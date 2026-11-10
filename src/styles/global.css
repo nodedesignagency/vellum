@@ -98,6 +98,15 @@ main{position:relative;z-index:1;background:var(--surface)}
 .d2{top:47%;left:calc(var(--gl) + 3 * (var(--col) + var(--g)))}
 .d3{top:66%;left:calc(var(--gl) + 6 * (var(--col) + var(--g)))}
 .d4{top:82%;left:calc(var(--gl) + 2 * (var(--col) + var(--g)))}
+/* With motion, the photos fly up through the text as on 333 South Wabash. Their start points are 333's,
+   measured against the text block (48% to 163% of its height), so most begin below the text and rise
+   across it. The positions above are the prototype's, kept for reduced motion. */
+.story.is-moving .drifts{position:absolute;left:0;right:0;top:clamp(96px,14vw,220px);bottom:clamp(120px,16vw,260px)}
+.story.is-moving .d0{top:48.3%}
+.story.is-moving .d1{top:121.2%}
+.story.is-moving .d2{top:113.6%}
+.story.is-moving .d3{top:146.5%}
+.story.is-moving .d4{top:163.3%}
 
 /* 2b. COLLABORATORS ticker (Airloom logo marquee) */
 .clients{position:relative;padding:24px 0 24px;border-top:1px solid var(--rule);overflow:hidden}
@@ -273,6 +282,12 @@ main{position:relative;z-index:1;background:var(--surface)}
   .d2{top:52%;left:calc(var(--gl) + 4 * (var(--col) + var(--g)))}
   .d3{top:71%;left:calc(var(--gl) + 1 * (var(--col) + var(--g)))}
   .d4{top:84%;left:calc(var(--gl) + 5 * (var(--col) + var(--g)))}
+  /* 333's phone start points, against the text block */
+  .story.is-moving .d0{top:12.2%}
+  .story.is-moving .d1{top:78.5%}
+  .story.is-moving .d2{top:66%}
+  .story.is-moving .d3{top:148.3%}
+  .story.is-moving .d4{top:126.9%}
   .ticker{margin-top:48px}
   .cell{flex-basis:140px;height:140px;padding:0 12px}
   .steps{grid-template-columns:1fr 1fr;row-gap:28px;margin-top:40px}

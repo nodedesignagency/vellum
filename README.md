@@ -24,6 +24,8 @@ Open http://localhost:4321 for the site and http://localhost:4321/keystatic for 
 npm run build
 ```
 
+To preview on a computer without a server, run `npm run offline` after a build: it writes `offline/vellum-site/`, which opens by double-clicking `index.html`.
+
 `npm run dev` and `npm run build` first regenerate `src/styles/tokens.css` from `design-system/tokens.json`. Edit the JSON, never the CSS file.
 
 ## How it fits together
@@ -35,6 +37,7 @@ npm run build
 | `src/layouts/Base.astro` | Shared head (font and hero preloads), logo symbol, contact footer, menu. |
 | `src/styles/global.css` | All styles, ported rule for rule from the prototype onto the tokens. |
 | `src/scripts/motion.ts` | Animations from the base sites: fade up, smooth in-page links, section name in the bar, lamp line sweep. |
+| `src/components/Statement.astro` | The statement's photos flying up through the text, as on 333 South Wabash's second section. |
 | `src/content/projects/*.yaml` | One file per project (edited in Keystatic). |
 | `src/content/collaborators.yaml` | The logo ticker list (edited in Keystatic). |
 | `src/content.config.ts` | The content schema the pages read. |

@@ -6,13 +6,14 @@ import stair from '../assets/home/stair-sm.jpg';
 import graze from '../assets/home/graze-sm.jpg';
 import beam from '../assets/home/beam-sm.jpg';
 
-// Five images drifting over the statement at their own scroll speeds (333 South Wabash parallax).
+// Five images flying up through the statement, each at its own speed: the second section of
+// 333 South Wabash (reference/333southwabash-com/source/js/site.js:9). The speed factors are theirs.
 const drifts = [
-  { src: scallop, speed: '.16' },
-  { src: section, speed: '.28' },
-  { src: stair, speed: '.1' },
-  { src: graze, speed: '.24' },
-  { src: beam, speed: '.14' },
+  { src: scallop, speed: 2.2 },
+  { src: section, speed: 4 },
+  { src: stair, speed: 2 },
+  { src: graze, speed: 3.5 },
+  { src: beam, speed: 1.8 },
 ];
 ---
 <section class="story" id="content" aria-label="About the practice" data-label="The practice">
@@ -21,7 +22,7 @@ const drifts = [
     <p data-reveal><b>We work beside architects, developers and interior designers</b> from the first concept sketch to the night we focus the last fitting on site.</p>
     <p data-reveal><b>Every project starts on paper.</b> We draw where the light falls before we choose what makes it.</p>
   </div>
-  <div aria-hidden="true">
+  <div class="drifts" aria-hidden="true">
     {drifts.map((d, i) => (
       <figure class={`drift d${i}`} data-speed={d.speed}>
         <Picture src={d.src} widths={[160, 320, 480, 645]} sizes="(max-width:700px) 28vw, 14vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
@@ -31,32 +32,79 @@ const drifts = [
 </section>
 
 <script>
-  // Drifting images over the statement, on native scroll. Still when motion is reduced.
+  // How 333 South Wabash moves its story photos:
+  //  - each photo moves up by (scroll x its speed x 0.13)% of its own height (0.16 on phones),
+  //    so on screen they travel at about 1.5 to 2.2 times the scroll speed and cross the text;
+  //  - they follow a smoothed scroll value that catches up over about 180ms, so they glide
+  //    rather than sticking to the scrollbar. Only the photos are smoothed; the page scrolls natively.
+  // With reduced motion the photos stay still, at the prototype's resting positions.
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const phone = matchMedia('(max-width:700px)');
   const story = document.querySelector<HTMLElement>('.story');
   const drifts = [...document.querySelectorAll<HTMLElement>('.drift')];
-  let ticking = false;
-  function drift() {
-    ticking = false;
+  const speeds = drifts.map((d) => parseFloat(d.dataset.speed || '0'));
+
+  let target = 0;
+  let current = 0;
+  let last = 0;
+  let frame = 0;
+
+  const measure = () => {
     if (!story) return;
+    // scroll distance since the statement's top reached the bottom of the screen (333 counts from page top,
+    // where its story starts at the bottom of the first screen, as ours does)
+    target = Math.max(0, innerHeight - story.getBoundingClientRect().top);
+  };
+
+  const apply = () => {
+    const k = phone.matches ? 0.16 : 0.13;
+    drifts.forEach((d, i) => {
+      d.style.transform = `translate3d(0,${(-current * speeds[i] * k).toFixed(2)}%,0)`;
+    });
+  };
+
+  const tick = (t: number) => {
+    const dt = last ? Math.min(64, t - last) : 16;
+    last = t;
+    current += (target - current) * (1 - Math.exp(-dt / 180));
+    if (Math.abs(target - current) < 0.1) current = target;
+    apply();
+    if (current !== target) frame = requestAnimationFrame(tick);
+    else {
+      frame = 0;
+      last = 0;
+    }
+  };
+
+  const onScroll = () => {
+    if (reduce.matches) return;
+    measure();
+    if (!frame) frame = requestAnimationFrame(tick);
+  };
+
+  const setMode = () => {
+    if (!story) return;
+    cancelAnimationFrame(frame);
+    frame = 0;
+    last = 0;
     if (reduce.matches) {
+      story.classList.remove('is-moving');
       drifts.forEach((d) => (d.style.transform = ''));
       return;
     }
-    const r = story.getBoundingClientRect();
-    if (r.bottom < 0 || r.top > innerHeight) return;
-    const t = -r.top;
-    drifts.forEach((d) => {
-      d.style.transform = `translate3d(0,${(-t * parseFloat(d.dataset.speed || '0')).toFixed(1)}px,0)`;
-    });
-  }
-  addEventListener('scroll', () => {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(drift);
-    }
-  }, { passive: true });
-  addEventListener('resize', drift);
-  reduce.addEventListener('change', drift);
-  drift();
+    story.classList.add('is-moving');
+    measure();
+    current = target; // start in place, no glide on page load
+    apply();
+  };
+
+  addEventListener('scroll', onScroll, { passive: true });
+  addEventListener('resize', () => {
+    if (reduce.matches) return;
+    measure();
+    current = target;
+    apply();
+  });
+  reduce.addEventListener('change', setMode);
+  setMode();
 </script>

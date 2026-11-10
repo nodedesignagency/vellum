@@ -9,6 +9,7 @@
     "prebuild": "node scripts/build-tokens.mjs",
     "build": "astro build",
     "preview": "astro preview",
+    "offline": "node scripts/build-offline.mjs",
     "check": "astro check"
   },
   "engines": {
