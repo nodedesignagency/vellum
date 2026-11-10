@@ -55,9 +55,9 @@ const wide = { widths: [640, 1024], sizes: '(max-width:700px) calc(100vw - 36px)
 <script>
   // Tabs: click, or arrow keys/Home/End from the keyboard (WAI-ARIA tabs pattern).
   // They also advance on their own (Airloom's feature tabs): each stage stays up for STAGE_MS while its
-  // gold line fills, then the next one takes over, looping. Choosing a stage stops that (the pause button
-  // starts it again). It also waits while the pointer is over the stages or panel, while keyboard focus is
-  // inside, while the band is off screen and while the tab is hidden. With reduced motion it starts stopped.
+  // gold line fills, then the next one takes over, looping. Choosing a stage jumps there and its line starts
+  // filling again from empty. The pause button stops and restarts the rotation. It waits while keyboard focus
+  // is on the stages, while the band is off screen and while the tab is hidden. With reduced motion it starts stopped.
   const STAGE_MS = 7000;
 
   const method = document.querySelector<HTMLElement>('.method')!;
@@ -95,8 +95,8 @@ const wide = { widths: [640, 1024], sizes: '(max-width:700px) calc(100vw - 36px)
   const reduceQuery = matchMedia('(prefers-reduced-motion: reduce)');
   const reduced = () => reduceQuery.matches && !document.documentElement.classList.contains('force-motion');
 
-  let running = !reduced(); // false once someone stops it or picks a stage
-  const waits = new Set<string>(['offscreen']); // temporary holds: hover, focus, offscreen, hidden
+  let running = !reduced(); // false while the pause button has it stopped
+  const waits = new Set<string>(['offscreen']); // temporary holds: keyboard focus, offscreen, hidden
   let elapsed = 0;
   let last = 0;
   let frame = 0;
@@ -148,27 +148,28 @@ const wide = { widths: [640, 1024], sizes: '(max-width:700px) calc(100vw - 36px)
 
   new IntersectionObserver((entries) => hold('offscreen', !entries[0].isIntersecting), { threshold: 0.3 }).observe(method);
   document.addEventListener('visibilitychange', () => hold('hidden', document.hidden));
-  for (const [name, el] of [['hover-stages', tablist], ['hover-panel', method.querySelector('.stage')!]] as const) {
-    el.addEventListener('pointerenter', (e) => { if ((e as PointerEvent).pointerType === 'mouse') hold(name, true); });
-    el.addEventListener('pointerleave', () => hold(name, false));
-  }
-  method.addEventListener('focusin', (e) => hold('focus', e.target !== btn));
+  // keyboard focus on the stages or panel holds it; a mouse click on a stage does not (it is not :focus-visible)
+  method.addEventListener('focusin', (e) => {
+    const t = e.target as HTMLElement;
+    hold('focus', t !== btn && t.matches(':focus-visible'));
+  });
   method.addEventListener('focusout', (e) => { if (!method.contains(e.relatedTarget as Node)) hold('focus', false); });
 
-  // ---- choosing a stage stops the rotation
+  // ---- choosing a stage jumps there and restarts its line; the rotation carries on from it
+  const jump = (i: number, focus = false) => {
+    select(i, focus);
+    elapsed = 0;
+    wake();
+  };
   tabs.forEach((t, i) => {
-    t.addEventListener('click', () => {
-      stop();
-      select(i);
-    });
+    t.addEventListener('click', () => jump(i));
     t.addEventListener('keydown', (e) => {
       // Left/Right across the row on desktop, Up/Down down the stack on phones; both work everywhere
       const k = ({ ArrowRight: 1, ArrowLeft: -1, ArrowDown: 1, ArrowUp: -1 } as Record<string, number>)[e.key];
       const to = k ? (i + k + tabs.length) % tabs.length : e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : -1;
       if (to < 0) return;
       e.preventDefault();
-      stop();
-      select(to, true);
+      jump(to, true);
     });
   });
 
