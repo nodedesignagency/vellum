@@ -1,0 +1,6 @@
+# Base website: unzipped here for reference only, never committed
+reference/*
+!reference/.gitkeep
+
+# OS
+.DS_Store
