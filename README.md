@@ -3,6 +3,8 @@
 Two pages, Home and Project journal, for Vellum, an architectural lighting-design practice.
 Built with [Astro](https://astro.build), edited with [Keystatic](https://keystatic.com), hosted on [Vercel](https://vercel.com).
 
+- **Just want to open it?** See [START-HERE.md](START-HERE.md).
+- **AI assistants and developers:** [AGENTS.md](AGENTS.md) is the complete handoff.
 - **Studio editors:** see [EDITING.md](EDITING.md).
 - **Design reference:** `prototype/index.html` (approved Home page), `design-system/` (tokens, brand book, fonts, logos), `CLAUDE.md` (brief).
 
@@ -24,7 +26,7 @@ Open http://localhost:4321 for the site and http://localhost:4321/keystatic for 
 npm run build
 ```
 
-To preview on a computer without a server, run `npm run offline` after a build: it writes `offline/vellum-site/` (Home and Project journal), which opens by double-clicking `index.html`.
+`npm run preview` serves the production build at http://localhost:4322 (run `npm run build` first; `scripts/serve.mjs`, no dependencies). To preview on a computer without a server, run `npm run offline` after a build: it writes `offline/vellum-site/` (Home and Project journal), which opens by double-clicking `index.html`.
 
 `npm run dev` and `npm run build` first regenerate `src/styles/tokens.css` from `design-system/tokens.json`. Edit the JSON, never the CSS file.
 

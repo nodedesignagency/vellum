@@ -3,8 +3,9 @@
 // Output: offline/vellum-site/ (git-ignored). Contains the Home page and the Project journal.
 import { readFileSync, writeFileSync, mkdirSync, copyFileSync, rmSync } from 'node:fs';
 import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = new URL('../', import.meta.url).pathname;
+const root = fileURLToPath(new URL('../', import.meta.url)); // works on Windows too
 const src = join(root, '.vercel/output/static');
 const out = join(root, 'offline/vellum-site');
 rmSync(out, { recursive: true, force: true });

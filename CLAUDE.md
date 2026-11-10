@@ -77,7 +77,7 @@ The user has a zip of a base website they want to reuse animations and interacti
 
 ## Codebase (built)
 
-Astro 7 + Keystatic + Vercel. See `README.md` for commands, structure and deploy, `EDITING.md` for the studio's guide.
+Astro 7 + Keystatic + Vercel. **`AGENTS.md` is the complete handoff** (structure, content model, every animation, owner decisions, gotchas, checks). `START-HERE.md` is the plain-language run guide, `README.md` covers deploy, `EDITING.md` is the studio's guide.
 
 - Projects and collaborators live in `src/content/` and are edited in Keystatic (`/keystatic`). Keystatic stores images as `src/assets/projects/<slug>/cover.jpg`, `.../entries/<n>/image.jpg` and `src/assets/collaborators/logos/<n>/logo.svg`; keep new seed content in that layout. Keystatic drops YAML comments on save.
 - `src/styles/tokens.css` is generated from `design-system/tokens.json` (`npm run tokens`). Never edit it.
