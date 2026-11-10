@@ -32,79 +32,51 @@ const drifts = [
 </section>
 
 <script>
-  // How 333 South Wabash moves its story photos:
+  // How 333 South Wabash moves its story photos (reference/333southwabash-com/source/js/site.js:9):
   //  - each photo moves up by (scroll x its speed x 0.13)% of its own height (0.16 on phones),
-  //    so on screen they travel at about 1.5 to 2.2 times the scroll speed and cross the text;
-  //  - they follow a smoothed scroll value that catches up over about 180ms, so they glide
-  //    rather than sticking to the scrollbar. Only the photos are smoothed; the page scrolls natively.
-  // With reduced motion the photos stay still, at the prototype's resting positions.
+  //    so on screen it travels at about 1.5 to 2.2 times the scroll speed and crosses the text;
+  //  - text and photos follow the same scroll value, so the photos stay locked to the words they pass.
+  //    The page's own scrolling (trackpad momentum, smooth wheel) provides the glide.
+  // With reduced motion, or without JavaScript, the photos stay still at the prototype's resting positions.
   const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const phone = matchMedia('(max-width:700px)');
   const story = document.querySelector<HTMLElement>('.story');
   const drifts = [...document.querySelectorAll<HTMLElement>('.drift')];
   const speeds = drifts.map((d) => parseFloat(d.dataset.speed || '0'));
+  let queued = false;
 
-  let target = 0;
-  let current = 0;
-  let last = 0;
-  let frame = 0;
-
-  const measure = () => {
-    if (!story) return;
-    // scroll distance since the statement's top reached the bottom of the screen (333 counts from page top,
+  const update = () => {
+    queued = false;
+    if (!story || reduce.matches) return;
+    // scroll distance since the statement's top reached the bottom of the screen (333 counts from the page top,
     // where its story starts at the bottom of the first screen, as ours does)
-    target = Math.max(0, innerHeight - story.getBoundingClientRect().top);
-  };
-
-  const apply = () => {
+    const p = Math.max(0, innerHeight - story.getBoundingClientRect().top);
     const k = phone.matches ? 0.16 : 0.13;
     drifts.forEach((d, i) => {
-      d.style.transform = `translate3d(0,${(-current * speeds[i] * k).toFixed(2)}%,0)`;
+      d.style.transform = `translate3d(0,${(-p * speeds[i] * k).toFixed(2)}%,0)`;
     });
   };
 
-  const tick = (t: number) => {
-    const dt = last ? Math.min(64, t - last) : 16;
-    last = t;
-    current += (target - current) * (1 - Math.exp(-dt / 180));
-    if (Math.abs(target - current) < 0.1) current = target;
-    apply();
-    if (current !== target) frame = requestAnimationFrame(tick);
-    else {
-      frame = 0;
-      last = 0;
+  const queue = () => {
+    if (!queued) {
+      queued = true;
+      requestAnimationFrame(update);
     }
-  };
-
-  const onScroll = () => {
-    if (reduce.matches) return;
-    measure();
-    if (!frame) frame = requestAnimationFrame(tick);
   };
 
   const setMode = () => {
     if (!story) return;
-    cancelAnimationFrame(frame);
-    frame = 0;
-    last = 0;
     if (reduce.matches) {
       story.classList.remove('is-moving');
       drifts.forEach((d) => (d.style.transform = ''));
       return;
     }
     story.classList.add('is-moving');
-    measure();
-    current = target; // start in place, no glide on page load
-    apply();
+    update();
   };
 
-  addEventListener('scroll', onScroll, { passive: true });
-  addEventListener('resize', () => {
-    if (reduce.matches) return;
-    measure();
-    current = target;
-    apply();
-  });
+  addEventListener('scroll', queue, { passive: true });
+  addEventListener('resize', queue);
   reduce.addEventListener('change', setMode);
   setMode();
 </script>
