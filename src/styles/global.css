@@ -290,7 +290,8 @@ main{position:relative;z-index:1;background:var(--surface)}
   .story.is-moving .d4{top:126.9%}
   .ticker{margin-top:48px}
   .cell{flex-basis:140px;height:140px;padding:0 12px}
-  .steps{grid-template-columns:1fr 1fr;row-gap:28px;margin-top:40px}
+  /* phones: the four stages stack in one column (the prototype had two by two) */
+  .steps{grid-template-columns:1fr;row-gap:20px;margin-top:40px}
   .step-t,.step-d{font-size:16px}
   .stage{margin-top:40px;height:auto;aspect-ratio:4/3;max-width:100%}
   .principle{grid-template-columns:1fr}

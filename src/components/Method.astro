@@ -46,8 +46,14 @@ const wide = { widths: [640, 1024], sizes: '(max-width:700px) calc(100vw - 36px)
 </section>
 
 <script>
-  // Tabs: click, or Left/Right/Home/End from the keyboard (WAI-ARIA tabs pattern).
+  // Tabs: click, or arrow keys/Home/End from the keyboard (WAI-ARIA tabs pattern).
   const tabs = [...document.querySelectorAll<HTMLButtonElement>('.step')];
+  // the tab list is a row on desktop and a stack on phones; tell assistive tech which
+  const tablist = document.querySelector<HTMLElement>('.steps');
+  const stacked = matchMedia('(max-width:700px)');
+  const orient = () => tablist?.setAttribute('aria-orientation', stacked.matches ? 'vertical' : 'horizontal');
+  stacked.addEventListener('change', orient);
+  orient();
   function select(i: number, focus = false) {
     tabs.forEach((t, j) => {
       const on = j === i;
@@ -66,7 +72,8 @@ const wide = { widths: [640, 1024], sizes: '(max-width:700px) calc(100vw - 36px)
   tabs.forEach((t, i) => {
     t.addEventListener('click', () => select(i));
     t.addEventListener('keydown', (e) => {
-      const k = ({ ArrowRight: 1, ArrowLeft: -1 } as Record<string, number>)[e.key];
+      // Left/Right across the row on desktop, Up/Down down the stack on phones; both work everywhere
+      const k = ({ ArrowRight: 1, ArrowLeft: -1, ArrowDown: 1, ArrowUp: -1 } as Record<string, number>)[e.key];
       if (k) {
         e.preventDefault();
         select((i + k + tabs.length) % tabs.length, true);
