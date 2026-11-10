@@ -4,8 +4,14 @@
 //   3. Section name in the bar [data-label]    (Airloom header label)
 //   4. Lamp line sweep         [data-sweep]    (Airloom feature rule sweep)
 // With prefers-reduced-motion, 1 and 4 never hide or move anything, 2 jumps, and 3 swaps text without sliding.
+// (?motion=on in the address overrides that for reviewing, see Base.astro.)
 
-const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+// Respect the reduce-motion setting, unless ?motion=on was added for reviewing (sets html.force-motion, see Base.astro).
+const reduceQuery = matchMedia('(prefers-reduced-motion: reduce)');
+const reduce = {
+  get matches() { return reduceQuery.matches && !document.documentElement.classList.contains('force-motion'); },
+  addEventListener: (type: 'change', fn: () => void) => reduceQuery.addEventListener(type, fn),
+};
 const io = 'IntersectionObserver' in window;
 
 /* 1. Fade up on scroll */

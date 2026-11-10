@@ -30,6 +30,12 @@ const list = await getCollaborators();
 </section>
 
 <script>
+  // Respect the reduce-motion setting, unless ?motion=on was added for reviewing (sets html.force-motion, see Base.astro).
+  const reduceQuery = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduce = {
+    get matches() { return reduceQuery.matches && !document.documentElement.classList.contains('force-motion'); },
+    addEventListener: (type: 'change', fn: () => void) => reduceQuery.addEventListener(type, fn),
+  };
   const sec = document.querySelector<HTMLElement>('.clients');
   const tb = sec?.querySelector<HTMLButtonElement>('.tick-btn');
   const setPaused = (p: boolean) => {
@@ -38,5 +44,5 @@ const list = await getCollaborators();
     tb.setAttribute('aria-label', p ? 'Play the logo ticker' : 'Pause the logo ticker');
   };
   tb?.addEventListener('click', () => setPaused(!sec?.classList.contains('paused')));
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) setPaused(true);
+  if (reduce.matches) setPaused(true);
 </script>

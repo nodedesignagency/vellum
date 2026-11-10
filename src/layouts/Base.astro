@@ -18,6 +18,8 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <!-- ?motion=on: play the animations even when this computer is set to reduce motion (for reviewing). -->
+    <script is:inline>try{var m=new URLSearchParams(location.search).get('motion');if(m==='on')sessionStorage.setItem('vellum-motion','on');if(m==='off')sessionStorage.removeItem('vellum-motion');if(sessionStorage.getItem('vellum-motion')==='on')document.documentElement.classList.add('force-motion')}catch(e){if(/[?&]motion=on/.test(location.search))document.documentElement.classList.add('force-motion')}</script>
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />

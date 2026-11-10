@@ -80,4 +80,7 @@ The form posts to `/api/enquiry`, which sends an email through [Resend](https://
 
 ## Notes
 
+Animations follow the visitor's reduce-motion setting. If yours is on, add `?motion=on` to the address to review them (for example http://localhost:4321/?motion=on); `?motion=off` turns that off again.
+
+
 `npm audit` reports issues in build-time dependencies (`@vercel/nft`, `@vercel/routing-utils`, a `minimatch` inside Keystatic). None runs for site visitors, and the suggested fix downgrades to years-old versions, so they are left until upstream releases patches.

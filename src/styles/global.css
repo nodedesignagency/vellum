@@ -320,10 +320,11 @@ main{position:relative;z-index:1;background:var(--surface)}
   .filter.sweep::after,.cards.sweep::after,.rows div:first-child.sweep::after{display:none}
   .card.sweep::after,.rows div:nth-child(-n+3):not(:first-child).sweep::after{display:block}
 }
+/* html.force-motion (from ?motion=on) lets a reviewer see the motion with the setting on; visitors never get it */
 @media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
-  .drift{will-change:auto}
-  .rv{opacity:1;transform:none}
+  html:not(.force-motion) *,html:not(.force-motion) *::before,html:not(.force-motion) *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  html:not(.force-motion) .drift{will-change:auto}
+  html:not(.force-motion) .rv{opacity:1;transform:none}
 }
 @media print{
   .rv{opacity:1!important;transform:none!important}

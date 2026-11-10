@@ -32,13 +32,18 @@ const drifts = [
 </section>
 
 <script>
+  // Respect the reduce-motion setting, unless ?motion=on was added for reviewing (sets html.force-motion, see Base.astro).
+  const reduceQuery = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduce = {
+    get matches() { return reduceQuery.matches && !document.documentElement.classList.contains('force-motion'); },
+    addEventListener: (type: 'change', fn: () => void) => reduceQuery.addEventListener(type, fn),
+  };
   // How 333 South Wabash moves its story photos (reference/333southwabash-com/source/js/site.js:9):
   //  - each photo moves up by (scroll x its speed x 0.13)% of its own height (0.16 on phones),
   //    so on screen it travels at about 1.5 to 2.2 times the scroll speed and crosses the text;
   //  - text and photos follow the same scroll value, so the photos stay locked to the words they pass.
   //    The page's own scrolling (trackpad momentum, smooth wheel) provides the glide.
   // With reduced motion, or without JavaScript, the photos stay still at the prototype's resting positions.
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
   const phone = matchMedia('(max-width:700px)');
   const story = document.querySelector<HTMLElement>('.story');
   const drifts = [...document.querySelectorAll<HTMLElement>('.drift')];
