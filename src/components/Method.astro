@@ -6,8 +6,15 @@ import graze from '../assets/home/graze-sm.jpg';
 const wide = { widths: [640, 1024], sizes: '(max-width:700px) calc(100vw - 36px), calc(100vw - 48px)' };
 ---
 <section class="method" id="practice" aria-labelledby="method-h" data-label="How we work">
-  <h2 class="h2" id="method-h" data-reveal><b>From first sketch to final focus.</b> One team carries each scheme through four stages, so the light that gets built is the light that was drawn.</h2>
-  <div class="steps" role="tablist" aria-label="How we work" data-reveal>
+  <div class="method-top">
+    <h2 class="h2" id="method-h" data-reveal><b>From first sketch to final focus.</b> One team carries each scheme through four stages, so the light that gets built is the light that was drawn.</h2>
+    <!-- the stages change on their own; this stops and restarts them (WCAG 2.2.2) -->
+    <button class="tick-btn stage-btn" type="button" aria-controls="steps" aria-label="Pause the stages">
+      <svg class="i-pause" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1h2v8H2zM6 1h2v8H6z" fill="currentColor"></path></svg>
+      <svg class="i-play" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1l7 4-7 4z" fill="currentColor"></path></svg>
+    </button>
+  </div>
+  <div class="steps" id="steps" role="tablist" aria-label="How we work" data-reveal>
     <button class="step" type="button" role="tab" id="t0" aria-controls="p0" aria-selected="true"><span class="step-n">01</span><span class="step-t">Concept</span><span class="step-d">Hand drawings that set where light lands, and where it doesn't.</span></button>
     <button class="step" type="button" role="tab" id="t1" aria-controls="p1" aria-selected="false" tabindex="-1"><span class="step-n">02</span><span class="step-t">Detail</span><span class="step-d">Sections through every slot, cove and niche, coordinated with your drawings.</span></button>
     <button class="step" type="button" role="tab" id="t2" aria-controls="p2" aria-selected="false" tabindex="-1"><span class="step-n">03</span><span class="step-t">Specification</span><span class="step-d">Fittings scheduled by colour temperature, beam, glare and control circuit.</span></button>
@@ -47,18 +54,31 @@ const wide = { widths: [640, 1024], sizes: '(max-width:700px) calc(100vw - 36px)
 
 <script>
   // Tabs: click, or arrow keys/Home/End from the keyboard (WAI-ARIA tabs pattern).
-  const tabs = [...document.querySelectorAll<HTMLButtonElement>('.step')];
+  // They also advance on their own (Airloom's feature tabs): each stage stays up for STAGE_MS while its
+  // gold line fills, then the next one takes over, looping. Choosing a stage stops that (the pause button
+  // starts it again). It also waits while the pointer is over the stages or panel, while keyboard focus is
+  // inside, while the band is off screen and while the tab is hidden. With reduced motion it starts stopped.
+  const STAGE_MS = 7000;
+
+  const method = document.querySelector<HTMLElement>('.method')!;
+  const tabs = [...method.querySelectorAll<HTMLButtonElement>('.step')];
+  const tablist = method.querySelector<HTMLElement>('.steps')!;
+  const btn = method.querySelector<HTMLButtonElement>('.stage-btn')!;
+
   // the tab list is a row on desktop and a stack on phones; tell assistive tech which
-  const tablist = document.querySelector<HTMLElement>('.steps');
   const stacked = matchMedia('(max-width:700px)');
-  const orient = () => tablist?.setAttribute('aria-orientation', stacked.matches ? 'vertical' : 'horizontal');
+  const orient = () => tablist.setAttribute('aria-orientation', stacked.matches ? 'vertical' : 'horizontal');
   stacked.addEventListener('change', orient);
   orient();
+
+  let current = 0;
   function select(i: number, focus = false) {
+    current = i;
     tabs.forEach((t, j) => {
       const on = j === i;
       t.setAttribute('aria-selected', String(on));
       t.tabIndex = on ? 0 : -1;
+      t.style.setProperty('--p', '0');
       const p = document.getElementById(t.getAttribute('aria-controls')!)!;
       p.hidden = !on;
       if (on) {
@@ -69,21 +89,88 @@ const wide = { widths: [640, 1024], sizes: '(max-width:700px) calc(100vw - 36px)
     });
     if (focus) tabs[i].focus();
   }
+
+  // ---- timing
+  // Respect the reduce-motion setting, unless ?motion=on was added for reviewing (sets html.force-motion, see Base.astro).
+  const reduceQuery = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = () => reduceQuery.matches && !document.documentElement.classList.contains('force-motion');
+
+  let running = !reduced(); // false once someone stops it or picks a stage
+  const waits = new Set<string>(['offscreen']); // temporary holds: hover, focus, offscreen, hidden
+  let elapsed = 0;
+  let last = 0;
+  let frame = 0;
+
+  const setButton = () => {
+    method.classList.toggle('is-auto', running);
+    btn.setAttribute('aria-label', running ? 'Pause the stages' : 'Play the stages');
+    btn.classList.toggle('is-stopped', !running);
+  };
+
+  const tick = (t: number) => {
+    frame = 0;
+    if (!running || waits.size) {
+      last = 0;
+      return;
+    }
+    elapsed += last ? t - last : 0;
+    last = t;
+    if (elapsed >= STAGE_MS) {
+      elapsed = 0;
+      select((current + 1) % tabs.length);
+    }
+    tabs[current].style.setProperty('--p', String(Math.min(1, elapsed / STAGE_MS)));
+    frame = requestAnimationFrame(tick);
+  };
+  const wake = () => {
+    if (!frame && running && !waits.size) frame = requestAnimationFrame(tick);
+  };
+  const hold = (why: string, on: boolean) => {
+    if (on) waits.add(why);
+    else waits.delete(why);
+    wake();
+  };
+  const stop = () => {
+    running = false;
+    elapsed = 0;
+    setButton();
+  };
+
+  btn.addEventListener('click', () => {
+    if (running) stop();
+    else {
+      running = true;
+      elapsed = 0;
+      setButton();
+      wake();
+    }
+  });
+
+  new IntersectionObserver((entries) => hold('offscreen', !entries[0].isIntersecting), { threshold: 0.3 }).observe(method);
+  document.addEventListener('visibilitychange', () => hold('hidden', document.hidden));
+  for (const [name, el] of [['hover-stages', tablist], ['hover-panel', method.querySelector('.stage')!]] as const) {
+    el.addEventListener('pointerenter', (e) => { if ((e as PointerEvent).pointerType === 'mouse') hold(name, true); });
+    el.addEventListener('pointerleave', () => hold(name, false));
+  }
+  method.addEventListener('focusin', (e) => hold('focus', e.target !== btn));
+  method.addEventListener('focusout', (e) => { if (!method.contains(e.relatedTarget as Node)) hold('focus', false); });
+
+  // ---- choosing a stage stops the rotation
   tabs.forEach((t, i) => {
-    t.addEventListener('click', () => select(i));
+    t.addEventListener('click', () => {
+      stop();
+      select(i);
+    });
     t.addEventListener('keydown', (e) => {
       // Left/Right across the row on desktop, Up/Down down the stack on phones; both work everywhere
       const k = ({ ArrowRight: 1, ArrowLeft: -1, ArrowDown: 1, ArrowUp: -1 } as Record<string, number>)[e.key];
-      if (k) {
-        e.preventDefault();
-        select((i + k + tabs.length) % tabs.length, true);
-      } else if (e.key === 'Home') {
-        e.preventDefault();
-        select(0, true);
-      } else if (e.key === 'End') {
-        e.preventDefault();
-        select(tabs.length - 1, true);
-      }
+      const to = k ? (i + k + tabs.length) % tabs.length : e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : -1;
+      if (to < 0) return;
+      e.preventDefault();
+      stop();
+      select(to, true);
     });
   });
+
+  setButton();
 </script>

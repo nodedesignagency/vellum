@@ -127,13 +127,22 @@ main{position:relative;z-index:1;background:var(--surface)}
 
 /* 3. METHOD: dark band (Airloom .dark) */
 .method{background:var(--surface-dark);color:var(--on-dark);padding:48px var(--gr) var(--g) var(--gl)}
+.method-top{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--g)}
+.method-top .h2{flex:1;min-width:0}
 .method .h2{max-width:1150px;color:var(--on-dark-muted)}
+/* pause/play for the stages, the ticker's button on the dark band */
+.stage-btn{background:rgba(255,255,255,.08);color:var(--on-dark)}
+.stage-btn:hover{background:rgba(255,255,255,.16)}
+.stage-btn.is-stopped .i-pause{display:none}
+.stage-btn.is-stopped .i-play{display:block}
 .method .h2 b{font-weight:400;color:var(--on-dark);display:block}
 .steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--g);margin-top:64px}
 .step{position:relative;display:flex;flex-direction:column;gap:2px;padding-top:12px;padding-bottom:8px;border-top:1px solid rgba(204,204,204,.35);color:var(--on-dark-muted);transition:color .3s}
 .step::before{content:"";position:absolute;left:0;top:-1px;height:1px;width:100%;background:var(--lamp-glow);transform:scaleX(0);transform-origin:0 0;transition:transform .9s var(--ease)}
 .step[aria-selected="true"]{color:var(--on-dark)}
 .step[aria-selected="true"]::before{transform:scaleX(1)}
+/* while the stages run on their own, the active stage's gold line fills with its time (Airloom's progress line) */
+.method.is-auto .step[aria-selected="true"]::before{transform:scaleX(var(--p,0));transition:none}
 .step:hover{color:var(--on-dark)}
 .step-n{font:400 10px/1 var(--font-mono);letter-spacing:.08em;color:var(--on-dark-muted);margin-bottom:8px}
 .step-t{font-size:18px;line-height:1.1;color:var(--on-dark)}
