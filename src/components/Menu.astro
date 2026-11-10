@@ -1,0 +1,60 @@
+---
+// Full-screen menu panel (Airloom), a native <dialog> so focus is trapped and Escape closes it.
+interface Props {
+  page: 'home' | 'project';
+}
+const { page } = Astro.props;
+const home = page === 'home';
+const links = [
+  { href: home ? '#top' : '/', label: 'Home', small: 'The practice', current: home },
+  { href: '/project/', label: 'Project journal', small: 'Drawings to installations', current: page === 'project' },
+  { href: home ? '#practice' : '/#practice', label: 'How we work', small: 'Four stages', current: false },
+  { href: home ? '#work' : '/#work', label: 'Selected work', small: 'By sector', current: false },
+  { href: '#contact', label: 'Contact', small: 'New enquiries', current: false },
+];
+---
+<dialog class="menu" id="menu" aria-label="Site menu">
+  <div class="menu-top">
+    <span class="caption"><i aria-hidden="true"></i>Vellum</span>
+    <button type="button" class="menu-close">Close</button>
+  </div>
+  <nav aria-label="Main">
+    {links.map((l) => (
+      <a href={l.href} aria-current={l.current ? 'page' : undefined}>{l.label}<small>{l.small}</small></a>
+    ))}
+  </nav>
+  <div class="menu-foot">
+    <div>Studio<span>hello@vellum.studio</span></div>
+    <div>Follow<span>Instagram</span></div>
+    <div>Address<span>Studio address, City</span></div>
+  </div>
+</dialog>
+
+<script>
+  const menu = document.getElementById('menu') as HTMLDialogElement;
+  const btn = document.querySelector<HTMLButtonElement>('.menu-btn');
+  // a link inside the menu moves focus to its target itself, so the menu should not hand focus back to the button
+  let leavingByLink = false;
+  btn?.addEventListener('click', () => {
+    menu.showModal();
+    btn.setAttribute('aria-expanded', 'true');
+    menu.classList.remove('in');
+    void menu.offsetWidth;
+    menu.classList.add('in');
+  });
+  menu.querySelector('.menu-close')?.addEventListener('click', () => menu.close());
+  menu.addEventListener('close', () => {
+    btn?.setAttribute('aria-expanded', 'false');
+    if (!leavingByLink) btn?.focus();
+    leavingByLink = false;
+  });
+  menu.querySelectorAll<HTMLAnchorElement>('nav a').forEach((a) =>
+    a.addEventListener('click', () => {
+      const url = new URL(a.href);
+      if (url.pathname === location.pathname && url.hash) {
+        leavingByLink = true;
+        menu.close();
+      }
+    }),
+  );
+</script>

@@ -1,0 +1,30 @@
+title: Harbour Hotel lobby
+hidden: false
+order: 1
+sector: Hospitality
+location: Coastal hotel, 120 keys
+year: "2025"
+summary: We lit the lobby from its walls. A recessed slot grazes the stone at
+  2700K, an opal pendant marks the bench, and deep regressed downlights hold
+  glare to UGR<13.
+cover: ../../assets/projects/harbour-hotel/cover.jpg
+coverAlt: Warm light grazing down a rough stone wall from a ceiling slot
+entries:
+  - kind: drawing
+    image: ../../assets/projects/harbour-hotel/entries/0/image.jpg
+    alt: Perspective drawing of a hotel lobby, with gold arrows tracing light from
+      downlights, a pendant over a stone bench and a grazed stone wall
+    caption: Concept · lobby perspective · G01 graze · P02 pendant · D03 downlights
+    hidden: false
+  - kind: drawing
+    image: ../../assets/projects/harbour-hotel/entries/1/image.jpg
+    alt: Cutaway drawing of a recessed ceiling slot, with gold arrows showing light
+      spilling down the wall and its cut-off angle
+    caption: Detail 04 · ceiling slot · 60° cut-off
+    hidden: false
+  - kind: installation
+    image: ../../assets/projects/harbour-hotel/entries/2/image.jpg
+    alt: Warm light grazing down a rough stone wall from a ceiling slot, falling to
+      darkness
+    caption: Focus night · 23:40 · G01 at 40%
+    hidden: false

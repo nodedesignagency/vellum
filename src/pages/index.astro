@@ -1,0 +1,35 @@
+---
+import { getImage } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import Hero, { heroOptions } from '../components/Hero.astro';
+import Bar from '../components/Bar.astro';
+import Statement from '../components/Statement.astro';
+import Collaborators from '../components/Collaborators.astro';
+import Method from '../components/Method.astro';
+import Principle from '../components/Principle.astro';
+import Work from '../components/Work.astro';
+import Night from '../components/Night.astro';
+import Scope from '../components/Scope.astro';
+import hero from '../assets/home/hero.jpg';
+
+// Preload exactly the AVIF files the hero <picture> asks for, so the largest image starts downloading first.
+const heroAvif = await getImage({ src: hero, widths: heroOptions.widths, format: 'avif' });
+---
+<Base
+  page="home"
+  title="Vellum Lighting"
+  description="Vellum is an architectural lighting-design practice working with architects, developers and interior designers."
+>
+  <link slot="head" rel="preload" as="image" type="image/avif" imagesrcset={heroAvif.srcSet.attribute} imagesizes={heroOptions.sizes} fetchpriority="high" />
+  <main id="top" tabindex="-1">
+    <Hero />
+    <Bar page="home" />
+    <Statement />
+    <Collaborators />
+    <Method />
+    <Principle />
+    <Work />
+    <Night />
+    <Scope />
+  </main>
+</Base>

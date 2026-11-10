@@ -1,0 +1,23 @@
+title: Gallery House
+hidden: false
+order: 2
+sector: Residential
+location: Private residence
+year: "2024"
+summary: One light idea per room. In the reading room a single 24° downlight
+  pools beside the chair. On the stair a linear step light sits under every
+  tread at 2700K.
+cover: ../../assets/projects/gallery-house/cover.jpg
+coverAlt: Floating stone stairs with a line of warm light under each tread
+entries:
+  - kind: drawing
+    image: ../../assets/projects/gallery-house/entries/0/image.jpg
+    alt: Section drawing through a reading room, with gold lines tracing one
+      downlight's cone onto the floor beside an armchair and a bookshelf
+    caption: Section · reading room · D03 downlight · 24°
+    hidden: false
+  - kind: installation
+    image: ../../assets/projects/gallery-house/entries/1/image.jpg
+    alt: Floating stone stairs with a line of warm light under each tread
+    caption: S05 step light · 2700K · 30%
+    hidden: false

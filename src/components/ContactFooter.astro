@@ -1,0 +1,81 @@
+---
+// Contact footer. On large screens it is fixed under the page and revealed as the page lifts off it (Airloom).
+// The form posts to /api/enquiry, which emails the studio once RESEND_API_KEY and ENQUIRY_TO are set in Vercel.
+---
+<footer class="foot" id="contact" aria-labelledby="contact-h">
+  <form class="form" id="enquiry" action="/api/enquiry" method="post" novalidate>
+    <h2 id="contact-h">Bringing us onto a project?</h2>
+    <label class="field"><span class="sr">Email (required)</span><input id="f-email" name="email" type="email" placeholder="Email*" autocomplete="email" required /></label>
+    <div class="pair">
+      <label class="field"><span class="sr">First name (required)</span><input id="f-first" name="first" type="text" placeholder="First name*" autocomplete="given-name" required /></label>
+      <label class="field"><span class="sr">Last name</span><input id="f-last" name="last" type="text" placeholder="Last name" autocomplete="family-name" /></label>
+    </div>
+    <label class="field"><span class="sr">Practice or company</span><input id="f-firm" name="firm" type="text" placeholder="Practice or company" autocomplete="organization" /></label>
+    <div class="pair">
+      <label class="field"><span class="sr">Project type</span><select id="f-type" name="type"><option value="">Project type</option><option>Hospitality</option><option>Residential</option><option>Cultural</option><option>Workplace</option><option>Retail</option><option>Landscape</option></select></label>
+      <label class="field"><span class="sr">Project stage</span><select id="f-stage" name="stage"><option value="">Stage</option><option>Feasibility</option><option>Concept design</option><option>Technical design</option><option>On site</option></select></label>
+    </div>
+    <label class="field"><span class="sr">About the project</span><textarea id="f-msg" name="message" placeholder="A few lines about the project"></textarea></label>
+    <div class="hp" aria-hidden="true"><label>Leave this empty<input name="website" type="text" tabindex="-1" autocomplete="off" /></label></div>
+    <button class="submit" type="submit">Send enquiry</button>
+    <p class="status" id="f-status" role="status" aria-live="polite"></p>
+  </form>
+  <div class="contact">
+    <div><p>Studio</p><p class="v">hello@vellum.studio</p></div>
+    <div><p>New projects</p><p class="v">projects@vellum.studio</p></div>
+    <div><p>Follow</p><a class="v" href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram</a></div>
+    <div><p>Address</p><p class="v">Studio address<br />City, Postcode</p></div>
+  </div>
+  <div class="giant" aria-hidden="true"><svg class="logo"><use href="#vl"></use></svg></div>
+  <div class="legal"><span>© 2026 Vellum Lighting Design</span><span>Architectural lighting for architects, developers and interior designers</span></div>
+</footer>
+
+<script>
+  const form = document.getElementById('enquiry') as HTMLFormElement;
+  const status = document.getElementById('f-status') as HTMLParagraphElement;
+  const submit = form.querySelector<HTMLButtonElement>('.submit')!;
+  const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
+
+  form.querySelectorAll('select').forEach((s) => s.addEventListener('change', () => s.classList.toggle('set', !!s.value)));
+
+  const say = (msg: string, err: boolean) => {
+    status.textContent = msg;
+    status.classList.toggle('err', err);
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const email = field('email').value.trim();
+    const first = field('first').value.trim();
+    if (!email || !first) {
+      say('Add your email and first name so we can reply.', true);
+      (email ? field('first') : field('email')).focus();
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      say('That email address looks incomplete. Check it and send again.', true);
+      field('email').focus();
+      return;
+    }
+    submit.disabled = true;
+    form.setAttribute('aria-busy', 'true');
+    let state: 'sent' | 'not-connected' | 'failed' = 'failed';
+    try {
+      const res = await fetch(form.action, { method: 'POST', body: new FormData(form), headers: { accept: 'application/json' } });
+      state = res.ok ? 'sent' : res.status === 503 ? 'not-connected' : 'failed';
+    } catch {
+      state = 'failed';
+    }
+    submit.disabled = false;
+    form.removeAttribute('aria-busy');
+    if (state === 'sent') {
+      say(`Thanks, ${first}. Your enquiry has been sent to the studio.`, false);
+      form.reset();
+      form.querySelectorAll('select').forEach((s) => s.classList.remove('set'));
+    } else if (state === 'not-connected') {
+      say(`Thanks, ${first}. Your enquiry is ready to send once this form is connected to the studio inbox.`, false);
+    } else {
+      say('That did not send. Try again, or email projects@vellum.studio.', true);
+    }
+  });
+</script>

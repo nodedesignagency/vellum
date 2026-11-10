@@ -1,0 +1,22 @@
+---
+// The 56px bar: sits under the hero and docks to the top on scroll.
+// The grey label beside Menu names the section in view (from each section's data-label).
+interface Props {
+  page: 'home' | 'project';
+}
+const { page } = Astro.props;
+const top = page === 'home' ? '#top' : '/';
+---
+<div class="bar">
+  <div class="bar-left">
+    <button class="menu-btn" type="button" aria-haspopup="dialog" aria-controls="menu" aria-expanded="false">
+      <svg viewBox="0 0 6 8" aria-hidden="true"><path d="M0 0l6 4-6 4z" fill="currentColor"></path></svg>Menu
+    </button>
+    <span class="bar-section" aria-hidden="true"><span></span></span>
+  </div>
+  <a class="bar-mark" href={top} aria-label={page === 'home' ? 'Vellum, back to top' : 'Vellum, home'}><svg class="logo" aria-hidden="true"><use href="#vl"></use></svg></a>
+  <div class="bar-right">
+    <span class="caption"><i aria-hidden="true"></i>Architectural lighting</span>
+    <a href="#contact">Enquire</a>
+  </div>
+</div>

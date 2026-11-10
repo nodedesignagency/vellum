@@ -1,0 +1,16 @@
+title: North Gallery
+hidden: false
+order: 3
+sector: Cultural
+location: Contemporary art space
+year: "2025"
+summary: A dark room with one beam in it. Adjustable 15° downlights at 3000K and
+  CRI 95 put light on the work and nowhere else.
+cover: ../../assets/projects/north-gallery/cover.jpg
+coverAlt: A single beam crossing a dark room onto the floor
+entries:
+  - kind: installation
+    image: ../../assets/projects/north-gallery/entries/0/image.jpg
+    alt: A single beam crossing a dark room onto the floor
+    caption: D04 adjustable downlight · 3000K · 15° · 60%
+    hidden: false

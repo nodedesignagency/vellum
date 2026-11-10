@@ -1,0 +1,43 @@
+---
+import '../styles/tokens.css';
+import '../styles/global.css';
+import LogoSymbol from '../components/LogoSymbol.astro';
+import ContactFooter from '../components/ContactFooter.astro';
+import Menu from '../components/Menu.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  page: 'home' | 'project';
+}
+const { title, description, page } = Astro.props;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preload" href="/fonts/Geist-400.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/GeistMono-400.woff2" as="font" type="font/woff2" crossorigin />
+    <slot name="head" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+  </head>
+  <body data-page={page}>
+    <a class="skip" href="#content">Skip to content</a>
+    <LogoSymbol />
+    <slot />
+    <ContactFooter />
+    <Menu page={page} />
+    <script>
+      import '../scripts/motion';
+    </script>
+  </body>
+</html>

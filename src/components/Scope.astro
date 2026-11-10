@@ -1,0 +1,39 @@
+---
+const lists = [
+  {
+    label: 'Sectors',
+    rows: [
+      ['Hospitality', 'Hotels, restaurants, spas'],
+      ['Residential', 'Private homes and multi-unit'],
+      ['Cultural', 'Galleries, museums, places of worship'],
+      ['Workplace', 'Offices, studios, lobbies'],
+      ['Retail', 'Flagships and showrooms'],
+      ['Landscape', 'Gardens, facades, public realm'],
+    ],
+  },
+  {
+    label: 'Services',
+    rows: [
+      ['Concept lighting design', 'Sketches, mood studies, scenes'],
+      ['Technical design', 'Details coordinated with the design team'],
+      ['Specification', 'Luminaire schedules and tender packages'],
+      ['Controls', 'Circuits, scenes and timeclock settings'],
+      ['Daylight studies', 'Glare and daylight integration'],
+      ['Commissioning', 'Focusing and dimming on site'],
+    ],
+  },
+];
+---
+<section class="scope" aria-labelledby="scope-h" data-label="Sectors and services" data-sweep>
+  <h2 class="h3" id="scope-h" data-reveal>We light the places people gather, rest and work.</h2>
+  {lists.map((list) => (
+    <div class="plist" data-sweep>
+      <p class="pl" data-reveal>{list.label}</p>
+      <dl class="rows">
+        {list.rows.map(([dt, dd], i) => (
+          <div data-sweep data-reveal style={`--d:${i % 3}`}><dt>{dt}</dt><dd>{dd}</dd></div>
+        ))}
+      </dl>
+    </div>
+  ))}
+</section>

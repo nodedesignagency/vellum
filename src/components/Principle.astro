@@ -1,0 +1,11 @@
+---
+import { Picture } from 'astro:assets';
+import stair from '../assets/home/stair-sm.jpg';
+---
+<section class="principle" aria-label="Studio principle" data-label="Studio principle">
+  <figure class="principle-fig" data-reveal>
+    <Picture src={stair} widths={[448, 645]} sizes="(max-width:700px) calc(100vw - 36px), 448px" formats={['avif', 'webp']} fallbackFormat="jpg" alt="Floating stone stairs with a line of warm light under each tread" loading="lazy" decoding="async" />
+  </figure>
+  <blockquote data-reveal style="--d:1">We light the dark as carefully as the light. Contrast is what lets a room be read at night, and what makes the bright moments count.</blockquote>
+  <footer data-reveal style="--d:2">Vellum<span>Studio principle</span></footer>
+</section>

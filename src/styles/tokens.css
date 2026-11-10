@@ -1,0 +1,53 @@
+/* Generated from design-system/tokens.json by scripts/build-tokens.mjs. Edit the JSON, not this file. */
+:root{
+  --surface:#ffffff;
+  --surface-wash:#f6f6f6;
+  --surface-dark:#1a1a1a;
+  --ink:#000000;
+  --ink-muted:#6f6f6f;
+  --rule:#cccccc;
+  --on-dark:#ffffff;
+  --on-dark-muted:#aeaeae;
+  --lamp:#d9ad82;
+  --lamp-glow:#e8c391;
+  --brand-navy:#1a2232;
+  --brand-navy-deep:#131925;
+  --brand-cream:#ece3d7;
+  --brand-paper:#f5f0ea;
+  --brand-stone:#e4dcd4;
+  --field-navy:#1a2232;
+  --font-sans:"Geist", "Helvetica Neue", Arial, sans-serif;
+  --font-display:"Cormorant Garamond", Georgia, serif;
+  --font-mono:"Geist Mono", ui-monospace, Menlo, monospace;
+  --space-xs:4px;
+  --space-s:8px;
+  --space-m:12px;
+  --space-l:16px;
+  --gutter-phone:18px;
+  --gutter:24px;
+  --block-s:48px;
+  --block-m:72px;
+  --block-l:96px;
+  --block-xl:160px;
+  --radius-none:0px;
+  --radius-tile:4px;
+  --radius-tag:6px;
+  --radius-button:12px;
+  --bar-height:56px;
+  --logo-bar:78px;
+  --logo-hero:190px;
+  --logo-min:72px;
+  --icon:24px;
+}
+/* Night (brand) theme: for after-dark pages. The website itself uses Day. */
+[data-theme="night"]{
+  --surface:#131925;
+  --surface-wash:#1a2232;
+  --surface-dark:#0d121c;
+  --ink:#ece3d7;
+  --ink-muted:#a9a49d;
+  --rule:#2e3546;
+  --on-dark:#ece3d7;
+  --on-dark-muted:#a39d94;
+  --field-navy:#2a3247;
+}

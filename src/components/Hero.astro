@@ -1,0 +1,20 @@
+---
+import { Picture } from 'astro:assets';
+import hero from '../assets/home/hero.jpg';
+export const heroOptions = { widths: [640, 1024], sizes: '100vw' };
+---
+<header class="hero">
+  <Picture
+    src={hero}
+    {...heroOptions}
+    formats={['avif', 'webp']}
+    fallbackFormat="jpg"
+    alt="A stone facade seen straight on at night, each recess uplit from fittings in the paving"
+    loading="eager"
+    fetchpriority="high"
+    decoding="async"
+  />
+  <a class="brand" href="#top"><svg class="logo" role="img" aria-label="Vellum, architectural lighting design"><use href="#vl"></use></svg><span class="brand-sub">Architectural lighting design</span></a>
+  <h1 class="hero-h1"><b>At Vellum, every room gets a second life after dark.</b> Drawn on paper, finished on site.</h1>
+  <p class="hero-note">Facade uplight study<br />2700K · 15° · 40% dim</p>
+</header>

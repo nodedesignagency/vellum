@@ -1,0 +1,82 @@
+---
+import { Picture } from 'astro:assets';
+import concept from '../assets/home/sketch-concept.jpg';
+import detail from '../assets/home/sketch-detail.jpg';
+import graze from '../assets/home/graze-sm.jpg';
+const wide = { widths: [640, 1024], sizes: '(max-width:700px) calc(100vw - 36px), calc(100vw - 48px)' };
+---
+<section class="method" id="practice" aria-labelledby="method-h" data-label="How we work">
+  <h2 class="h2" id="method-h" data-reveal><b>From first sketch to final focus.</b> One team carries each scheme through four stages, so the light that gets built is the light that was drawn.</h2>
+  <div class="steps" role="tablist" aria-label="How we work" data-reveal>
+    <button class="step" type="button" role="tab" id="t0" aria-controls="p0" aria-selected="true"><span class="step-n">01</span><span class="step-t">Concept</span><span class="step-d">Hand drawings that set where light lands, and where it doesn't.</span></button>
+    <button class="step" type="button" role="tab" id="t1" aria-controls="p1" aria-selected="false" tabindex="-1"><span class="step-n">02</span><span class="step-t">Detail</span><span class="step-d">Sections through every slot, cove and niche, coordinated with your drawings.</span></button>
+    <button class="step" type="button" role="tab" id="t2" aria-controls="p2" aria-selected="false" tabindex="-1"><span class="step-n">03</span><span class="step-t">Specification</span><span class="step-d">Fittings scheduled by colour temperature, beam, glare and control circuit.</span></button>
+    <button class="step" type="button" role="tab" id="t3" aria-controls="p3" aria-selected="false" tabindex="-1"><span class="step-n">04</span><span class="step-t">Commissioning</span><span class="step-d">On site after dark, aiming and dimming each fitting until the room reads right.</span></button>
+  </div>
+  <div class="stage" data-reveal>
+    <div class="panel" role="tabpanel" id="p0" aria-labelledby="t0" tabindex="0">
+      <Picture src={concept} {...wide} formats={['avif', 'webp']} fallbackFormat="jpg" loading="lazy" decoding="async" alt="Perspective drawing of a hotel lobby, with gold arrows tracing light from downlights, a pendant over a stone bench and a grazed stone wall" />
+      <p class="panel-cap">Concept · lobby perspective · G01 graze · P02 pendant · D03 downlights</p>
+    </div>
+    <div class="panel" role="tabpanel" id="p1" aria-labelledby="t1" tabindex="0" hidden>
+      <Picture src={detail} {...wide} formats={['avif', 'webp']} fallbackFormat="jpg" loading="lazy" decoding="async" alt="Cutaway drawing of a recessed ceiling slot, with gold arrows showing light spilling down the wall and its cut-off angle" />
+      <p class="panel-cap">Detail 04 · ceiling slot · 60° cut-off</p>
+    </div>
+    <div class="panel" role="tabpanel" id="p2" aria-labelledby="t2" tabindex="0" hidden>
+      <div class="sched-wrap">
+        <table class="sched">
+          <caption>Luminaire schedule · lobby · rev C</caption>
+          <thead><tr><th scope="col">Ref</th><th scope="col">Type</th><th scope="col">CCT</th><th scope="col">CRI</th><th scope="col">Beam</th><th scope="col">UGR</th><th scope="col">Control</th></tr></thead>
+          <tbody>
+            <tr><td>G01</td><td>Linear wall grazer, recessed</td><td>2700K</td><td>95</td><td>10×60°</td><td>&lt;16</td><td>DALI-2 · C1</td></tr>
+            <tr><td>P02</td><td>Pendant, opal glass</td><td>2200K</td><td>90</td><td>Diffuse</td><td>n/a</td><td>Phase · C2</td></tr>
+            <tr><td>D03</td><td>Downlight, deep regressed</td><td>3000K</td><td>95</td><td>24°</td><td>&lt;13</td><td>DALI-2 · C3</td></tr>
+            <tr><td>D04</td><td>Downlight, adjustable</td><td>3000K</td><td>95</td><td>15°</td><td>&lt;13</td><td>DALI-2 · C3</td></tr>
+            <tr><td>S05</td><td>Step light, linear</td><td>2700K</td><td>90</td><td>Asymmetric</td><td>n/a</td><td>DALI-2 · C4</td></tr>
+            <tr><td>E06</td><td>In-ground uplight, facade</td><td>2700K</td><td>90</td><td>8°</td><td>n/a</td><td>DMX · EXT</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel" role="tabpanel" id="p3" aria-labelledby="t3" tabindex="0" hidden>
+      <Picture src={graze} widths={[480, 645]} sizes="(max-width:700px) calc(100vw - 36px), calc(100vw - 48px)" formats={['avif', 'webp']} fallbackFormat="jpg" loading="lazy" decoding="async" alt="Warm light grazing down a rough stone wall from a ceiling slot, falling to darkness" />
+      <p class="panel-cap">Focus night · 23:40 · G01 at 40%</p>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Tabs: click, or Left/Right/Home/End from the keyboard (WAI-ARIA tabs pattern).
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>('.step')];
+  function select(i: number, focus = false) {
+    tabs.forEach((t, j) => {
+      const on = j === i;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      const p = document.getElementById(t.getAttribute('aria-controls')!)!;
+      p.hidden = !on;
+      if (on) {
+        p.classList.remove('in');
+        void p.offsetWidth;
+        p.classList.add('in');
+      }
+    });
+    if (focus) tabs[i].focus();
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(i));
+    t.addEventListener('keydown', (e) => {
+      const k = ({ ArrowRight: 1, ArrowLeft: -1 } as Record<string, number>)[e.key];
+      if (k) {
+        e.preventDefault();
+        select((i + k + tabs.length) % tabs.length, true);
+      } else if (e.key === 'Home') {
+        e.preventDefault();
+        select(0, true);
+      } else if (e.key === 'End') {
+        e.preventDefault();
+        select(tabs.length - 1, true);
+      }
+    });
+  });
+</script>

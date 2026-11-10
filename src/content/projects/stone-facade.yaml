@@ -1,0 +1,17 @@
+title: Stone facade
+hidden: false
+order: 5
+sector: Landscape
+location: Mixed-use building
+year: "2024"
+summary: In-ground uplights at 2700K pick out each recess in the stone. Narrow
+  beams keep the light on the facade and off the sky.
+cover: ../../assets/projects/stone-facade/cover.jpg
+coverAlt: A stone facade uplit at night
+entries:
+  - kind: installation
+    image: ../../assets/projects/stone-facade/entries/0/image.jpg
+    alt: A stone facade seen straight on at night, each recess uplit from fittings
+      in the paving
+    caption: Facade uplight study · 2700K · 15° · 40% dim
+    hidden: false

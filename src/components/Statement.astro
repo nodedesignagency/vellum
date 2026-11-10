@@ -1,0 +1,62 @@
+---
+import { Picture } from 'astro:assets';
+import scallop from '../assets/home/scallop-sm.jpg';
+import section from '../assets/home/sketch-section.jpg';
+import stair from '../assets/home/stair-sm.jpg';
+import graze from '../assets/home/graze-sm.jpg';
+import beam from '../assets/home/beam-sm.jpg';
+
+// Five images drifting over the statement at their own scroll speeds (333 South Wabash parallax).
+const drifts = [
+  { src: scallop, speed: '.16' },
+  { src: section, speed: '.28' },
+  { src: stair, speed: '.1' },
+  { src: graze, speed: '.24' },
+  { src: beam, speed: '.14' },
+];
+---
+<section class="story" id="content" aria-label="About the practice" data-label="The practice">
+  <div class="story-copy">
+    <p data-reveal><b>This is Vellum.</b> An architectural lighting practice that treats light as a building material, drawn, detailed and tuned with the same care as stone, timber or glass.</p>
+    <p data-reveal><b>We work beside architects, developers and interior designers</b> from the first concept sketch to the night we focus the last fitting on site.</p>
+    <p data-reveal><b>Every project starts on paper.</b> We draw where the light falls before we choose what makes it.</p>
+  </div>
+  <div aria-hidden="true">
+    {drifts.map((d, i) => (
+      <figure class={`drift d${i}`} data-speed={d.speed}>
+        <Picture src={d.src} widths={[160, 320, 480, 645]} sizes="(max-width:700px) 28vw, 14vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
+      </figure>
+    ))}
+  </div>
+</section>
+
+<script>
+  // Drifting images over the statement, on native scroll. Still when motion is reduced.
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  const story = document.querySelector<HTMLElement>('.story');
+  const drifts = [...document.querySelectorAll<HTMLElement>('.drift')];
+  let ticking = false;
+  function drift() {
+    ticking = false;
+    if (!story) return;
+    if (reduce.matches) {
+      drifts.forEach((d) => (d.style.transform = ''));
+      return;
+    }
+    const r = story.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    const t = -r.top;
+    drifts.forEach((d) => {
+      d.style.transform = `translate3d(0,${(-t * parseFloat(d.dataset.speed || '0')).toFixed(1)}px,0)`;
+    });
+  }
+  addEventListener('scroll', () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(drift);
+    }
+  }, { passive: true });
+  addEventListener('resize', drift);
+  reduce.addEventListener('change', drift);
+  drift();
+</script>

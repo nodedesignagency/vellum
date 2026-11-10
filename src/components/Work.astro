@@ -1,0 +1,52 @@
+---
+import { Picture } from 'astro:assets';
+import { getProjects } from '../lib/content';
+// Cards come from the CMS (Keystatic > Projects): hidden projects are left out, lower Order shows first.
+const projects = await getProjects();
+const sectors = ['All', ...new Set(projects.map((p) => p.sector))];
+---
+<section class="work" id="work" aria-labelledby="work-h" data-label="Selected work">
+  <h2 class="h2" id="work-h" data-reveal>Selected work</h2>
+  <div class="work-grid">
+    <div class="filter" role="group" aria-label="Filter by sector" data-sweep>
+      <p class="filter-l">Filter</p>
+      {sectors.map((s, i) => (
+        <button type="button" data-sector={s} aria-pressed={i === 0 ? 'true' : 'false'}>{s}</button>
+      ))}
+    </div>
+    <div class="cards" id="cards" aria-live="polite" data-sweep>
+      {projects.map((p, i) => (
+        <a class="card" href={`/project/#${p.slug}`} data-sector={p.sector} data-reveal data-sweep style={`--d:${i % 3}`}>
+          <div class="meta"><span>{p.sector}</span><span>{p.year}</span></div>
+          <h3>{p.title}</h3>
+          <p class="loc">{p.location}</p>
+          <div class="tile">
+            <Picture src={p.cover} widths={[320, 480, 645]} sizes="(max-width:700px) calc(100vw - 36px), 24vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt={p.coverAlt} loading="lazy" decoding="async" />
+          </div>
+        </a>
+      ))}
+      <p class="empty" hidden>No projects in this sector yet.</p>
+    </div>
+  </div>
+  <div class="work-foot" data-reveal><a class="btn" href="/project/">View the project journal <svg viewBox="0 0 9 9" aria-hidden="true"><path d="M1 8 8 1M2 1h6v6" fill="none" stroke="currentColor" stroke-width="1.2"></path></svg></a></div>
+</section>
+
+<script>
+  // Sector filter: shows the matching cards, without reloading.
+  const filter = document.querySelector<HTMLElement>('.filter');
+  const cards = [...document.querySelectorAll<HTMLElement>('#cards .card')];
+  const empty = document.querySelector<HTMLElement>('#cards .empty');
+  filter?.querySelectorAll<HTMLButtonElement>('button').forEach((b) =>
+    b.addEventListener('click', () => {
+      filter.querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      const s = b.dataset.sector;
+      let shown = 0;
+      cards.forEach((c) => {
+        const on = s === 'All' || c.dataset.sector === s;
+        c.hidden = !on;
+        if (on) c.style.setProperty('--d', String(shown++ % 3));
+      });
+      if (empty) empty.hidden = shown > 0;
+    }),
+  );
+</script>

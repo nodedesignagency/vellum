@@ -1,0 +1,42 @@
+---
+import { getCollaborators } from '../lib/content';
+// Logos come from the CMS (Keystatic > Collaborators). The list is drawn twice for a seamless loop;
+// the second copy is hidden from assistive tech.
+const list = await getCollaborators();
+---
+<section class="clients" aria-labelledby="clients-h" data-label="Collaborators" data-sweep>
+  <div class="clients-top">
+    <p class="lede" id="clients-h" data-reveal>We have worked alongside these architects, developers and design studios.</p>
+    <button class="tick-btn" type="button" aria-label="Pause the logo ticker">
+      <svg class="i-pause" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1h2v8H2zM6 1h2v8H6z" fill="currentColor"></path></svg>
+      <svg class="i-play" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 1l7 4-7 4z" fill="currentColor"></path></svg>
+    </button>
+  </div>
+  <div class="ticker" data-reveal>
+    <ul class="track" role="list">
+      {[false, true].map((dup) =>
+        list.map((c) => (
+          <li class="cell" aria-hidden={dup ? 'true' : undefined}>
+            {c.logo ? (
+              <img src={c.logo.src} width={c.logo.width} height={c.logo.height} alt={dup ? '' : c.name} loading="lazy" decoding="async" />
+            ) : (
+              <span class="nm">{c.name}</span>
+            )}
+          </li>
+        )),
+      )}
+    </ul>
+  </div>
+</section>
+
+<script>
+  const sec = document.querySelector<HTMLElement>('.clients');
+  const tb = sec?.querySelector<HTMLButtonElement>('.tick-btn');
+  const setPaused = (p: boolean) => {
+    if (!sec || !tb) return;
+    sec.classList.toggle('paused', p);
+    tb.setAttribute('aria-label', p ? 'Play the logo ticker' : 'Pause the logo ticker');
+  };
+  tb?.addEventListener('click', () => setPaused(!sec?.classList.contains('paused')));
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) setPaused(true);
+</script>

@@ -4,3 +4,12 @@ reference/*
 
 # OS
 .DS_Store
+
+# Astro
+dist/
+.astro/
+.vercel/
+node_modules/
+.env
+.env.*
+!.env.example

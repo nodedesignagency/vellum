@@ -1,0 +1,16 @@
+title: Atelier offices
+hidden: false
+order: 4
+sector: Workplace
+location: Studio headquarters, 4 floors
+year: "2023"
+summary: Four floors of studio space lit from the walls. Downlights set close to
+  the plaster throw soft scallops, so desks sit in even light without glare.
+cover: ../../assets/projects/atelier-offices/cover.jpg
+coverAlt: Three soft scallops of light on a plaster wall
+entries:
+  - kind: installation
+    image: ../../assets/projects/atelier-offices/entries/0/image.jpg
+    alt: Three soft scallops of light on a plaster wall
+    caption: Wall scallops · 3000K · 50%
+    hidden: false

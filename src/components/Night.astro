@@ -1,0 +1,11 @@
+---
+import { Picture } from 'astro:assets';
+import beam from '../assets/home/beam-sm.jpg';
+---
+<section class="night" aria-label="After dark" data-label="After dark">
+  <Picture src={beam} widths={[480, 645]} sizes="100vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
+  <div class="night-t" data-reveal>
+    <h2 class="h3">Light is the last material on site, and the one people remember.</h2>
+    <p class="lede">We stay through commissioning, so the scheme you approved on paper is the one your guests see.</p>
+  </div>
+</section>

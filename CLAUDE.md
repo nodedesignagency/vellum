@@ -74,3 +74,13 @@ The user has a zip of a base website they want to reuse animations and interacti
 - Keep all copy from the prototype unless the user changes it.
 - No em dashes anywhere in copy.
 - Plain, specific, calm. Real units (2700K, 24°, UGR<16). See `design-system/BRAND.md`.
+
+## Codebase (built)
+
+Astro 7 + Keystatic + Vercel. See `README.md` for commands, structure and deploy, `EDITING.md` for the studio's guide.
+
+- Projects and collaborators live in `src/content/` and are edited in Keystatic (`/keystatic`). Keystatic stores images as `src/assets/projects/<slug>/cover.jpg`, `.../entries/<n>/image.jpg` and `src/assets/collaborators/logos/<n>/logo.svg`; keep new seed content in that layout. Keystatic drops YAML comments on save.
+- `src/styles/tokens.css` is generated from `design-system/tokens.json` (`npm run tokens`). Never edit it.
+- Animations from the base sites are in `src/scripts/motion.ts`, driven by `data-reveal`, `data-sweep` and `data-label` attributes. 5 (pinned project heading) and 6 (image viewer) belong to the Project page.
+- Deliberate departures from the prototype: token `ink-muted` (#6f6f6f) replaces the prototype's #7a7a7a and #767676 to pass AA; footer legal text #808080; filter buttons at least 24px tall on desktop (WCAG 2.2 target size); the ticker button changes its label instead of also toggling aria-pressed. The Principle photo is 900px tall as the prototype rendered it (its height attribute overrode `aspect-ratio:4/5`).
+- Compare against the prototype with a doctype added: without one the file renders in quirks mode (forms gain a 16px bottom margin).
