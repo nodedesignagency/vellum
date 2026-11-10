@@ -1,0 +1,107 @@
+---
+// Full-screen image viewer for the journal (base-site animation 6: 333 South Wabash's gallery and Airloom's dialog).
+// Opens from any journal image and steps through that project's images: buttons, Left/Right keys or a swipe.
+// A native <dialog>: focus stays inside, Escape closes, focus returns to the image that opened it.
+---
+<dialog class="viewer" id="viewer" aria-labelledby="viewer-title">
+  <div class="viewer-top">
+    <p class="viewer-title" id="viewer-title"></p>
+    <p class="viewer-count" aria-hidden="true"></p>
+    <button type="button" class="viewer-btn viewer-close">Close</button>
+  </div>
+  <div class="viewer-stage"></div>
+  <div class="viewer-bottom">
+    <p class="viewer-cap"></p>
+    <div class="viewer-nav">
+      <button type="button" class="viewer-btn viewer-prev">Previous</button>
+      <button type="button" class="viewer-btn viewer-next">Next</button>
+    </div>
+  </div>
+  <p class="sr" aria-live="polite" id="viewer-status"></p>
+</dialog>
+
+<script>
+  // Respect the reduce-motion setting, unless ?motion=on was added for reviewing (sets html.force-motion, see Base.astro).
+  const reduceQuery = matchMedia('(prefers-reduced-motion: reduce)');
+  const reduced = () => reduceQuery.matches && !document.documentElement.classList.contains('force-motion');
+
+  const viewer = document.getElementById('viewer') as HTMLDialogElement;
+  const stage = viewer.querySelector<HTMLElement>('.viewer-stage')!;
+  const title = viewer.querySelector<HTMLElement>('.viewer-title')!;
+  const count = viewer.querySelector<HTMLElement>('.viewer-count')!;
+  const cap = viewer.querySelector<HTMLElement>('.viewer-cap')!;
+  const status = viewer.querySelector<HTMLElement>('#viewer-status')!;
+  const prev = viewer.querySelector<HTMLButtonElement>('.viewer-prev')!;
+  const next = viewer.querySelector<HTMLButtonElement>('.viewer-next')!;
+  const close = viewer.querySelector<HTMLButtonElement>('.viewer-close')!;
+  const pad = (n: number) => String(n).padStart(2, '0');
+
+  let list: HTMLAnchorElement[] = [];
+  let index = 0;
+  let opener: HTMLElement | null = null;
+
+  function show(i: number, announce: boolean) {
+    index = (i + list.length) % list.length;
+    const link = list[index];
+    // reuse the page's own <picture>, asking for the largest file the screen needs
+    const pic = link.querySelector('picture')!.cloneNode(true) as HTMLElement;
+    pic.querySelectorAll('source, img').forEach((el) => el.setAttribute('sizes', '100vw'));
+    const img = pic.querySelector('img')!;
+    img.loading = 'eager';
+    stage.replaceChildren(pic);
+    const caption = link.closest('figure')?.querySelector('figcaption')?.textContent ?? '';
+    cap.textContent = caption;
+    count.textContent = `${pad(index + 1)} / ${pad(list.length)}`;
+    if (announce) status.textContent = `Image ${index + 1} of ${list.length}. ${img.alt}${caption ? `. ${caption}` : ''}`;
+    if (!reduced() && img.animate) img.animate([{ opacity: 0.15 }, { opacity: 1 }], { duration: 500, easing: 'ease-out' });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    const link = (e.target as Element).closest?.('a[data-viewer]') as HTMLAnchorElement | null;
+    const article = link?.closest('article');
+    if (!link || !article) return;
+    e.preventDefault();
+    list = [...article.querySelectorAll<HTMLAnchorElement>('a[data-viewer]')];
+    title.textContent = article.dataset.label || '';
+    const single = list.length < 2;
+    prev.hidden = single;
+    next.hidden = single;
+    opener = link;
+    status.textContent = '';
+    viewer.showModal();
+    document.documentElement.classList.add('viewer-open');
+    viewer.classList.remove('in');
+    void viewer.offsetWidth;
+    viewer.classList.add('in');
+    show(list.indexOf(link), false);
+    close.focus();
+  });
+
+  prev.addEventListener('click', () => show(index - 1, true));
+  next.addEventListener('click', () => show(index + 1, true));
+  close.addEventListener('click', () => viewer.close());
+  viewer.addEventListener('keydown', (e) => {
+    if (list.length < 2) return;
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      show(index + 1, true);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      show(index - 1, true);
+    }
+  });
+  let startX: number | null = null;
+  viewer.addEventListener('touchstart', (e) => (startX = e.changedTouches[0].clientX), { passive: true });
+  viewer.addEventListener('touchend', (e) => {
+    if (startX === null || list.length < 2) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    startX = null;
+    if (Math.abs(dx) > 40) show(index + (dx < 0 ? 1 : -1), true);
+  }, { passive: true });
+  viewer.addEventListener('close', () => {
+    document.documentElement.classList.remove('viewer-open');
+    stage.replaceChildren();
+    opener?.focus({ preventScroll: true });
+  });
+</script>

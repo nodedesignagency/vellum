@@ -38,6 +38,8 @@ Each project appears twice on the site: as a card in *Selected work* on the Home
 
 **Reorder projects:** change the *Order* numbers.
 
+In the journal, a project's drawings always come before its installation photos, whatever order they are in here. A project with no journal images shows its cover image instead.
+
 **Remove a project for good:** open it and use the bin icon at the top. If you might want it back, tick *Hidden* instead.
 
 ## Collaborators (the logo ticker)

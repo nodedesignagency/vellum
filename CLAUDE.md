@@ -35,7 +35,7 @@ Sections in order, as in `prototype/index.html`:
 
 Plus a full-screen menu panel.
 
-## Project page (to design and build)
+## Project page (built: `/project/`)
 
 Brief: the Project page reads as **one continuous, curated journal**, not separate project blocks. Each project opens with **concept drawings** and then shows the **finished lighting installations**, with short copy explaining the work. Use the Home page's system (type scale, rules, mono captions, the dark and grey bands). Captions follow the label style: fitting reference, colour temperature, dim level.
 
@@ -81,7 +81,8 @@ Astro 7 + Keystatic + Vercel. See `README.md` for commands, structure and deploy
 
 - Projects and collaborators live in `src/content/` and are edited in Keystatic (`/keystatic`). Keystatic stores images as `src/assets/projects/<slug>/cover.jpg`, `.../entries/<n>/image.jpg` and `src/assets/collaborators/logos/<n>/logo.svg`; keep new seed content in that layout. Keystatic drops YAML comments on save.
 - `src/styles/tokens.css` is generated from `design-system/tokens.json` (`npm run tokens`). Never edit it.
-- Animations from the base sites are in `src/scripts/motion.ts`, driven by `data-reveal`, `data-sweep` and `data-label` attributes. 5 (pinned project heading) and 6 (image viewer) belong to the Project page.
+- Animations from the base sites are in `src/scripts/motion.ts`, driven by `data-reveal`, `data-sweep` and `data-label` attributes. 5 (pinned project heading) is CSS sticky in the journal; 6 (image viewer) is `src/components/Viewer.astro`.
+- Project journal (`src/pages/project/index.astro`, approved by the user as one continuous page, white throughout with one closing dark band): statement-style intro, grey index band linking to each project, then per project (`src/components/JournalEntry.astro`) a heading pinned in the left column and its images grouped as "Drawn on paper" then "Finished on site" (grouped by kind whatever order the CMS has; landscape images full width, upright ones half). A project with no journal images shows its cover. Each image links to its full-size file (works without JS) and opens the viewer, which steps through that project's images. The bar label shows the current project. Intro line is new copy proposed by Claude; the closing band reuses the Home statement's last line.
 - The Statement's photos move like 333 South Wabash's second section (`reference/333southwabash-com/source/js/site.js:9`): translateY of -(scroll x speed x 0.13)% of their own height (0.16 on phones), speeds 2.2/4/2/3.5/1.8, locked to the native scroll (no separate smoothing: lagging photos read as floaty against the text), start points measured from 333 against the text block. Code in `src/components/Statement.astro`; with reduced motion or no JS the photos rest at the prototype's positions.
 - Reduced motion is respected everywhere; `?motion=on` in the address (remembered per tab, `?motion=off` clears) plays the animations anyway for reviewing on a machine with the setting on. It sets `html.force-motion` from an inline head script; each script checks it inline. Keep page scripts free of shared imports: an import splits them into separate files (extra requests, and the offline copy cannot load them from disk).
 - `npm run offline` (after a build) writes `offline/vellum-site/`, a copy that opens by double-clicking `index.html`.

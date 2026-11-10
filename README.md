@@ -24,7 +24,7 @@ Open http://localhost:4321 for the site and http://localhost:4321/keystatic for 
 npm run build
 ```
 
-To preview on a computer without a server, run `npm run offline` after a build: it writes `offline/vellum-site/`, which opens by double-clicking `index.html`.
+To preview on a computer without a server, run `npm run offline` after a build: it writes `offline/vellum-site/` (Home and Project journal), which opens by double-clicking `index.html`.
 
 `npm run dev` and `npm run build` first regenerate `src/styles/tokens.css` from `design-system/tokens.json`. Edit the JSON, never the CSS file.
 
@@ -33,6 +33,9 @@ To preview on a computer without a server, run `npm run offline` after a build: 
 | Path | What it is |
 | --- | --- |
 | `src/pages/index.astro` | Home page, assembled from `src/components/`. |
+| `src/pages/project/index.astro` | Project journal: every visible project in order, drawings then installations. |
+| `src/components/JournalEntry.astro` | One project in the journal (pinned heading, image groups). |
+| `src/components/Viewer.astro` | Full-screen image viewer for the journal. |
 | `src/components/` | One component per Home section, each with its own small script. |
 | `src/layouts/Base.astro` | Shared head (font and hero preloads), logo symbol, contact footer, menu. |
 | `src/styles/global.css` | All styles, ported rule for rule from the prototype onto the tokens. |

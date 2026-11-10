@@ -1,0 +1,91 @@
+---
+// One project in the journal: a heading that stays pinned while its images pass (base-site animation 5),
+// then its drawings ("Drawn on paper") and its installation photos ("Finished on site").
+// Each image opens in the viewer (animation 6); without JavaScript the link opens the full image.
+import { Picture, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Entry {
+  kind: 'drawing' | 'installation';
+  image: ImageMetadata;
+  alt: string;
+  caption: string;
+}
+interface Props {
+  n: number;
+  project: {
+    slug: string;
+    title: string;
+    sector: string;
+    location: string;
+    year: number;
+    summary: string;
+    cover: ImageMetadata;
+    coverAlt: string;
+    entries: Entry[];
+  };
+}
+const { project: p, n } = Astro.props;
+
+// A project with no journal images yet shows its cover as the finished photo.
+const entries: Entry[] = p.entries.length ? p.entries : [{ kind: 'installation', image: p.cover, alt: p.coverAlt, caption: '' }];
+
+// Drawings always come first, then installations, each in the order the studio set.
+const groups = await Promise.all(
+  ([
+    ['drawing', 'Drawn on paper'],
+    ['installation', 'Finished on site'],
+  ] as const).map(async ([kind, label]) => ({
+    kind,
+    label,
+    items: await Promise.all(
+      entries
+        .filter((e) => e.kind === kind)
+        .map(async (e) => {
+          const wide = e.image.width / e.image.height >= 1.2;
+          const widths = [480, 768, 1024].filter((w) => w < e.image.width).concat(e.image.width);
+          const full = await getImage({ src: e.image, width: e.image.width, format: 'webp' });
+          return { ...e, wide, widths, full: full.src };
+        }),
+    ),
+  })),
+).then((all) => all.filter((g) => g.items.length));
+
+const num = String(n).padStart(2, '0');
+---
+<article class="entry" id={p.slug} aria-labelledby={`${p.slug}-h`} data-label={p.title} data-sweep>
+  <header class="entry-head" data-reveal>
+    <p class="entry-n">{num}</p>
+    <h2 class="h3 entry-t" id={`${p.slug}-h`}>{p.title}</h2>
+    <p class="meta"><span>{p.sector}</span><span>{p.year}</span></p>
+    <p class="entry-loc">{p.location}</p>
+    {p.summary && <p class="entry-sum">{p.summary}</p>}
+  </header>
+  <div class="entry-body">
+    {groups.map((g) => (
+      <div class="j-group">
+        <h3 class={`j-label j-${g.kind}`}><i aria-hidden="true"></i>{g.label}</h3>
+        <div class="plates">
+          {g.items.map((e) => (
+            <figure class={`plate ${e.wide ? 'wide' : 'tall'}`} data-reveal>
+              <a class="plate-open" href={e.full} data-viewer>
+                <Picture
+                  src={e.image}
+                  widths={e.widths}
+                  sizes={e.wide ? '(max-width:700px) calc(100vw - 36px), 72vw' : '(max-width:700px) calc(100vw - 36px), 36vw'}
+                  formats={['avif', 'webp']}
+                  fallbackFormat="jpg"
+                  alt={e.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="sr">, view larger</span>
+              </a>
+              {e.caption && <figcaption class="plate-cap">{e.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</article>

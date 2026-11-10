@@ -252,6 +252,70 @@ main{position:relative;z-index:1;background:var(--surface)}
 .menu.in nav{animation:rise .7s var(--ease)}
 @keyframes rise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
 
+/* PROJECT JOURNAL (/project/): one continuous sequence on white, a grey index band, one dark band to close */
+.j-intro{padding:clamp(72px,10vw,160px) var(--gr) clamp(72px,9vw,140px) var(--gl)}
+.j-title{font-size:clamp(30px,6.1vw,88px);line-height:1.04;letter-spacing:-.035em;color:var(--ink-muted);text-indent:calc(var(--col) + var(--g));text-wrap:pretty}
+.j-title b{font-weight:400;color:var(--ink)}
+
+.j-index{background:var(--surface-wash);padding:48px var(--gr) 72px var(--gl)}
+.j-index .plist{margin-top:0}
+.j-index .pl{font-weight:400}
+.j-rows{margin:0;padding:0;list-style:none}
+.j-rows li{position:relative;border-top:1px solid var(--rule)}
+.j-rows li:first-child{border-top:0}
+.j-rows li:first-child.sweep::after{display:none}
+.j-rows a{display:grid;grid-template-columns:48px minmax(0,1fr) minmax(0,1fr) 56px;gap:var(--g);align-items:baseline;padding:10px 0 12px;font-size:18px;line-height:1.1}
+.j-rows li:first-child a{padding-top:0}
+.j-t{transition:color .3s}
+.j-rows a:hover .j-t{color:var(--ink-muted)}
+.j-n,.j-y{font:400 10px/1 var(--font-mono);letter-spacing:.08em;color:var(--ink-muted)}
+.j-y{text-align:right}
+.j-s{font-size:16px;color:var(--ink-muted)}
+
+.journal{padding:clamp(72px,9vw,120px) var(--gr) clamp(96px,11vw,160px) var(--gl)}
+.entry{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:var(--g);border-top:1px solid var(--rule);padding-top:14px}
+.entry+.entry{margin-top:clamp(96px,11vw,160px)}
+/* the heading stays pinned under the bar while its images scroll past (333 South Wabash .hall-type) */
+.entry-head{position:sticky;top:calc(var(--bar) + 14px);align-self:start;display:grid;gap:6px}
+.entry-n{font:400 10px/1 var(--font-mono);letter-spacing:.08em;color:var(--ink-muted);margin-bottom:8px}
+.entry-head .meta{margin-top:10px}
+.entry-loc{font-size:16px;color:var(--ink-muted)}
+.entry-sum{margin-top:24px;font-size:16px;line-height:1.25;max-width:36ch}
+.j-group+.j-group{margin-top:72px}
+.j-label{display:flex;align-items:center;gap:8px;margin-bottom:18px;font:400 11px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted)}
+.j-label i{width:8px;height:8px;border:1px solid currentColor}
+/* lamp marks light: the finished installations are lit, the drawings are not yet */
+.j-installation i{background:var(--lamp-glow);border-color:var(--lamp-glow);box-shadow:0 0 10px var(--lamp-glow)}
+.plates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px var(--g);align-items:start}
+.plate.wide{grid-column:1/-1}
+.plate-open{display:block;overflow:hidden;border-radius:var(--radius-tile);background:#101010;cursor:zoom-in}
+.plate-open img{width:100%;height:auto;transition:transform .8s var(--ease)}
+.plate-open:hover img{transform:scale(1.03)}
+.plate-cap{margin-top:12px;font:400 11px/1.4 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-muted)}
+
+.j-close{background:var(--surface-dark);color:var(--on-dark);padding:clamp(72px,9vw,120px) var(--gr) clamp(72px,9vw,120px) var(--gl);display:grid;gap:48px;justify-items:start}
+.j-close .h2{max-width:1150px;color:var(--on-dark-muted)}
+.j-close .h2 b{display:block;font-weight:400;color:var(--on-dark)}
+.btn-dark{border-color:rgba(255,255,255,.3)}
+.btn-dark:hover{background:var(--on-dark);color:var(--ink);border-color:var(--on-dark)}
+
+/* image viewer */
+html.viewer-open{overflow:hidden}
+.viewer{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;border:0;padding:calc(10px + env(safe-area-inset-top,0px)) var(--gr) calc(14px + env(safe-area-inset-bottom,0px)) var(--gl);background:#000;color:var(--on-dark);overflow:hidden;overscroll-behavior:contain}
+.viewer::backdrop{background:#000}
+.viewer[open]{display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:14px}
+.viewer-top,.viewer-bottom{display:flex;align-items:center;gap:var(--g);min-width:0}
+.viewer-title{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:16px}
+.viewer-count,.viewer-cap{font:400 11px/1.4 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--on-dark-muted)}
+.viewer-cap{flex:1;min-width:0}
+.viewer-nav{display:flex;gap:8px}
+.viewer-btn{height:38px;padding:0 16px;border-radius:var(--radius-button);border:1px solid rgba(255,255,255,.25);color:var(--on-dark);transition:background-color .3s,color .3s}
+.viewer-btn:hover{background:var(--on-dark);color:var(--ink)}
+.viewer-btn[hidden]{display:none}
+.viewer-stage{position:relative;display:grid;place-items:center;min-height:0;overflow:hidden}
+.viewer-stage img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+.viewer.in .viewer-stage{animation:fade .4s var(--ease)}
+
 /* MOTION from the base sites. Each is switched on by script only when motion is allowed,
    so without JavaScript or with reduced motion the page simply shows everything at rest. */
 
@@ -317,6 +381,16 @@ main{position:relative;z-index:1;background:var(--surface)}
   .legal{flex-direction:column}
   .menu nav{grid-template-columns:1fr}
   .menu-foot{grid-template-columns:1fr;gap:14px}
+  /* journal on phones: one column, headings sit above their images instead of pinning */
+  .j-title{font-size:clamp(28px,7.6vw,40px);line-height:1.08;letter-spacing:-.025em;text-indent:calc(2 * (var(--col) + var(--g)))}
+  .j-index .plist{grid-template-columns:1fr;gap:14px}
+  .j-rows a{grid-template-columns:32px minmax(0,1fr) 40px;font-size:16px}
+  .j-s{display:none}
+  .entry{grid-template-columns:1fr;row-gap:32px}
+  .entry-head{position:static}
+  .plates{grid-template-columns:1fr;gap:32px}
+  .viewer-bottom{flex-direction:column;align-items:stretch;gap:12px}
+  .viewer-nav .viewer-btn{flex:1}
   /* sweep follows the rules as they are drawn on phones */
   .filter.sweep::after,.cards.sweep::after,.rows div:first-child.sweep::after{display:none}
   .card.sweep::after,.rows div:nth-child(-n+3):not(:first-child).sweep::after{display:block}

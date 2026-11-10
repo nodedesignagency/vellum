@@ -1,0 +1,53 @@
+---
+// The Project journal: every visible project in one continuous sequence, in the studio's order.
+// Each opens with its drawings, then its finished installations. Content comes from the CMS (Keystatic > Projects).
+import Base from '../../layouts/Base.astro';
+import Bar from '../../components/Bar.astro';
+import JournalEntry from '../../components/JournalEntry.astro';
+import Viewer from '../../components/Viewer.astro';
+import { getProjects } from '../../lib/content';
+
+const projects = await getProjects();
+const pad = (n: number) => String(n).padStart(2, '0');
+---
+<Base
+  page="project"
+  title="Project journal · Vellum Lighting"
+  description="Vellum's project journal: the concept drawings first, then the finished lighting, project by project."
+>
+  <main id="top" tabindex="-1">
+    <Bar page="project" />
+
+    <section class="j-intro" id="content" aria-labelledby="j-title">
+      <h1 class="j-title" id="j-title"><b>Project journal.</b> Each project in order, from the first drawing to the finished room after dark.</h1>
+    </section>
+
+    <nav class="j-index" aria-labelledby="j-index-h">
+      <div class="plist" data-sweep>
+        <h2 class="pl" id="j-index-h" data-reveal>Projects</h2>
+        <ol class="j-rows" role="list">
+          {projects.map((p, i) => (
+            <li data-sweep data-reveal style={`--d:${i % 4}`}>
+              <a href={`#${p.slug}`}>
+                <span class="j-n">{pad(i + 1)}</span>
+                <span class="j-t">{p.title}</span>
+                <span class="j-s">{p.sector}</span>
+                <span class="j-y">{p.year}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </nav>
+
+    <div class="journal">
+      {projects.map((p, i) => <JournalEntry project={p} n={i + 1} />)}
+    </div>
+
+    <section class="j-close" aria-labelledby="j-close-h">
+      <h2 class="h2" id="j-close-h" data-reveal><b>Every project starts on paper.</b> We draw where the light falls before we choose what makes it.</h2>
+      <a class="btn btn-dark" href="#contact" data-reveal>Enquire <svg viewBox="0 0 9 9" aria-hidden="true"><path d="M1 8 8 1M2 1h6v6" fill="none" stroke="currentColor" stroke-width="1.2"></path></svg></a>
+    </section>
+  </main>
+  <Viewer />
+</Base>
