@@ -155,6 +155,7 @@ Owner decided:
 3. Statement: use **333's second-section animation**; then, from a screen recording of 333, keep the photos locked to the text.
 4. How we work: **stack the four stages on phones**; make them **advance on a timer with the gold line filling**; **clicking a stage restarts its timer** rather than stopping.
 5. Project page: **one continuous journal page** (not a page per project), **white throughout with one closing dark band** (not installations on dark).
+6. Hero headline: **raise its contrast** (review feedback: the grey "Drawn on paper, finished on site." was hard to read where it crosses the uplit base of the facade, 1.75:1 at 1440px wide). Done with a soft shade behind the headline only (`.hero-h1::before` in `global.css`, 50% black, sized in em so it follows the type), leaving the text colours and the rest of the photo as they were.
 
 Defaults chosen by the assistant, not yet confirmed by the owner (change freely if asked):
 - Prototype greys below WCAG AA replaced by the `ink-muted` token (#6f6f6f); footer legal text #808080; filter buttons at least 24px tall on desktop; ticker button changes its label instead of also toggling `aria-pressed`.
@@ -179,6 +180,7 @@ Defaults chosen by the assistant, not yet confirmed by the owner (change freely 
 
 - **Prototype match**: Playwright screenshots of each Home section at 1440x900 and 375x812 with reduced motion, prototype (with doctype) against the build, compared with pixelmatch (threshold 0.1). Result: every section within 1% except the owner-requested How we work stack on phones. Differences left are image compression and the AA greys.
 - **Accessibility**: axe-core (WCAG 2.0/2.1/2.2 A and AA plus best practice) on both pages at both sizes, with menu and viewer open: 0 violations.
+- **Hero text over the photo** (axe cannot judge text on images): screenshot the hero with the text hidden, then each text part alone in white on black as a mask, and compute the contrast of every glyph pixel against the photo behind it, at 375, 430, 768, 1024, 1280, 1440, 1920 and 2560px wide. Result: grey line at least 4.66:1 (worst at 1440x900), white line at least 8.95:1, caption at least 9.36:1.
 - **Behaviour**: scripted checks for every effect in section 7, including reduced motion, no JavaScript, keyboard paths and phones (Home 22, journal 24, timed stages 16; all passing).
 - **Performance**: Lighthouse mobile. Home 99 / 100 / 100 / 100 (LCP 1.9s, CLS 0, about 200KB). Journal 98 / 100 / 100 / 100 (LCP 1.5s, CLS 0).
 - **Offline copy**: opened from `file://`: fonts, images, links between pages, viewer, menu.
