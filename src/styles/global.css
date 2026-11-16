@@ -173,7 +173,7 @@ main{position:relative;z-index:1;background:var(--surface)}
 .principle-fig{grid-column:1;grid-row:1/span 2;align-self:start;width:min(100%,448px)}
 .principle-fig img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:var(--radius-tile);background:#101010}
 /* The approved prototype shows this photo 900px tall: its height="900" attribute overrode the 4:5 ratio above.
-   Kept as approved. Delete this line for the 4:5 crop the CSS intended. */
+   Kept as approved above 700px (phones use 4:5, see PHONE). Delete this line for the 4:5 crop the CSS intended. */
 .principle-fig img{height:900px}
 .principle blockquote{grid-column:2;grid-row:1;align-self:start;margin:0;font-size:clamp(24px,2.3vw,32px);line-height:1.05;letter-spacing:-.015em;max-width:640px}
 .principle footer{grid-column:2;grid-row:2;align-self:start;margin-top:clamp(48px,6vw,96px);font-size:18px;line-height:1.1}
@@ -380,6 +380,9 @@ html.viewer-open{overflow:hidden}
   .principle{row-gap:40px}
   .principle-fig,.principle blockquote,.principle footer{grid-column:1;grid-row:auto}
   .principle footer{margin-top:0}
+  /* review feedback: 900px tall in a phone column (339x900 at 375px) was taller than the screen and cropped away
+     half the stairs; the photo's own 4:5 shows the whole flight and saves about 480px of scroll */
+  .principle-fig img{height:auto}
   .work-grid{grid-template-columns:1fr;margin-top:48px}
   .filter{position:static;display:flex;flex-wrap:wrap;gap:8px 18px;border-top:0;padding-top:0;font-size:16px}
   .filter-l{display:none}
