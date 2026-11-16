@@ -110,11 +110,11 @@ main{position:relative;z-index:1;background:var(--surface)}
 .story-stage{--p:.5;--sg:clamp(72px,9vw,120px);position:relative;display:grid;padding:var(--sg) var(--gr) var(--sg) var(--gl)}
 .story.is-moving .story-stage{position:sticky;top:var(--bar)}
 .story.is-moving .story-hold{height:210svh}
-/* the three paragraphs: stacked in normal flow; while held they share one cell (the tallest sets its height, all
-   top-aligned so the indented first line stays put) and crossfade, one per third of the hold */
+/* the three paragraphs: stacked in normal flow; while held they share one cell (the tallest sets its height, each
+   centred in it vertically, owner request) and crossfade, one per third of the hold */
 .story-lines{position:relative;z-index:1;display:grid;gap:.5em;align-items:start;margin-left:calc(var(--col) + var(--g));max-width:calc(5 * var(--col) + 4 * var(--g))}
 .story.is-moving .story-lines{gap:0}
-.story.is-moving .story-lead{grid-area:1/1;opacity:0;transition:opacity .6s var(--ease)}
+.story.is-moving .story-lead{grid-area:1/1;align-self:center;opacity:0;transition:opacity .6s var(--ease)}
 .story.is-moving .story-lead.is-on{opacity:1}
 .story-lead{font-size:clamp(30px,4.6vw,66px);line-height:1.04;letter-spacing:-.035em;color:var(--ink-muted);text-indent:calc(var(--col) + var(--g))}
 .story b{font-weight:400;color:var(--ink)}
