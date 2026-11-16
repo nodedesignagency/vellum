@@ -1,6 +1,6 @@
 ---
 // One project in the journal: a heading that stays pinned while its images pass (base-site animation 5),
-// then its drawings ("Drawn on paper") and its installation photos ("Finished on site"), each under a two-step strip.
+// then its drawings ("Drawn on paper") and its installation photos ("Finished on site"), each under a plain heading.
 // Each image opens in the viewer (animation 6); without JavaScript the link opens the full image.
 import { Picture, getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -60,30 +60,11 @@ const num = String(n).padStart(2, '0');
     <p class="meta"><span>{p.sector}</span><span>{p.year}</span></p>
     <p class="entry-loc">{p.location}</p>
     {p.summary && <p class="entry-sum">{p.summary}</p>}
-    {/* The stages in the pinned heading (owner request), on a 2px side line: the current one is in ink with an ink
-        line, which moves to the next stage as its images arrive; each jumps to its group.
-        Every project has it (one stage when there are only finished photos). Desktop with JavaScript only (see the
-        script below); phones and no-JS show a label over each group instead. */}
-    <ol class="j-steps" aria-label={`${p.title}, stages`}>
-      {groups.map((s, i) => (
-        <li><a href={`#${p.slug}-${s.kind}`} aria-current={i === 0 ? 'step' : undefined}>{s.label}</a></li>
-      ))}
-    </ol>
   </header>
   <div class="entry-body">
     {groups.map((g) => (
       <div class="j-group" id={`${p.slug}-${g.kind}`}>
-        {/* Phones and no-JS: both stages over each group, on side lines; the current one is the heading, in ink, the
-            other is grey and jumps to that group. On desktop with JavaScript only the heading stays, for screen readers. */}
-        <div class="j-stages">
-          {groups.map((s) =>
-            s.kind === g.kind ? (
-              <h3 class="j-stage is-on">{s.label}</h3>
-            ) : (
-              <a class="j-stage" href={`#${p.slug}-${s.kind}`}>{s.label}<span class="sr">, {p.title}</span></a>
-            ),
-          )}
-        </div>
+        <h3 class="j-label">{g.label}</h3>
         <div class="plates">
           {g.items.map((e) => (
             <figure class={`plate ${e.wide ? 'wide' : 'tall'}`} data-reveal>
@@ -108,35 +89,3 @@ const num = String(n).padStart(2, '0');
     ))}
   </div>
 </article>
-
-<script>
-  // Pinned stage list: marks the stage whose images have reached the middle of the screen (aria-current="step"),
-  // which moves the 2px ink side line to it. No fill: the line simply switches from one stage to the next.
-  const tracks = [...document.querySelectorAll<HTMLElement>('.j-steps')].map((list) => {
-    const links = [...list.querySelectorAll<HTMLAnchorElement>('a')];
-    const groups = links.map((a) => document.getElementById(a.hash.slice(1)));
-    return { links, groups };
-  });
-  if (tracks.length) {
-    let queued = false;
-    const update = () => {
-      queued = false;
-      const line = innerHeight / 2;
-      for (const { links, groups } of tracks) {
-        let current = 0;
-        groups.forEach((g, i) => {
-          if (g && g.getBoundingClientRect().top <= line) current = i;
-        });
-        links.forEach((a, i) => (i === current ? a.setAttribute('aria-current', 'step') : a.removeAttribute('aria-current')));
-      }
-    };
-    addEventListener('scroll', () => {
-      if (!queued) {
-        queued = true;
-        requestAnimationFrame(update);
-      }
-    }, { passive: true });
-    addEventListener('resize', update);
-    update();
-  }
-</script>

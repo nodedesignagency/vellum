@@ -328,26 +328,8 @@ main{position:relative;z-index:1;background:var(--surface)}
 .entry-loc{font-size:16px;color:var(--ink-muted)}
 .entry-sum{margin-top:24px;font-size:16px;line-height:1.25;max-width:36ch}
 .j-group+.j-group{margin-top:72px}
-/* Drawn on paper, then Finished on site, on a 2px side line (owner requests: a side line, not lines above; no fill
-   animation; the square markers before were decoration). Desktop with JavaScript: one list in the pinned heading,
-   the current stage in ink with an ink line, the other grey on a light line; the ink line moves to the next stage as
-   its images reach the middle of the screen (aria-current from JournalEntry.astro).
-   Phones and no-JS: both stages over each group, the current one in ink on an ink side line, the other grey. */
-.j-steps{display:none;margin:40px 0 0;padding:0;list-style:none}
-.j-steps a{position:relative;display:block;padding:7px 0 7px 16px;font-size:16px;line-height:1.1;color:var(--ink-muted);transition:color .3s}
-.j-steps a::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--rule);transition:background-color .3s}
-.j-steps a[aria-current="step"]::before{background:var(--ink)}
-.j-steps a[aria-current="step"],.j-steps a:hover{color:var(--ink)}
-.j-stages{display:flex;gap:32px;margin-bottom:24px}
-.j-stage{padding:3px 0 3px 12px;border-left:2px solid var(--rule);font-size:16px;line-height:1.1;color:var(--ink-muted)}
-.j-stage.is-on{border-left-color:var(--ink);color:var(--ink)}
-a.j-stage{transition:color .3s}
-a.j-stage:hover{color:var(--ink)}
-@media (min-width:701px){
-  .js .j-steps{display:block}
-  .js .j-stages{position:absolute;width:1px;height:1px;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-  .js .j-stages a{display:none}
-}
+/* Drawn on paper / Finished on site: a plain heading over each group (owner request: no markers or lines) */
+.j-label{margin-bottom:16px;font-size:16px;line-height:1.1}
 .plates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px var(--g);align-items:start}
 .plate.wide{grid-column:1/-1}
 .plate-open{display:block;overflow:hidden;border-radius:var(--radius-tile);background:#101010;cursor:zoom-in}
