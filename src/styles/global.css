@@ -221,12 +221,15 @@ main{position:relative;z-index:1;background:var(--surface)}
 /* The photo is the background and the words sit on top, in a band of the photo's own sky (#0e1421, sampled from its
    top edge); the photo starts just below, tucked up under the text by its empty sky (the tree tops begin 19% down the
    photo, about 10% of its width) and its top edge fading into the band, so the copy never sits on the trees.
-   Top left, on one edge: the heading large in white, the paragraph small in grey under it, each phrase on its own line
-   (owner request: a heading and paragraph at one size with an indented first line did not fit together). */
+   Top left, on one edge: the heading large in white over two lines, the paragraph small in grey under it, each phrase
+   on its own line (owner request: a heading and paragraph at one size with an indented first line did not fit together). */
 .night{--sky:#0e1421;position:relative;background:var(--sky);color:var(--on-dark);overflow:hidden}
 .night-t{position:relative;z-index:2;padding:clamp(64px,8vw,128px) var(--gr) 0 var(--gl)}
-.night-t h2{max-width:calc(5 * var(--col) + 4 * var(--g));font-size:clamp(30px,3.9vw,56px);line-height:1;letter-spacing:-.03em;text-wrap:balance}
-.night-t p{margin-top:clamp(16px,1.7vw,28px);font-size:clamp(17px,1.35vw,21px);line-height:1.35;color:#cfcfcf}
+/* the heading sits over two lines and its size stays about 2.6 times the paragraph's, so its wider line ("for the
+   final focus") is within about 10% of the paragraph's widest ("when every fitting is aimed and dimmed.") at every
+   width (owner: a one-line heading over a narrow paragraph looked odd) */
+.night-t h2{font-size:clamp(40px,3.7vw,57px);line-height:1.02;letter-spacing:-.03em}
+.night-t p{margin-top:clamp(18px,1.7vw,28px);font-size:clamp(17px,1.42vw,22px);line-height:1.35;color:#cfcfcf}
 .night-t .l{display:block;text-wrap:balance}
 /* the left tree's top is 18.7% down the photo, 10.4% of its width: the text keeps 56 to 80px clear of it */
 .night-img{position:relative;margin-top:calc(clamp(56px,4.2vw,80px) - 10.4%)}
@@ -234,7 +237,7 @@ main{position:relative;z-index:1;background:var(--surface)}
 .night img{display:block;width:100%;height:auto}
 @media (max-width:700px){
   .night-t{padding-top:56px}
-  .night-t h2{max-width:none;font-size:clamp(28px,8vw,36px)}
+  .night-t h2{font-size:clamp(32px,9.4vw,40px)}
   .night-t p{margin-top:14px;font-size:16px}
   /* a tall crop of the middle of the courtyard, fitted to its height, so the tree tops are 18.7% of that height down */
   .night-img{margin-top:calc(48px - .187 * min(118vw,520px))}
