@@ -43,7 +43,7 @@ const groups = await Promise.all(
         .filter((e) => e.kind === kind)
         .map(async (e) => {
           const wide = e.image.width / e.image.height >= 1.2;
-          const widths = [480, 768, 1024].filter((w) => w < e.image.width).concat(e.image.width);
+          const widths = [480, 768, 1024, 1600, 2048].filter((w) => w < e.image.width).concat(e.image.width);
           const full = await getImage({ src: e.image, width: e.image.width, format: 'webp' });
           return { ...e, wide, widths, full: full.src };
         }),

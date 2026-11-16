@@ -14,3 +14,8 @@ entries:
     alt: Three soft scallops of light on a plaster wall
     caption: Wall scallops · 3000K · 50%
     hidden: false
+  - kind: installation
+    image: ../../assets/projects/atelier-offices/entries/1/image.jpg
+    alt: A dark corridor with three soft scallops of light on a pale plaster wall
+    caption: Corridor · wall scallops · 3000K · 50%
+    hidden: false

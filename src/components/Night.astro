@@ -1,9 +1,9 @@
 ---
 import { Picture } from 'astro:assets';
-import beam from '../assets/home/beam-sm.jpg';
+import night from '../assets/home/night.jpg';
 ---
 <section class="night" aria-label="After dark" data-label="After dark">
-  <Picture src={beam} widths={[480, 645]} sizes="100vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
+  <Picture src={night} widths={[640, 1024, 1600, 1856]} sizes="100vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
   <div class="night-t" data-reveal>
     <h2 class="h3">We are on site for the final focus</h2>
     <p class="lede">Commissioning happens at night, when every fitting is aimed and dimmed. We do it ourselves, so the result matches the scheme you approved.</p>

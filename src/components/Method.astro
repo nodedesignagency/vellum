@@ -1,9 +1,9 @@
 ---
 import { Picture } from 'astro:assets';
-import concept from '../assets/home/sketch-concept.jpg';
-import detail from '../assets/home/sketch-detail.jpg';
-import graze from '../assets/home/graze-sm.jpg';
-const wide = { widths: [640, 1024], sizes: '(max-width:700px) calc(100vw - 36px), calc(100vw - 48px)' };
+import concept from '../assets/home/method-concept.jpg';
+import detail from '../assets/home/method-detail.jpg';
+import graze from '../assets/home/method-commissioning.jpg';
+const wide = { widths: [640, 1024, 1600, 2048, 2752], sizes: '(max-width:700px) calc(100vw - 36px), calc(100vw - 48px)' };
 ---
 <section class="method" id="practice" aria-labelledby="method-h" data-label="How we work">
   <div class="method-top">
@@ -49,7 +49,7 @@ const wide = { widths: [640, 1024], sizes: '(max-width:700px) calc(100vw - 36px)
       </div>
     </div>
     <div class="panel" role="tabpanel" id="p3" aria-labelledby="t3" tabindex="0" hidden>
-      <Picture src={graze} widths={[480, 645]} sizes="(max-width:700px) calc(100vw - 36px), calc(100vw - 48px)" formats={['avif', 'webp']} fallbackFormat="jpg" loading="lazy" decoding="async" alt="Warm light grazing down a rough stone wall from a ceiling slot, falling to darkness" />
+      <Picture src={graze} widths={[640, 1024, 1650]} sizes="(max-width:700px) calc(100vw - 36px), calc(100vw - 48px)" formats={['avif', 'webp']} fallbackFormat="jpg" loading="lazy" decoding="async" alt="Warm light grazing down a rough stone wall from a ceiling slot, falling to darkness" />
       <p class="panel-cap">Focus night · 23:40 · G01 at 40%</p>
     </div>
   </div>

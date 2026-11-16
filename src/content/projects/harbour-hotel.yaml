@@ -28,3 +28,9 @@ entries:
       darkness
     caption: Focus night · 23:40 · G01 at 40%
     hidden: false
+  - kind: installation
+    image: ../../assets/projects/harbour-hotel/entries/3/image.jpg
+    alt: The hotel lobby at night, warm light grazing a long limestone wall beside
+      a stone bench under a low pendant
+    caption: Lobby · G01 graze · P02 pendant · 2700K
+    hidden: false

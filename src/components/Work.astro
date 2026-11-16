@@ -21,7 +21,7 @@ const sectors = ['All', ...new Set(projects.map((p) => p.sector))];
           <h3>{p.title}</h3>
           <p class="loc">{p.location}</p>
           <div class="tile">
-            <Picture src={p.cover} widths={[320, 480, 645]} sizes="(max-width:700px) calc(100vw - 36px), 24vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt={p.coverAlt} loading="lazy" decoding="async" />
+            <Picture src={p.cover} widths={[320, 480, 645, 960, 1280]} sizes="(max-width:700px) calc(100vw - 36px), 24vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt={p.coverAlt} loading="lazy" decoding="async" />
           </div>
         </a>
       ))}

@@ -1,17 +1,18 @@
 ---
 import { Picture } from 'astro:assets';
-import scallop from '../assets/home/scallop-sm.jpg';
-import section from '../assets/home/sketch-section.jpg';
-import stair from '../assets/home/stair-sm.jpg';
-import graze from '../assets/home/graze-sm.jpg';
-import beam from '../assets/home/beam-sm.jpg';
+// the Statement's own photos (review feedback: they were the project covers again); larger copies are in the journal
+import corridor from '../assets/home/drift-corridor.jpg';
+import section from '../assets/home/drift-section.jpg';
+import stair from '../assets/home/drift-stair.jpg';
+import lobby from '../assets/home/drift-lobby.jpg';
+import detail from '../assets/home/drift-detail.jpg';
 
 // The three paragraphs share one held spot and change in place as the reader scrolls, while five photos pass around
 // them (review feedback: the earlier 333-style drift sent all three through a long scroll, so they were hard to read;
 // owner requests: fixed gaps, then the paragraphs back, swapping in the same place). The photos travel in the free space around the
 // text, never across it: up the outer columns on desktop, sideways above and below it on phones. Their start points
 // and travel are in global.css (.d0 to .d4); the script below only reports how far through the hold the reader is.
-const drifts = [scallop, section, stair, graze, beam];
+const drifts = [corridor, section, stair, lobby, detail];
 ---
 <section class="story" id="content" aria-label="About the practice" data-label="The practice">
   <div class="story-pin">
@@ -24,7 +25,7 @@ const drifts = [scallop, section, stair, graze, beam];
       <div class="drifts" aria-hidden="true">
         {drifts.map((src, i) => (
           <figure class={`drift d${i}`}>
-            <Picture src={src} widths={[160, 320, 480, 645]} sizes="(max-width:700px) 23vw, 13vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
+            <Picture src={src} widths={[160, 320, 480, 700, 1000, 1128]} sizes="(max-width:700px) 23vw, 13vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
           </figure>
         ))}
       </div>

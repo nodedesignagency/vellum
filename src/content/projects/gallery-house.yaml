@@ -21,3 +21,8 @@ entries:
     alt: Floating stone stairs with a line of warm light under each tread
     caption: S05 step light · 2700K · 30%
     hidden: false
+  - kind: installation
+    image: ../../assets/projects/gallery-house/entries/2/image.jpg
+    alt: A stone stair between timber slats, a line of warm light under each tread
+    caption: Stair · S05 step lights · 2700K
+    hidden: false

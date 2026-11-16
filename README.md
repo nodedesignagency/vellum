@@ -78,7 +78,7 @@ The form posts to `/api/enquiry`, which sends an email through [Resend](https://
 ## Before launch
 
 - Collaborator logos are invented placeholders. Replace them in the editor.
-- Photos and drawings are 1024px Magnific renders; swap in the full-resolution originals (the hero is soft on large screens).
+- Photos and drawings are the full-size Magnific originals. The hero and the night band are still slightly soft on large or high-density screens; a 2x upscale of the hero and a 4k night image fix them (`scripts/grade-image.mjs` grades new renders to match).
 - The logo was traced from the brand board; replace `src/components/LogoSymbol.astro` with the master vector.
 - Email addresses, address and Instagram are placeholders (`ContactFooter.astro`, `Menu.astro`).
 - Project summaries and most captions are drafted placeholders in the brand voice.

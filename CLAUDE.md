@@ -56,7 +56,7 @@ Pick a setup a non-developer can edit (for example Astro content collections wit
 
 ## Assets
 
-- Photos and drawings in `prototype/img/` were generated in Magnific and colour-graded to the logo's gold (#e8c391). They are 1024px wide, so the hero is soft on large screens. The full-resolution originals are in the user's Magnific project; ask the user for them before launch.
+- Photos and drawings were generated in Magnific (the user's Personal project) and the photos colour-graded to the logo's gold (#e8c391). The site now uses the full-size originals (1650 to 2752px), graded with `scripts/grade-image.mjs` (`--match` for renders that skipped the amber edit, `--no-grade` for drawings); `prototype/img/` keeps the old 1024px copies as the design reference. The hero (2048px) and night band are still below one file pixel per screen pixel on large or high-density screens: a 2x upscale and a new 4k image fix them, and cost Magnific credits, so ask first.
 - Collaborator logos in `prototype/img/clients/` are invented dummies. Replace with real clients before launch.
 - The logo was traced from a brand board image. Ask the user for the master vector before launch.
 - Email, address and Instagram are placeholders.
