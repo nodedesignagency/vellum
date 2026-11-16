@@ -112,16 +112,21 @@ main{position:relative;z-index:1;background:var(--surface)}
 .story.is-moving .story-hold{height:100svh}
 .story-lead{position:relative;z-index:1;margin-left:calc(var(--col) + var(--g));max-width:calc(5 * var(--col) + 4 * var(--g));font-size:clamp(30px,4.6vw,66px);line-height:1.04;letter-spacing:-.035em;color:var(--ink-muted);text-indent:calc(var(--col) + var(--g))}
 .story b{font-weight:400;color:var(--ink)}
-.drifts{position:absolute;inset:0}
+/* Start points. --l0 / --r0 are the first photo in the left / right column; the others follow 60svh / 75svh apart.
+   They start no higher than the middle-based point allows and never above the floor after max(): low enough that
+   no photo is cut when the hold starts, and that the faster-rising photos cannot catch the section's top edge
+   while it is still on screen (it reaches the bar after (screen - bar - stage) / 2 of scrolling; the left column
+   gains half a scroll on it, the right a whole one; owner request: no photo cut as the effect starts). */
+.drifts{position:absolute;inset:0;--l0:max(calc(50% - 35svh),calc((100svh - var(--bar) - 100%) / 4 + 16px));--r0:max(calc(50% - 5svh),calc((100svh - var(--bar) - 100%) / 2 + 16px))}
 .drift{position:absolute;width:var(--col);aspect-ratio:4/5;transform:translate3d(calc(var(--dx,0) * var(--p) * 1vw),calc(var(--dy,0) * var(--p) * 1svh),0);will-change:transform;pointer-events:none}
 .drift img,.drift svg{width:100%;height:100%;object-fit:cover}
 .d0,.d2,.d4{left:var(--gl);--dy:-150}
 .d1,.d3{left:calc(var(--gl) + 6 * (var(--col) + var(--g)));--dy:-200}
-.d0{top:calc(50% - 35svh)}
-.d1{top:calc(50% - 5svh)}
-.d2{top:calc(50% + 25svh)}
-.d3{top:calc(50% + 70svh)}
-.d4{top:calc(50% + 85svh)}
+.d0{top:var(--l0)}
+.d2{top:calc(var(--l0) + 60svh)}
+.d4{top:calc(var(--l0) + 120svh)}
+.d1{top:var(--r0)}
+.d3{top:calc(var(--r0) + 75svh)}
 
 /* 2b. COLLABORATORS ticker (Airloom logo marquee) */
 .clients{position:relative;padding:24px 0 24px;border-top:1px solid var(--rule);overflow:hidden}
