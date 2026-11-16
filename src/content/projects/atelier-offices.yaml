@@ -7,11 +7,11 @@ year: "2023"
 summary: Four floors of studio space. Downlights set close to the walls throw
   soft scallops on the plaster, so the desks get even light without glare.
 cover: ../../assets/projects/atelier-offices/cover.jpg
-coverAlt: Three soft scallops of light on a plaster wall
+coverAlt: Three recessed downlights casting scallops of light down a plaster wall
 entries:
   - kind: installation
     image: ../../assets/projects/atelier-offices/entries/0/image.jpg
-    alt: Three soft scallops of light on a plaster wall
+    alt: Three recessed downlights casting scallops of light down a plaster wall
     caption: Wall scallops · 3000K · 50%
     hidden: false
   - kind: installation
