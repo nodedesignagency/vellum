@@ -347,7 +347,10 @@ html.viewer-open{overflow:hidden}
   :root{--col:calc((100vw - 8 * var(--g)) / 7)}
   .hero{height:max(460px,calc(100svh - var(--bar)))}
   .hero img{object-position:42% 50%}
-  .hero-note{top:calc(26px + env(safe-area-inset-top,0px));bottom:auto;right:var(--gr);text-align:right;font-size:10px}
+  /* review feedback: the caption's lines met nothing in the logo, so phones drop it and the logo sits as far
+     from the top as from the side (one 18px margin); the headline's left edge already shares that line */
+  .hero-note{display:none}
+  .brand{top:calc(var(--g) + env(safe-area-inset-top,0px))}
   .hero-h1{bottom:28px}
   .bar .caption,.bar-section{display:none}
   .story-copy{font-size:clamp(28px,7.6vw,40px);line-height:1.08;letter-spacing:-.025em}

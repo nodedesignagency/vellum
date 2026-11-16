@@ -156,6 +156,7 @@ Owner decided:
 4. How we work: **stack the four stages on phones**; make them **advance on a timer with the gold line filling**; **clicking a stage restarts its timer** rather than stopping.
 5. Project page: **one continuous journal page** (not a page per project), **white throughout with one closing dark band** (not installations on dark).
 6. Hero headline: **raise its contrast** (review feedback: the grey "Drawn on paper, finished on site." was hard to read where it crosses the uplit base of the facade, 1.75:1 at 1440px wide). Done with a soft shade behind the headline only (`.hero-h1::before` in `global.css`, 50% black, sized in em so it follows the type), leaving the text colours and the rest of the photo as they were.
+7. Hero on phones: **drop the top-right caption** ("Facade uplight study, 2700K · 15° · 40% dim"; review feedback: its lines did not line up with the logo and it competed with it) and **tidy the margins**: the logo now sits 18px from the top, the same as the side margin, so logo, strapline and headline share one left edge inside one margin. Above 700px the caption stays at the bottom right as in the prototype.
 
 Defaults chosen by the assistant, not yet confirmed by the owner (change freely if asked):
 - Prototype greys below WCAG AA replaced by the `ink-muted` token (#6f6f6f); footer legal text #808080; filter buttons at least 24px tall on desktop; ticker button changes its label instead of also toggling `aria-pressed`.
