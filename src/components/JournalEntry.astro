@@ -53,29 +53,28 @@ const groups = await Promise.all(
 
 const num = String(n).padStart(2, '0');
 ---
-<article class={groups.length > 1 ? 'entry has-steps' : 'entry'} id={p.slug} aria-labelledby={`${p.slug}-h`} data-label={p.title} data-sweep>
+<article class="entry" id={p.slug} aria-labelledby={`${p.slug}-h`} data-label={p.title} data-sweep>
   <header class="entry-head" data-reveal>
     <p class="entry-n">{num}</p>
     <h2 class="h3 entry-t" id={`${p.slug}-h`}>{p.title}</h2>
     <p class="meta"><span>{p.sector}</span><span>{p.year}</span></p>
     <p class="entry-loc">{p.location}</p>
     {p.summary && <p class="entry-sum">{p.summary}</p>}
-    {/* The stages in the pinned heading (owner request): the current one is in ink and its line fills as its images
-        pass, so the list changes from paper to site while scrolling; each jumps to its group. Desktop with JavaScript
-        only (see the script below); phones and no-JS show the strip over each group instead. */}
-    {groups.length > 1 && (
-      <ol class="j-steps" aria-label={`${p.title}, stages`}>
-        {groups.map((s, i) => (
-          <li><a href={`#${p.slug}-${s.kind}`} aria-current={i === 0 ? 'step' : undefined}>{s.label}</a></li>
-        ))}
-      </ol>
-    )}
+    {/* The stages in the pinned heading (owner request), on a side line: the current one is in ink and the line fills
+        down as its images pass, so the list changes from paper to site while scrolling; each jumps to its group.
+        Every project has it (one stage when there are only finished photos). Desktop with JavaScript only (see the
+        script below); phones and no-JS show a label over each group instead. */}
+    <ol class="j-steps" aria-label={`${p.title}, stages`}>
+      {groups.map((s, i) => (
+        <li><a href={`#${p.slug}-${s.kind}`} aria-current={i === 0 ? 'step' : undefined}>{s.label}</a></li>
+      ))}
+    </ol>
   </header>
   <div class="entry-body">
     {groups.map((g) => (
       <div class="j-group" id={`${p.slug}-${g.kind}`}>
-        {/* Two steps, paper then site: the current one is the heading, in ink; the other is grey and jumps to that
-            group, so the drawings and the finished room can be compared (review feedback: replaces the square markers). */}
+        {/* Phones and no-JS: both stages over each group, on side lines; the current one is the heading, in ink, the
+            other is grey and jumps to that group. On desktop with JavaScript only the heading stays, for screen readers. */}
         <div class="j-stages">
           {groups.map((s) =>
             s.kind === g.kind ? (

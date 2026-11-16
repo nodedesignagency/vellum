@@ -328,26 +328,24 @@ main{position:relative;z-index:1;background:var(--surface)}
 .entry-loc{font-size:16px;color:var(--ink-muted)}
 .entry-sum{margin-top:24px;font-size:16px;line-height:1.25;max-width:36ch}
 .j-group+.j-group{margin-top:72px}
-/* Drawn on paper, then Finished on site: How we work's stage strip on white (review feedback: the square markers were
-   decoration). Two equal steps, the current one in ink on an ink rule, the other grey and a link to its group.
-   The first strip sits on the project's own top rule, so its ink segment marks the stage along it. */
-.j-stages{display:flex;gap:var(--g);margin-bottom:24px}
-.j-group:first-child .j-stages{margin-top:-15px}
-.j-stage{flex:0 0 clamp(148px,15vw,220px);padding-top:14px;border-top:1px solid var(--rule);font-size:16px;line-height:1.1;color:var(--ink-muted)}
-.j-stage.is-on{border-top-color:var(--ink);color:var(--ink)}
+/* Drawn on paper, then Finished on site, on side lines (owner request: a side line, not lines above; the square
+   markers before were decoration). Desktop with JavaScript: one list in the pinned heading, a single line down its
+   left side that fills in ink as each stage's images pass (--p from JournalEntry.astro), the current stage in ink.
+   Phones and no-JS: both stages over each group, the current one in ink on an ink side line, the other grey. */
+.j-steps{display:none;margin:40px 0 0;padding:0;list-style:none}
+.j-steps a{position:relative;display:block;padding:7px 0 7px 16px;font-size:16px;line-height:1.1;color:var(--ink-muted);transition:color .3s}
+.j-steps a::after,.j-steps a::before{content:"";position:absolute;left:0;top:0;bottom:0;width:1px;background:var(--rule)}
+.j-steps a::before{z-index:1;background:var(--ink);transform:scaleY(var(--p,0));transform-origin:0 0}
+.j-steps a[aria-current="step"],.j-steps a:hover{color:var(--ink)}
+.j-stages{display:flex;gap:32px;margin-bottom:24px}
+.j-stage{padding:3px 0 3px 12px;border-left:1px solid var(--rule);font-size:16px;line-height:1.1;color:var(--ink-muted)}
+.j-stage.is-on{border-left-color:var(--ink);color:var(--ink)}
 a.j-stage{transition:color .3s}
 a.j-stage:hover{color:var(--ink)}
-/* The same two stages in the pinned heading (owner request), stacked like How we work on phones. The current stage
-   is in ink and each line fills in ink as its images pass (--p from JournalEntry.astro). Desktop with JavaScript only:
-   there the strips over the groups step aside (kept as headings for screen readers, links removed). */
-.j-steps{display:none;margin:40px 0 0;padding:0;list-style:none;max-width:36ch}
-.j-steps a{position:relative;display:block;padding:12px 0 14px;border-top:1px solid var(--rule);font-size:16px;line-height:1.1;color:var(--ink-muted);transition:color .3s}
-.j-steps a::before{content:"";position:absolute;left:0;top:-1px;width:100%;height:1px;background:var(--ink);transform:scaleX(var(--p,0));transform-origin:0 0}
-.j-steps a[aria-current="step"],.j-steps a:hover{color:var(--ink)}
 @media (min-width:701px){
   .js .j-steps{display:block}
-  .js .has-steps .j-stages{position:absolute;width:1px;height:1px;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-  .js .has-steps .j-stages a{display:none}
+  .js .j-stages{position:absolute;width:1px;height:1px;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .js .j-stages a{display:none}
 }
 .plates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px var(--g);align-items:start}
 .plate.wide{grid-column:1/-1}
@@ -457,7 +455,6 @@ html.viewer-open{overflow:hidden}
   .j-s{display:none}
   .entry{grid-template-columns:1fr;row-gap:32px}
   .entry-head{position:static}
-  .j-group:first-child .j-stages{margin-top:0}
   .plates{grid-template-columns:1fr;gap:32px}
   .viewer-bottom{flex-direction:column;align-items:stretch;gap:12px}
   .viewer-nav .viewer-btn{flex:1}
