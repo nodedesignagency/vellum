@@ -6,8 +6,8 @@ import stair from '../assets/home/stair-sm.jpg';
 import graze from '../assets/home/graze-sm.jpg';
 import beam from '../assets/home/beam-sm.jpg';
 
-// One key paragraph held on screen while five photos pass it (review feedback: the earlier 333-style drift sent all
-// three paragraphs through a long scroll, so they were hard to read). The photos travel in the free space around the
+// One paragraph held on screen while five photos pass it (review feedback: the earlier 333-style drift sent all
+// three paragraphs through a long scroll, so they were hard to read; the other two were then removed, owner request). The photos travel in the free space around the
 // text, never across it: up the outer columns on desktop, sideways above and below it on phones. Their start points
 // and travel are in global.css (.d0 to .d4); the script below only reports how far through the hold the reader is.
 const drifts = [scallop, section, stair, graze, beam];
@@ -24,10 +24,7 @@ const drifts = [scallop, section, stair, graze, beam];
         ))}
       </div>
     </div>
-  </div>
-  <div class="story-copy">
-    <p data-reveal><b>We work beside architects, developers and interior designers</b> from the first concept sketch to the night we focus the last fitting on site.</p>
-    <p data-reveal style="--d:1"><b>Every project starts on paper.</b> We draw where the light falls before we choose what makes it.</p>
+    <div class="story-hold" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -38,9 +35,10 @@ const drifts = [scallop, section, stair, graze, beam];
     get matches() { return reduceQuery.matches && !document.documentElement.classList.contains('force-motion'); },
     addEventListener: (type: 'change', fn: () => void) => reduceQuery.addEventListener(type, fn),
   };
-  // The hold: the stage sticks under the bar while the reader scrolls one screen; --p runs from 0 to 1 across it and
-  // moves the photos (CSS: start point + travel x --p, in units of the stage's size). Locked to the native scroll.
-  // With reduced motion, or without JavaScript, nothing is held and the photos rest halfway (--p: .5).
+  // The hold: the stage (paragraph plus fixed gaps) sticks, centred in the space under the bar, while the reader scrolls
+  // through .story-hold (one screen); --p runs from 0 to 1 across it and moves the photos (CSS: start point + travel
+  // x --p). Locked to the native scroll. With reduced motion, or without JavaScript, nothing is held and the photos
+  // rest halfway (--p: .5).
   const story = document.querySelector<HTMLElement>('.story');
   const pin = story?.querySelector<HTMLElement>('.story-pin');
   const stage = story?.querySelector<HTMLElement>('.story-stage');
@@ -51,7 +49,7 @@ const drifts = [scallop, section, stair, graze, beam];
     if (!story || !pin || !stage || reduce.matches) return;
     const r = pin.getBoundingClientRect();
     if (r.bottom < 0 || r.top > innerHeight) return;
-    const top = parseFloat(getComputedStyle(stage).top) || 0;
+    const top = parseFloat(stage.style.top) || 0;
     const range = r.height - stage.offsetHeight;
     const p = range > 0 ? Math.min(1, Math.max(0, (top - r.top) / range)) : 0;
     stage.style.setProperty('--p', p.toFixed(4));
@@ -64,14 +62,23 @@ const drifts = [scallop, section, stair, graze, beam];
     }
   };
 
+  // where the stage sticks: centred in the screen below the bar (or right under the bar if it is taller than that)
+  const place = () => {
+    if (!stage) return;
+    const bar = document.querySelector<HTMLElement>('.bar')?.offsetHeight ?? 0;
+    stage.style.top = `${Math.max(bar, Math.round((innerHeight + bar - stage.offsetHeight) / 2))}px`;
+  };
+
   const setMode = () => {
     if (!story || !stage) return;
     if (reduce.matches) {
       story.classList.remove('is-moving');
       stage.style.removeProperty('--p');
+      stage.style.removeProperty('top');
       return;
     }
     story.classList.add('is-moving');
+    place();
     update();
   };
 
@@ -87,7 +94,10 @@ const drifts = [scallop, section, stair, graze, beam];
   }
 
   addEventListener('scroll', queue, { passive: true });
-  addEventListener('resize', queue);
+  addEventListener('resize', () => {
+    if (story?.classList.contains('is-moving')) place();
+    queue();
+  });
   reduce.addEventListener('change', setMode);
   setMode();
 </script>

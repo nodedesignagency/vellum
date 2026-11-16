@@ -97,31 +97,31 @@ main{position:relative;z-index:1;background:var(--surface)}
 .caption i{width:8px;height:8px;background:var(--lamp-glow);box-shadow:0 0 10px var(--lamp-glow)}
 .bar-right a{transition:color .3s}.bar-right a:hover{color:var(--ink-muted)}
 
-/* 2. STATEMENT. One key paragraph is held on screen while five photos pass it; the other two follow as plain
-   paragraphs that fade up (review feedback: the earlier 333-style drift sent all three paragraphs through a long
-   scroll and made them hard to read). The stage is one screen tall and sticks under the bar for one more screen of
-   scrolling (.is-moving, set by Statement.astro, which also sets --p from 0 to 1 across the hold). Each photo has a
-   start point (left/top) and a travel (--dx, --dy, in units of the stage's size); it never crosses the text:
-   desktop sends them up the outer columns (left lane slower than the right), phones slide them through the space
-   above and below. Reduced motion or no JS: nothing is held, the photos rest halfway (--p .5). */
-.story{position:relative;padding-bottom:clamp(120px,16vw,260px)}
-.story-stage{--p:.5;position:relative;height:calc(100svh - var(--bar));display:grid;align-content:center;padding:0 var(--gr) 0 var(--gl);overflow:hidden;container-type:size}
-.story.is-moving .story-pin{height:calc(200svh - var(--bar))}
+/* 2. STATEMENT. One paragraph is held on screen while five photos pass it (review feedback: the earlier 333-style
+   drift sent three paragraphs through a long scroll and made them hard to read; the other two were then removed,
+   owner request). Spacing is fixed, not shared out (owner request): a fixed gap (--sg) above and below the
+   paragraph, and on phones the photo rows sit one fixed gap from it. The stage is only that tall; with motion it
+   sticks, centred on screen, while the reader scrolls through .story-hold (one screen), and Statement.astro sets --p
+   from 0 to 1 across the hold. Each photo has a start point and a travel (--dx in vw, --dy in svh); it never crosses
+   the text: desktop sends them up the outer columns from below the screen to above it (left lane slower than the
+   right), phones slide them along the rows above and below. The section clips them at its edges.
+   Reduced motion or no JS: nothing is held, the photos rest halfway (--p .5). */
+.story{position:relative;overflow:clip}
+.story-stage{--p:.5;--sg:clamp(72px,9vw,120px);position:relative;display:grid;padding:var(--sg) var(--gr) var(--sg) var(--gl)}
 .story.is-moving .story-stage{position:sticky;top:var(--bar)}
-.story-lead,.story-copy p{font-size:clamp(30px,4.6vw,66px);line-height:1.04;letter-spacing:-.035em;color:var(--ink-muted);text-indent:calc(var(--col) + var(--g))}
-.story-lead{position:relative;z-index:1;margin-left:calc(var(--col) + var(--g));max-width:calc(5 * var(--col) + 4 * var(--g))}
-.story-copy{display:grid;gap:.5em;padding:0 calc(var(--gr) + var(--col) + var(--g)) 0 calc(var(--gl) + var(--col) + var(--g))}
+.story.is-moving .story-hold{height:100svh}
+.story-lead{position:relative;z-index:1;margin-left:calc(var(--col) + var(--g));max-width:calc(5 * var(--col) + 4 * var(--g));font-size:clamp(30px,4.6vw,66px);line-height:1.04;letter-spacing:-.035em;color:var(--ink-muted);text-indent:calc(var(--col) + var(--g))}
 .story b{font-weight:400;color:var(--ink)}
 .drifts{position:absolute;inset:0}
-.drift{position:absolute;width:var(--col);aspect-ratio:4/5;transform:translate3d(calc(var(--dx,0) * var(--p) * 1cqw),calc(var(--dy,0) * var(--p) * 1cqh),0);will-change:transform;pointer-events:none}
+.drift{position:absolute;width:var(--col);aspect-ratio:4/5;transform:translate3d(calc(var(--dx,0) * var(--p) * 1vw),calc(var(--dy,0) * var(--p) * 1svh),0);will-change:transform;pointer-events:none}
 .drift img,.drift svg{width:100%;height:100%;object-fit:cover}
 .d0,.d2,.d4{left:var(--gl);--dy:-150}
 .d1,.d3{left:calc(var(--gl) + 6 * (var(--col) + var(--g)));--dy:-200}
-.d0{top:15%}
-.d1{top:45%}
-.d2{top:75%}
-.d3{top:120%}
-.d4{top:135%}
+.d0{top:calc(50% - 35svh)}
+.d1{top:calc(50% - 5svh)}
+.d2{top:calc(50% + 25svh)}
+.d3{top:calc(50% + 70svh)}
+.d4{top:calc(50% + 85svh)}
 
 /* 2b. COLLABORATORS ticker (Airloom logo marquee) */
 .clients{position:relative;padding:24px 0 24px;border-top:1px solid var(--rule);overflow:hidden}
@@ -395,19 +395,18 @@ html.viewer-open{overflow:hidden}
   .brand{top:calc(var(--g) + env(safe-area-inset-top,0px))}
   .hero-copy{bottom:28px}
   .bar .caption,.bar-section{display:none}
-  /* phones: the paragraph takes the full width, so the photos slide sideways through the space above it (leftwards)
-     and below it (rightwards) */
-  .story-lead,.story-copy p{font-size:clamp(28px,7.6vw,40px);line-height:1.08;letter-spacing:-.025em;text-indent:calc(2 * (var(--col) + var(--g)))}
-  .story-lead{margin-left:0;max-width:none}
-  .story-copy{padding:0 var(--gr) 0 var(--gl)}
-  .drift{width:min(calc(2 * var(--col) + var(--g)),13cqh);--dy:0}
-  .d0,.d1,.d4{--dx:-110}
-  .d2,.d3{top:auto;--dx:110}
-  .d0{top:2%;left:55%}
-  .d1{top:5%;left:110%}
-  .d4{top:3%;left:165%}
-  .d2{bottom:3%;left:-30%}
-  .d3{bottom:6%;left:30%}
+  /* phones: the paragraph takes the full width; a row of photos one fixed gap above it and one below, sliding
+     left along the top row and right along the bottom one. Photos are capped by screen height so short phones fit. */
+  .story-stage{--sg:32px;--ph:min(calc(2 * var(--col) + var(--g)),11svh);padding:calc(2 * var(--sg) + 1.25 * var(--ph)) var(--gr) calc(2 * var(--sg) + 1.25 * var(--ph)) var(--gl)}
+  .story-lead{font-size:clamp(28px,7.6vw,40px);line-height:1.08;letter-spacing:-.025em;text-indent:calc(2 * (var(--col) + var(--g)));margin-left:0;max-width:none}
+  .drift{width:var(--ph);--dy:0}
+  .d0,.d1,.d4{top:var(--sg);--dx:-110}
+  .d2,.d3{top:auto;bottom:var(--sg);--dx:110}
+  .d0{left:55%}
+  .d1{left:110%}
+  .d4{left:165%}
+  .d2{left:-30%}
+  .d3{left:30%}
   .ticker{margin-top:48px}
   .cell{flex-basis:140px;height:140px;padding:0 12px}
   /* phones: the four stages stack in one column (the prototype had two by two) */
