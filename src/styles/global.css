@@ -225,11 +225,15 @@ main{position:relative;z-index:1;background:var(--surface)}
 .empty{grid-column:1/-1;color:var(--ink-muted);font-size:18px}
 
 /* 6. AFTER DARK band (Airloom .wyo) */
-.night{position:relative;min-height:clamp(440px,62vw,900px);display:grid;place-items:center;text-align:center;color:var(--on-dark);padding:48px var(--gr) 48px var(--gl);overflow:hidden;background:#050505}
+/* the text sits in the night sky above the courtyard's trees, the line kept narrow so it stays over the shorter middle
+   tree (at least 11.6:1 at every size measured); smaller screens get a taller band so the sky has room for it */
+.night{position:relative;min-height:clamp(440px,62vw,900px);display:grid;place-items:start center;text-align:center;color:var(--on-dark);padding:clamp(32px,5.5vw,88px) var(--gr) 48px var(--gl);overflow:hidden;background:#050505}
 .night img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .night-t{position:relative;display:grid;justify-items:center;gap:14px;max-width:720px}
 .night .h3{font-size:clamp(24px,2.3vw,32px)}
 .night p{color:#d6d6d6}
+.night .lede{max-width:34ch}
+@media (max-width:900px){.night{min-height:max(560px,62vw)}}
 
 /* 7. SCOPE lists (Airloom team rows) */
 .scope{position:relative;border-top:1px solid var(--rule);padding:48px var(--gr) 120px var(--gl)}

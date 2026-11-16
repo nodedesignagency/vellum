@@ -29,7 +29,7 @@ Sections in order, as in `prototype/index.html`:
 5. **How we work**: one dark band with four tabs (Concept, Detail, Specification, Commissioning) switching a large panel below: two drawings, a luminaire schedule table, a photo.
 6. **Studio principle**: photo on the left, quote on the right.
 7. **Selected work**: grey band, sector filter on the left, project cards on the right, link to the Project page.
-8. **Night band**: full-bleed image with one line of copy.
+8. **Night band**: full-bleed image (a courtyard at night) with its heading and line set in the sky above the trees.
 9. **Sectors and services**: two ruled lists.
 10. **Contact footer**: black footer revealed underneath the page as you scroll to the end (the page lifts off it), enquiry form, contact details, large logo.
 
@@ -56,7 +56,7 @@ Pick a setup a non-developer can edit (for example Astro content collections wit
 
 ## Assets
 
-- Photos and drawings were generated in Magnific (the user's Personal project) and the photos colour-graded to the logo's gold (#e8c391). The site now uses the full-size originals (1650 to 2752px), graded with `scripts/grade-image.mjs` (`--match` for renders that skipped the amber edit, `--no-grade` for drawings); `prototype/img/` keeps the old 1024px copies as the design reference. The hero (2048px) and night band are still below one file pixel per screen pixel on large or high-density screens: a 2x upscale and a new 4k image fix them, and cost Magnific credits, so ask first.
+- Photos and drawings were generated in Magnific (the user's Personal project) and the photos colour-graded to the logo's gold (#e8c391). The site uses the full-size originals, graded with `scripts/grade-image.mjs` (`--match` for renders that skipped the amber edit, `--no-grade` for drawings); the hero is a 2x Magnific upscale (4096px) and the night band and How we work's commissioning photo are 4k renders, so every image is sharp on large and high-density screens. `prototype/img/` keeps the old 1024px copies as the design reference. New Magnific renders or upscales cost credits: ask first.
 - Collaborator logos in `prototype/img/clients/` are invented dummies. Replace with real clients before launch.
 - The logo was traced from a brand board image. Ask the user for the master vector before launch.
 - Email, address and Instagram are placeholders.
