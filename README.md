@@ -78,7 +78,7 @@ The form posts to `/api/enquiry`, which sends an email through [Resend](https://
 ## Before launch
 
 - Collaborator logos are invented placeholders. Replace them in the editor.
-- Photos and drawings are full-size Magnific renders (the hero a 2x upscale, the night band and How we work's commissioning photo 4k), sharp on large and high-density screens. `scripts/grade-image.mjs` grades new renders to match. Replace with real project photography when available.
+- Photos and drawings are full-size Magnific renders (the hero a 2x upscale; the night band, How we work's commissioning photo and the North Gallery and Atelier offices photos 4k), sharp on large and high-density screens. `scripts/grade-image.mjs` grades new renders to match. Replace with real project photography when available.
 - The logo was traced from the brand board; replace `src/components/LogoSymbol.astro` with the master vector.
 - Email addresses, address and Instagram are placeholders (`ContactFooter.astro`, `Menu.astro`).
 - Project summaries and most captions are drafted placeholders in the brand voice.

@@ -12,6 +12,8 @@ export default defineConfig({
   // React is only used by the Keystatic editing screen; the public pages ship no framework.
   integrations: [react(), keystatic()],
   build: { inlineStylesheets: 'always' },
+  // Astro's sharp service, re-encoding flat, dark photos at a higher quality so they keep their texture (see the file)
+  image: { service: { entrypoint: './src/image-service.ts' } },
   env: {
     schema: {
       // Set these in Vercel once the studio inbox is ready. Without them the form says it is not connected yet.
