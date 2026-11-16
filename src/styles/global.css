@@ -337,6 +337,18 @@ main{position:relative;z-index:1;background:var(--surface)}
 .j-stage.is-on{border-top-color:var(--ink);color:var(--ink)}
 a.j-stage{transition:color .3s}
 a.j-stage:hover{color:var(--ink)}
+/* The same two stages in the pinned heading (owner request), stacked like How we work on phones. The current stage
+   is in ink and each line fills in ink as its images pass (--p from JournalEntry.astro). Desktop with JavaScript only:
+   there the strips over the groups step aside (kept as headings for screen readers, links removed). */
+.j-steps{display:none;margin:40px 0 0;padding:0;list-style:none;max-width:36ch}
+.j-steps a{position:relative;display:block;padding:12px 0 14px;border-top:1px solid var(--rule);font-size:16px;line-height:1.1;color:var(--ink-muted);transition:color .3s}
+.j-steps a::before{content:"";position:absolute;left:0;top:-1px;width:100%;height:1px;background:var(--ink);transform:scaleX(var(--p,0));transform-origin:0 0}
+.j-steps a[aria-current="step"],.j-steps a:hover{color:var(--ink)}
+@media (min-width:701px){
+  .js .j-steps{display:block}
+  .js .has-steps .j-stages{position:absolute;width:1px;height:1px;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+  .js .has-steps .j-stages a{display:none}
+}
 .plates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px var(--g);align-items:start}
 .plate.wide{grid-column:1/-1}
 .plate-open{display:block;overflow:hidden;border-radius:var(--radius-tile);background:#101010;cursor:zoom-in}
