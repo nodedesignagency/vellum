@@ -2,16 +2,41 @@
 import { Picture } from 'astro:assets';
 import night from '../assets/home/night.jpg';
 ---
-<!-- The text sits on the grid in a band of the photo's own night sky, and the photo starts just below it, its top
-     fading into that sky, so the copy never sits on the lit trees at any width (review feedback: the centred text
-     floating over the photo felt unplanned, and the paragraph wrapped awkwardly). Each phrase starts its own line (the
-     heading's two, the first sentence's two, then the second sentence balanced over two), so lines break between phrases. -->
+<!-- The page's own group layout (as Selected work and Sectors and services): the heading, then a narrow column for the
+     words and a wide one for the photo, one rule above each (owner request: the full-bleed photo with the copy in its
+     sky was not liked; references: In Common With's featured section and MOUTHWASH Studio's split, on Mobbin). The
+     photo is a framed print at its own shape, so no text ever sits on it. Each phrase of the paragraph starts its own
+     line (span.l), so lines break between phrases. As it scrolls into view the courtyard starts dark and its lights
+     fade up, the commissioning moment the copy describes. -->
 <section class="night" aria-labelledby="night-h" data-label="After dark">
-  <div class="night-t" data-reveal>
-    <h2 class="h2" id="night-h"><span class="l">We are on site</span> <span class="l">for the final focus</span></h2>
-    <p><span class="l">Commissioning happens at night,</span> <span class="l">when every fitting is aimed and dimmed.</span> <span class="l">We do it ourselves, so the result matches the scheme you approved.</span></p>
-  </div>
-  <div class="night-img">
-    <Picture src={night} widths={[640, 1024, 1600, 2400, 3200, 3840]} sizes="(max-width:700px) 215vw, 100vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
+  <h2 class="h2" id="night-h" data-reveal>We are on site for the final focus</h2>
+  <div class="night-grid">
+    <div class="night-copy" data-sweep>
+      <p><span class="l">Commissioning happens at night,</span> <span class="l">when every fitting is aimed and dimmed.</span> <span class="l">We do it ourselves, so the result matches the scheme you approved.</span></p>
+    </div>
+    <div class="night-fig" data-sweep>
+      <div class="night-img" data-lights>
+        <Picture src={night} widths={[640, 1024, 1600, 2400, 3200, 3840]} sizes="(max-width:700px) calc((100vw - 36px) * 1.35), (max-width:1000px) calc(100vw - 48px), (max-width:1280px) 66vw, 75vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
+      </div>
+    </div>
   </div>
 </section>
+
+<script>
+  // Lights up: the photo starts dark and its lights fade up once it is well into view. Only with motion allowed and
+  // only when it starts below the screen; otherwise it simply shows. (Reduced-motion check inline: see AGENTS.md gotchas.)
+  const lamp = document.querySelector<HTMLElement>('[data-lights]');
+  const still = matchMedia('(prefers-reduced-motion: reduce)').matches && !document.documentElement.classList.contains('force-motion');
+  if (lamp && !still && 'IntersectionObserver' in window && lamp.getBoundingClientRect().top > innerHeight) {
+    lamp.classList.add('lights-off');
+    const io = new IntersectionObserver(
+      ([e]) => {
+        if (!e.isIntersecting) return;
+        lamp.classList.add('lights-on');
+        io.disconnect();
+      },
+      { rootMargin: '0px 0px -30% 0px' },
+    );
+    io.observe(lamp);
+  }
+</script>

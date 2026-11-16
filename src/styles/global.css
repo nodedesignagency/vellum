@@ -217,31 +217,35 @@ main{position:relative;z-index:1;background:var(--surface)}
 .work-foot{margin-top:72px;display:flex;justify-content:flex-end}
 .empty{grid-column:1/-1;color:var(--ink-muted);font-size:18px}
 
-/* 6. AFTER DARK band (Airloom .wyo) */
-/* Night band: the heading and paragraph sit on the 7-column grid in a band of the photo's own sky (#0e1421, sampled
-   from its top edge), heading on the left, paragraph in its own column on the right, both resting on one line; the
-   photo starts just below, tucked up under the text by its empty sky (the tree tops begin 19% down the photo, about
-   10% of its width) and its top edge fading into the band, so the copy never sits on the trees. */
-.night{--sky:#0e1421;position:relative;background:var(--sky);color:var(--on-dark);overflow:hidden}
-.night-t{position:relative;z-index:2;display:grid;grid-template-columns:repeat(7,minmax(0,1fr));column-gap:var(--g);align-items:end;padding:clamp(56px,7vw,112px) var(--gr) 0 var(--gl)}
-.night-t .h2{grid-column:1/span 4}
-.night-t .l{display:block;text-wrap:balance}
-.night-t p{grid-column:6/span 2;max-width:36ch;font-size:18px;line-height:1.3;color:#cfcfcf;text-wrap:pretty}
-/* the left tree's top is 18.7% down the photo, 10.4% of its width: the text keeps 56px clear of it at every width */
-.night-img{position:relative;margin-top:calc(56px - 10.4%)}
-.night-img::before{content:"";position:absolute;z-index:1;inset:0 0 auto;height:16%;background:linear-gradient(var(--sky),rgba(14,20,33,0));pointer-events:none}
-.night img{display:block;width:100%;height:auto}
-@media (max-width:1100px){.night-t p{grid-column:5/span 3}}
-@media (max-width:900px){
-  .night-t{grid-template-columns:minmax(0,1fr);row-gap:16px}
-  .night-t .h2,.night-t p{grid-column:1}
+/* 6. AFTER DARK */
+/* The page's own group layout (as .work-grid and .plist): the heading, then a narrow column for the paragraph and a
+   wide one for the photo, one rule above each (owner request: the full-bleed photo with the copy in its sky was not
+   liked; references: In Common With's featured section and MOUTHWASH Studio's split, on Mobbin). The photo is a framed
+   print at its own shape (3840x2143), so no text sits on it; phones crop it to 4:3 about the middle, keeping all three
+   trees. As it scrolls into view it starts dark and its lights fade up (script in Night.astro). */
+.night{padding:64px var(--gr) clamp(96px,10vw,144px) var(--gl)}
+.night .h2{max-width:1150px}
+.night-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:var(--g);margin-top:clamp(56px,7vw,112px);align-items:start}
+.night-copy,.night-fig{position:relative;border-top:1px solid var(--rule);padding-top:14px}
+/* each phrase starts its own line, long ones balanced (review feedback: "every / fitting") */
+.night-copy p{max-width:36ch;font-size:18px;line-height:1.3}
+.night-copy .l{display:block;text-wrap:balance}
+.night-img{border-radius:var(--radius-tile);overflow:hidden;background:#0e1421}
+.night-img img{width:100%;height:auto}
+.night-img.lights-off img{filter:brightness(.14);transition:filter 2.6s cubic-bezier(.45,0,.2,1) .15s}
+.night-img.lights-on img{filter:none}
+/* narrower screens: a wider text column, then stacked, so the paragraph never runs to a thin column */
+@media (max-width:1280px){.night-grid{grid-template-columns:minmax(0,1fr) minmax(0,2fr)}}
+@media (max-width:1000px){
+  .night-grid{grid-template-columns:minmax(0,1fr);row-gap:32px}
+  .night-fig{border-top:0;padding-top:0}
+  .night-fig.sweep::after{display:none}
 }
 @media (max-width:700px){
-  .night-t{padding-top:48px}
-  .night-t p{font-size:16px}
-  /* a tall crop of the middle of the courtyard, fitted to its height, so the tree tops are 18.7% of that height down */
-  .night-img{margin-top:calc(48px - .187 * min(118vw,520px))}
-  .night img{height:min(118vw,520px);object-fit:cover;object-position:50% 0}
+  .night{padding-top:48px;padding-bottom:96px}
+  .night-grid{margin-top:40px;row-gap:28px}
+  .night-copy p{font-size:16px}
+  .night-img img{aspect-ratio:4/3;object-fit:cover}
 }
 
 /* 7. SCOPE lists (Airloom team rows) */
@@ -483,4 +487,5 @@ html.viewer-open{overflow:hidden}
 }
 @media print{
   .rv{opacity:1!important;transform:none!important}
+  .night-img.lights-off img{filter:none!important}
 }
