@@ -29,7 +29,7 @@ Sections in order, as in `prototype/index.html`:
 5. **How we work**: one dark band with four tabs (Concept, Detail, Specification, Commissioning) switching a large panel below: two drawings, a luminaire schedule table, a photo.
 6. **Studio principle**: photo on the left, quote on the right.
 7. **Selected work**: grey band, sector filter on the left, project cards on the right, link to the Project page.
-8. **After dark**: the courtyard-at-night photo full width as the background, its top fading into a band of its own night sky; on top of it the heading in white and the paragraph in grey as one large indented block, the paragraph's first line indented two columns (owner requests, references MOUTHWASH Studio and TinyWins on Mobbin; a framed photo beside the text was tried and not liked).
+8. **After dark**: the courtyard-at-night photo full width as the background, its top fading into a band of its own night sky; on top of it, at the top left on one edge, the heading large in white and the paragraph small in grey under it, each phrase on its own line (owner requests; a framed photo beside the text, and a same-size heading and paragraph with an indented first line, were tried and not liked).
 9. **Sectors and services**: two lists, one rule above each.
 10. **Contact footer**: black footer revealed underneath the page as you scroll to the end (the page lifts off it), enquiry form, contact details, large logo.
 

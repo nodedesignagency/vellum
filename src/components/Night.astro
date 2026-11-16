@@ -3,14 +3,14 @@ import { Picture } from 'astro:assets';
 import night from '../assets/home/night.jpg';
 ---
 <!-- The courtyard photo is the background and the words sit on top of it, in a band of its own night sky that its top
-     edge fades into, so the copy never crosses the lit trees (owner request: back to the photo-behind-text version as
-     the base, after the framed photo beside the text was not liked). The words are one large indented block, as on
-     MOUTHWASH Studio and TinyWins (Mobbin): the heading in white on its own line, then the paragraph in grey with its
-     first line indented two columns, the same voice as the Home statement (lead in full colour, the rest muted). -->
+     edge fades into, so the copy never crosses the lit trees (owner request: the photo behind the words, after a framed
+     photo beside the text was not liked). Top left, on one edge: the heading large in white, the paragraph small in
+     grey under it (owner: a heading and paragraph at one size, with an indented first line, did not fit together).
+     Each phrase of the paragraph starts its own line (span.l), so lines break between phrases. -->
 <section class="night" aria-labelledby="night-h" data-label="After dark">
   <div class="night-t" data-reveal>
     <h2 id="night-h">We are on site for the final focus</h2>
-    <p>Commissioning happens at night, when every fitting is aimed and dimmed. We do it ourselves, so the result matches the scheme you approved.</p>
+    <p><span class="l">Commissioning happens at night,</span> <span class="l">when every fitting is aimed and dimmed.</span> <span class="l">We do it ourselves, so the result</span> <span class="l">matches the scheme you approved.</span></p>
   </div>
   <div class="night-img">
     <Picture src={night} widths={[640, 1024, 1600, 2400, 3200, 3840]} sizes="(max-width:700px) 215vw, 100vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
