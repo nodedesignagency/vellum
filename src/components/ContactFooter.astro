@@ -12,8 +12,8 @@
     </div>
     <label class="field"><span class="sr">Practice or company</span><input id="f-firm" name="firm" type="text" placeholder="Practice or company" autocomplete="organization" /></label>
     <div class="pair">
-      <label class="field"><span class="sr">Project type</span><select id="f-type" name="type"><option value="">Project type</option><option>Hospitality</option><option>Residential</option><option>Cultural</option><option>Workplace</option><option>Retail</option><option>Landscape</option></select></label>
-      <label class="field"><span class="sr">Project stage</span><select id="f-stage" name="stage"><option value="">Stage</option><option>Feasibility</option><option>Concept design</option><option>Technical design</option><option>On site</option></select></label>
+      <div class="field"><label class="sr" id="f-type-l" for="f-type">Project type</label><select id="f-type" name="type" data-dd><option value="">Project type</option><option>Hospitality</option><option>Residential</option><option>Cultural</option><option>Workplace</option><option>Retail</option><option>Landscape</option></select></div>
+      <div class="field"><label class="sr" id="f-stage-l" for="f-stage">Project stage</label><select id="f-stage" name="stage" data-dd><option value="">Stage</option><option>Feasibility</option><option>Concept design</option><option>Technical design</option><option>On site</option></select></div>
     </div>
     <label class="field"><span class="sr">About the project</span><textarea id="f-msg" name="message" placeholder="A few lines about the project"></textarea></label>
     <div class="hp" aria-hidden="true"><label>Leave this empty<input name="website" type="text" tabindex="-1" autocomplete="off" /></label></div>
@@ -37,6 +37,149 @@
   const field = (name: string) => form.elements.namedItem(name) as HTMLInputElement;
 
   form.querySelectorAll('select').forEach((s) => s.addEventListener('change', () => s.classList.toggle('set', !!s.value)));
+
+  // Dropdowns drawn in the site's style (review feedback: the system menu looked out of place). Each is a select-only
+  // combobox (WAI-ARIA APG pattern) laid over the native <select>, which stays in the form, hidden, so its value posts
+  // as before. Without JavaScript the native select shows, styled as a field.
+  form.querySelectorAll<HTMLSelectElement>('select[data-dd]').forEach((select) => {
+    const id = select.id;
+    const labelId = `${id}-l`;
+    const opts = [...select.options].filter((o) => o.value !== '');
+    const placeholder = select.options[0]?.value === '' ? select.options[0].text : '';
+
+    const wrap = document.createElement('div');
+    wrap.className = 'dd';
+    const btn = document.createElement('div');
+    btn.className = 'dd-btn';
+    btn.tabIndex = 0;
+    btn.setAttribute('role', 'combobox');
+    btn.setAttribute('aria-haspopup', 'listbox');
+    btn.setAttribute('aria-expanded', 'false');
+    btn.setAttribute('aria-controls', `${id}-list`);
+    btn.setAttribute('aria-labelledby', labelId);
+    const val = document.createElement('span');
+    val.className = 'dd-val';
+    btn.append(val);
+    btn.insertAdjacentHTML('beforeend', '<svg class="dd-chev" viewBox="0 0 10 6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.2"></path></svg>');
+    const list = document.createElement('ul');
+    list.className = 'dd-list';
+    list.id = `${id}-list`;
+    list.tabIndex = -1;
+    list.setAttribute('role', 'listbox');
+    list.setAttribute('aria-labelledby', labelId);
+    const items = opts.map((o, i) => {
+      const li = document.createElement('li');
+      li.id = `${id}-o${i}`;
+      li.setAttribute('role', 'option');
+      li.textContent = o.text;
+      list.append(li);
+      return li;
+    });
+    wrap.append(btn, list);
+    select.after(wrap);
+    select.classList.add('dd-native');
+
+    let open = false;
+    let active = 0;
+    const chosen = () => opts.findIndex((o) => o.value === select.value);
+    const render = () => {
+      const i = chosen();
+      val.textContent = i >= 0 ? opts[i].text : placeholder;
+      btn.classList.toggle('set', i >= 0);
+      items.forEach((li, k) => li.setAttribute('aria-selected', String(k === i)));
+    };
+    const setActive = (k: number, scroll = true) => {
+      active = Math.max(0, Math.min(items.length - 1, k));
+      items.forEach((li, j) => li.classList.toggle('active', j === active));
+      btn.setAttribute('aria-activedescendant', items[active].id);
+      if (scroll) items[active].scrollIntoView({ block: 'nearest' });
+    };
+    const show = (k = Math.max(0, chosen())) => {
+      if (!open) {
+        open = true;
+        wrap.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+        // open upwards when there is not enough room below
+        const r = btn.getBoundingClientRect();
+        const below = innerHeight - r.bottom;
+        wrap.classList.toggle('up', below < list.offsetHeight + 16 && r.top > below);
+        // a list wider than its field lines up with the field's right edge when it would run past the form
+        wrap.classList.remove('end');
+        wrap.classList.toggle('end', list.getBoundingClientRect().right > form.getBoundingClientRect().right + 1);
+      }
+      setActive(k);
+    };
+    const hide = () => {
+      if (!open) return;
+      open = false;
+      wrap.classList.remove('open', 'up', 'end');
+      btn.setAttribute('aria-expanded', 'false');
+      btn.removeAttribute('aria-activedescendant');
+      items.forEach((li) => li.classList.remove('active'));
+    };
+    const choose = (k: number) => {
+      if (select.value !== opts[k].value) {
+        select.value = opts[k].value;
+        select.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      render();
+    };
+
+    // type a letter or two to jump to an option
+    let typed = '';
+    let typedAt = 0;
+    const find = (ch: string) => {
+      const now = Date.now();
+      typed = now - typedAt > 700 ? ch : typed + ch;
+      typedAt = now;
+      // the same letter again cycles through the options that start with it
+      const q = [...typed].every((c) => c === typed[0]) ? typed[0] : typed;
+      const from = (open ? active : Math.max(0, chosen())) + (q.length === 1 ? 1 : 0);
+      for (let n = 0; n < items.length; n++) {
+        const k = (from + n) % items.length;
+        if (opts[k].text.toLowerCase().startsWith(q.toLowerCase())) return k;
+      }
+      return -1;
+    };
+
+    btn.addEventListener('keydown', (e) => {
+      const k = e.key;
+      const letter = k.length === 1 && k !== ' ' && !e.ctrlKey && !e.metaKey && !e.altKey;
+      if (!open) {
+        if (k === 'ArrowDown' || k === 'ArrowUp' || k === 'Enter' || k === ' ') { e.preventDefault(); show(); }
+        else if (k === 'Home') { e.preventDefault(); show(0); }
+        else if (k === 'End') { e.preventDefault(); show(items.length - 1); }
+        else if (letter) { const m = find(k); if (m >= 0) show(m); }
+        return;
+      }
+      if (k === 'ArrowDown') { e.preventDefault(); setActive(active + 1); }
+      else if (k === 'ArrowUp' && e.altKey) { e.preventDefault(); choose(active); hide(); }
+      else if (k === 'ArrowUp') { e.preventDefault(); setActive(active - 1); }
+      else if (k === 'Home' || k === 'PageUp') { e.preventDefault(); setActive(k === 'Home' ? 0 : active - 10); }
+      else if (k === 'End' || k === 'PageDown') { e.preventDefault(); setActive(k === 'End' ? items.length - 1 : active + 10); }
+      else if (k === 'Enter' || k === ' ') { e.preventDefault(); choose(active); hide(); }
+      else if (k === 'Escape') { e.preventDefault(); hide(); }
+      else if (k === 'Tab') { choose(active); hide(); }
+      else if (letter) { const m = find(k); if (m >= 0) setActive(m); }
+    });
+    btn.addEventListener('click', () => (open ? hide() : show()));
+    btn.addEventListener('blur', hide);
+    // keep focus on the combobox while picking with a pointer
+    list.addEventListener('pointerdown', (e) => e.preventDefault());
+    list.addEventListener('pointermove', (e) => {
+      const li = (e.target as Element).closest<HTMLLIElement>('[role="option"]');
+      if (li) setActive(items.indexOf(li), false);
+    });
+    list.addEventListener('click', (e) => {
+      const li = (e.target as Element).closest<HTMLLIElement>('[role="option"]');
+      if (!li) return;
+      choose(items.indexOf(li));
+      hide();
+      btn.focus();
+    });
+    form.addEventListener('reset', () => setTimeout(render));
+    render();
+  });
 
   const say = (msg: string, err: boolean) => {
     status.textContent = msg;
