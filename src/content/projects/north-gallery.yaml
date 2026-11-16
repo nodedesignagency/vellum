@@ -12,11 +12,11 @@ entries:
   - kind: installation
     image: ../../assets/projects/north-gallery/entries/0/image.jpg
     alt: A single beam crossing a dark room onto the floor
-    caption: D04 adjustable downlight · 3000K · 15° · 60%
+    caption: D04 adjustable downlight, 3000K, 15°, 60%
     hidden: false
   - kind: installation
     image: ../../assets/projects/north-gallery/entries/1/image.jpg
     alt: The empty gallery at night, one narrow beam crossing the room to a soft
       pool on the floor
-    caption: D04 adjustable downlight · 15° · 3000K
+    caption: ''
     hidden: false

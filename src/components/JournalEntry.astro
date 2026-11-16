@@ -12,7 +12,6 @@ interface Entry {
   caption: string;
 }
 interface Props {
-  n: number;
   project: {
     slug: string;
     title: string;
@@ -25,7 +24,7 @@ interface Props {
     entries: Entry[];
   };
 }
-const { project: p, n } = Astro.props;
+const { project: p } = Astro.props;
 
 // A project with no journal images yet shows its cover as the finished photo.
 const entries: Entry[] = p.entries.length ? p.entries : [{ kind: 'installation', image: p.cover, alt: p.coverAlt, caption: '' }];
@@ -51,11 +50,9 @@ const groups = await Promise.all(
   })),
 ).then((all) => all.filter((g) => g.items.length));
 
-const num = String(n).padStart(2, '0');
 ---
 <article class="entry" id={p.slug} aria-labelledby={`${p.slug}-h`} data-label={p.title} data-sweep>
   <header class="entry-head" data-reveal>
-    <p class="entry-n">{num}</p>
     <h2 class="h3 entry-t" id={`${p.slug}-h`}>{p.title}</h2>
     <p class="meta"><span>{p.sector}</span><span>{p.year}</span></p>
     <p class="entry-loc">{p.location}</p>

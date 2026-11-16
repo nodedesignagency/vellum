@@ -34,7 +34,7 @@ Each project appears twice on the site: as a card in *Selected work* on the Home
 
 - Put the **drawings first**, then the installation photos. Drag the handle (⠿) on the left of each image to reorder.
 - Tick **Hide this image** to keep an image without showing it.
-- Captions are short data, written in sentence case: fitting reference, colour temperature, dim level. For example: `G01 linear graze · 2700K · 40%`. The site sets them in small grey type, so do not type them in capitals.
+- Captions are optional short data, written in sentence case and separated by commas: fitting reference, colour temperature, dim level. For example: `G01 linear graze, 2700K, 40%`. Leave a caption empty when it would only repeat the one before it. The site sets them in small grey type, so do not type them in capitals, and do not use dots or other symbols between the parts.
 
 **Reorder projects:** change the *Order* numbers.
 

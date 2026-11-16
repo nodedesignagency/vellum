@@ -92,7 +92,7 @@ export default config({
             }),
             caption: fields.text({
               label: 'Caption',
-              description: 'Short data in sentence case: fitting reference, colour temperature, dim level. e.g. G01 linear graze · 2700K · 40%',
+              description: 'Optional. Short data in sentence case, separated by commas: fitting reference, colour temperature, dim level. e.g. G01 linear graze, 2700K, 40%. Leave it empty when it would repeat the image before.',
             }),
             hidden: fields.checkbox({ label: 'Hide this image', defaultValue: false }),
           }),

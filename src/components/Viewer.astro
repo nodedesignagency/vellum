@@ -34,7 +34,6 @@
   const prev = viewer.querySelector<HTMLButtonElement>('.viewer-prev')!;
   const next = viewer.querySelector<HTMLButtonElement>('.viewer-next')!;
   const close = viewer.querySelector<HTMLButtonElement>('.viewer-close')!;
-  const pad = (n: number) => String(n).padStart(2, '0');
 
   let list: HTMLAnchorElement[] = [];
   let index = 0;
@@ -51,7 +50,7 @@
     stage.replaceChildren(pic);
     const caption = link.closest('figure')?.querySelector('figcaption')?.textContent ?? '';
     cap.textContent = caption;
-    count.textContent = `${pad(index + 1)} / ${pad(list.length)}`;
+    count.textContent = `${index + 1} of ${list.length}`;
     if (announce) status.textContent = `Image ${index + 1} of ${list.length}. ${img.alt}${caption ? `. ${caption}` : ''}`;
     if (!reduced() && img.animate) img.animate([{ opacity: 0.15 }, { opacity: 1 }], { duration: 500, easing: 'ease-out' });
   }

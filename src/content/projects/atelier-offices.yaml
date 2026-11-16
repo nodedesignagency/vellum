@@ -12,10 +12,10 @@ entries:
   - kind: installation
     image: ../../assets/projects/atelier-offices/entries/0/image.jpg
     alt: Three recessed downlights casting scallops of light down a plaster wall
-    caption: Wall scallops · 3000K · 50%
+    caption: Wall scallops, 3000K, 50%
     hidden: false
   - kind: installation
     image: ../../assets/projects/atelier-offices/entries/1/image.jpg
     alt: A dark corridor with three soft scallops of light on a pale plaster wall
-    caption: Corridor · wall scallops · 3000K · 50%
+    caption: ''
     hidden: false

@@ -19,39 +19,36 @@ const wide = { widths: [640, 1024, 1600, 2048, 2752], sizes: '(max-width:700px) 
     </button>
   </div>
   <div class="steps" id="steps" role="tablist" aria-label="How we work" data-reveal>
-    <button class="step" type="button" role="tab" id="t0" aria-controls="p0" aria-selected="true"><span class="step-n">01</span><span class="step-t">Concept</span><span class="step-d">Hand drawings of where light should fall and where it should not.</span></button>
-    <button class="step" type="button" role="tab" id="t1" aria-controls="p1" aria-selected="false" tabindex="-1"><span class="step-n">02</span><span class="step-t">Detail</span><span class="step-d">Section drawings of every slot, cove and niche, checked against your drawings.</span></button>
-    <button class="step" type="button" role="tab" id="t2" aria-controls="p2" aria-selected="false" tabindex="-1"><span class="step-n">03</span><span class="step-t">Specification</span><span class="step-d">A schedule of every fitting with its colour temperature, beam, glare rating and control circuit.</span></button>
-    <button class="step" type="button" role="tab" id="t3" aria-controls="p3" aria-selected="false" tabindex="-1"><span class="step-n">04</span><span class="step-t">Commissioning</span><span class="step-d">We aim and dim each fitting on site, after dark, until the room looks as drawn.</span></button>
+    <button class="step" type="button" role="tab" id="t0" aria-controls="p0" aria-selected="true"><span class="step-t">Concept</span><span class="step-d">Hand drawings of where light should fall and where it should not.</span></button>
+    <button class="step" type="button" role="tab" id="t1" aria-controls="p1" aria-selected="false" tabindex="-1"><span class="step-t">Detail</span><span class="step-d">Section drawings of every slot, cove and niche, checked against your drawings.</span></button>
+    <button class="step" type="button" role="tab" id="t2" aria-controls="p2" aria-selected="false" tabindex="-1"><span class="step-t">Specification</span><span class="step-d">A schedule of every fitting with its colour temperature, beam, glare rating and control circuit.</span></button>
+    <button class="step" type="button" role="tab" id="t3" aria-controls="p3" aria-selected="false" tabindex="-1"><span class="step-t">Commissioning</span><span class="step-d">We aim and dim each fitting on site, after dark, until the room looks as drawn.</span></button>
   </div>
   <div class="stage" data-reveal>
     <div class="panel" role="tabpanel" id="p0" aria-labelledby="t0" tabindex="0">
       <Picture src={concept} {...wide} formats={['avif', 'webp']} fallbackFormat="jpg" loading="lazy" decoding="async" alt="Perspective drawing of a hotel lobby, with gold arrows tracing light from downlights, a pendant over a stone bench and a grazed stone wall" />
-      <p class="panel-cap">Concept · lobby perspective · G01 graze · P02 pendant · D03 downlights</p>
     </div>
     <div class="panel" role="tabpanel" id="p1" aria-labelledby="t1" tabindex="0" hidden>
       <Picture src={detail} {...wide} formats={['avif', 'webp']} fallbackFormat="jpg" loading="lazy" decoding="async" alt="Cutaway drawing of a recessed ceiling slot, with gold arrows showing light spilling down the wall and its cut-off angle" />
-      <p class="panel-cap">Detail 04 · ceiling slot · 60° cut-off</p>
     </div>
     <div class="panel" role="tabpanel" id="p2" aria-labelledby="t2" tabindex="0" hidden>
       <div class="sched-wrap">
         <table class="sched">
-          <caption>Luminaire schedule · lobby · rev C</caption>
-          <thead><tr><th scope="col">Ref</th><th scope="col">Type</th><th scope="col">CCT</th><th scope="col">CRI</th><th scope="col">Beam</th><th scope="col">UGR</th><th scope="col">Control</th></tr></thead>
+          <caption class="sr">Luminaire schedule for the lobby, revision C</caption>
+          <thead><tr><th scope="col">Ref</th><th scope="col">Type</th><th scope="col">CCT</th><th scope="col">CRI</th><th scope="col">Beam</th><th scope="col">UGR</th><th scope="col">Control</th><th scope="col">Circuit</th></tr></thead>
           <tbody>
-            <tr><td>G01</td><td>Linear wall grazer, recessed</td><td>2700K</td><td>95</td><td>10×60°</td><td>&lt;16</td><td>DALI-2 · C1</td></tr>
-            <tr><td>P02</td><td>Pendant, opal glass</td><td>2200K</td><td>90</td><td>Diffuse</td><td>n/a</td><td>Phase · C2</td></tr>
-            <tr><td>D03</td><td>Downlight, deep regressed</td><td>3000K</td><td>95</td><td>24°</td><td>&lt;13</td><td>DALI-2 · C3</td></tr>
-            <tr><td>D04</td><td>Downlight, adjustable</td><td>3000K</td><td>95</td><td>15°</td><td>&lt;13</td><td>DALI-2 · C3</td></tr>
-            <tr><td>S05</td><td>Step light, linear</td><td>2700K</td><td>90</td><td>Asymmetric</td><td>n/a</td><td>DALI-2 · C4</td></tr>
-            <tr><td>E06</td><td>In-ground uplight, facade</td><td>2700K</td><td>90</td><td>8°</td><td>n/a</td><td>DMX · EXT</td></tr>
+            <tr><td>G01</td><td>Linear wall grazer, recessed</td><td>2700K</td><td>95</td><td>10×60°</td><td>&lt;16</td><td>DALI-2</td><td>C1</td></tr>
+            <tr><td>P02</td><td>Pendant, opal glass</td><td>2200K</td><td>90</td><td>Diffuse</td><td>n/a</td><td>Phase</td><td>C2</td></tr>
+            <tr><td>D03</td><td>Downlight, deep regressed</td><td>3000K</td><td>95</td><td>24°</td><td>&lt;13</td><td>DALI-2</td><td>C3</td></tr>
+            <tr><td>D04</td><td>Downlight, adjustable</td><td>3000K</td><td>95</td><td>15°</td><td>&lt;13</td><td>DALI-2</td><td>C3</td></tr>
+            <tr><td>S05</td><td>Step light, linear</td><td>2700K</td><td>90</td><td>Asymmetric</td><td>n/a</td><td>DALI-2</td><td>C4</td></tr>
+            <tr><td>E06</td><td>In-ground uplight, facade</td><td>2700K</td><td>90</td><td>8°</td><td>n/a</td><td>DMX</td><td>External</td></tr>
           </tbody>
         </table>
       </div>
     </div>
     <div class="panel" role="tabpanel" id="p3" aria-labelledby="t3" tabindex="0" hidden>
       <Picture src={commissioning} widths={[640, 1024, 1600, 2400, 3200]} sizes="(max-width:700px) 540px, calc(100vw - 48px)" formats={['avif', 'webp']} fallbackFormat="jpg" loading="lazy" decoding="async" alt="A dark hotel lobby during commissioning: a step ladder against a limestone wall and one spotlight aimed at it" />
-      <p class="panel-cap">Focus night · 23:40 · D04 aimed at the wall</p>
     </div>
   </div>
 </section>

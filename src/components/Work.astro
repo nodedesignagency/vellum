@@ -16,7 +16,7 @@ const sectors = ['All', ...new Set(projects.map((p) => p.sector))];
     </div>
     <div class="cards" id="cards" aria-live="polite" data-sweep>
       {projects.map((p, i) => (
-        <a class="card" href={`/project/#${p.slug}`} data-sector={p.sector} data-reveal data-sweep style={`--d:${i % 3}`}>
+        <a class="card" href={`/project/#${p.slug}`} data-sector={p.sector} data-reveal style={`--d:${i % 3}`}>
           <div class="meta"><span>{p.sector}</span><span>{p.year}</span></div>
           <h3>{p.title}</h3>
           <p class="loc">{p.location}</p>
