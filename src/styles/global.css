@@ -97,22 +97,29 @@ main{position:relative;z-index:1;background:var(--surface)}
 .caption i{width:8px;height:8px;background:var(--lamp-glow);box-shadow:0 0 10px var(--lamp-glow)}
 .bar-right a{transition:color .3s}.bar-right a:hover{color:var(--ink-muted)}
 
-/* 2. STATEMENT. One paragraph is held on screen while five photos pass it (review feedback: the earlier 333-style
-   drift sent three paragraphs through a long scroll and made them hard to read; the other two were then removed,
-   owner request). Spacing is fixed, not shared out (owner request): a fixed gap (--sg) above and below the
-   paragraph, and on phones the photo rows sit one fixed gap from it. The stage is only that tall; with motion it
-   sticks, centred on screen, while the reader scrolls through .story-hold (one screen), and Statement.astro sets --p
-   from 0 to 1 across the hold. Each photo has a start point and a travel (--dx in vw, --dy in svh); it never crosses
+/* 2. STATEMENT. Three paragraphs share one held spot and change in place while five photos pass them (review
+   feedback: the earlier 333-style drift sent the paragraphs through a long scroll and made them hard to read;
+   owner requests: fixed gaps, then the paragraphs back, swapping in the same place). Spacing is fixed, not shared
+   out: a fixed gap (--sg) above and below the paragraphs, and on phones the photo rows sit one fixed gap from them.
+   The stage is only that tall; with motion it sticks, centred on screen, while the reader scrolls through
+   .story-hold (70svh per paragraph), and Statement.astro sets --p from 0 to 1 across the hold. Each photo has a start point and a travel (--dx in vw, --dy in svh); it never crosses
    the text: desktop sends them up the outer columns from below the screen to above it (left lane slower than the
    right), phones slide them along the rows above and below. The section clips them at its edges.
-   Reduced motion or no JS: nothing is held, the photos rest halfway (--p .5). */
+   Reduced motion or no JS: nothing is held, the paragraphs stack, the photos rest halfway (--p .5). */
 .story{position:relative;overflow:clip}
 .story-stage{--p:.5;--sg:clamp(72px,9vw,120px);position:relative;display:grid;padding:var(--sg) var(--gr) var(--sg) var(--gl)}
 .story.is-moving .story-stage{position:sticky;top:var(--bar)}
-.story.is-moving .story-hold{height:100svh}
-.story-lead{position:relative;z-index:1;margin-left:calc(var(--col) + var(--g));max-width:calc(5 * var(--col) + 4 * var(--g));font-size:clamp(30px,4.6vw,66px);line-height:1.04;letter-spacing:-.035em;color:var(--ink-muted);text-indent:calc(var(--col) + var(--g))}
+.story.is-moving .story-hold{height:210svh}
+/* the three paragraphs: stacked in normal flow; while held they share one cell (the tallest sets its height, all
+   top-aligned so the indented first line stays put) and crossfade, one per third of the hold */
+.story-lines{position:relative;z-index:1;display:grid;gap:.5em;align-items:start;margin-left:calc(var(--col) + var(--g));max-width:calc(5 * var(--col) + 4 * var(--g))}
+.story.is-moving .story-lines{gap:0}
+.story.is-moving .story-lead{grid-area:1/1;opacity:0;transition:opacity .6s var(--ease)}
+.story.is-moving .story-lead.is-on{opacity:1}
+.story-lead{font-size:clamp(30px,4.6vw,66px);line-height:1.04;letter-spacing:-.035em;color:var(--ink-muted);text-indent:calc(var(--col) + var(--g))}
 .story b{font-weight:400;color:var(--ink)}
-/* Start points. --l0 / --r0 are the first photo in the left / right column; the others follow 60svh / 75svh apart.
+/* Start points. --l0 / --r0 are the first photo in the left / right column; the others follow 70svh / 110svh apart,
+   spread so each third of the hold keeps two or three photos in view.
    They start no higher than the middle-based point allows and never above the floor after max(): low enough that
    no photo is cut when the hold starts, and that the faster-rising photos cannot catch the section's top edge
    while it is still on screen (it reaches the bar after (screen - bar - stage) / 2 of scrolling; the left column
@@ -120,13 +127,13 @@ main{position:relative;z-index:1;background:var(--surface)}
 .drifts{position:absolute;inset:0;--l0:max(calc(50% - 35svh),calc((100svh - var(--bar) - 100%) / 4 + 16px));--r0:max(calc(50% - 5svh),calc((100svh - var(--bar) - 100%) / 2 + 16px))}
 .drift{position:absolute;width:var(--col);aspect-ratio:4/5;transform:translate3d(calc(var(--dx,0) * var(--p) * 1vw),calc(var(--dy,0) * var(--p) * 1svh),0);will-change:transform;pointer-events:none}
 .drift img,.drift svg{width:100%;height:100%;object-fit:cover}
-.d0,.d2,.d4{left:var(--gl);--dy:-150}
-.d1,.d3{left:calc(var(--gl) + 6 * (var(--col) + var(--g)));--dy:-200}
+.d0,.d2,.d4{left:var(--gl);--dy:-120}
+.d1,.d3{left:calc(var(--gl) + 6 * (var(--col) + var(--g)));--dy:-160}
 .d0{top:var(--l0)}
-.d2{top:calc(var(--l0) + 60svh)}
-.d4{top:calc(var(--l0) + 120svh)}
+.d2{top:calc(var(--l0) + 70svh)}
+.d4{top:calc(var(--l0) + 140svh)}
 .d1{top:var(--r0)}
-.d3{top:calc(var(--r0) + 75svh)}
+.d3{top:calc(var(--r0) + 110svh)}
 
 /* 2b. COLLABORATORS ticker (Airloom logo marquee) */
 .clients{position:relative;padding:24px 0 24px;border-top:1px solid var(--rule);overflow:hidden}
@@ -379,8 +386,6 @@ html.viewer-open{overflow:hidden}
 /* Fade up on scroll (333 South Wabash .reveal) */
 .rv{opacity:0;transform:translate3d(0,32px,0);transition:opacity 1s var(--ease),transform 1s var(--ease);transition-delay:calc(var(--d,0) * 90ms)}
 .rv.is-in{opacity:1;transform:none}
-/* the held Statement paragraph fades in where it will stay, so it never shifts into the photos' paths */
-.story-lead.rv{transform:none}
 
 /* Lamp line sweeping along a hairline as it scrolls into view (Airloom .feat .fr) */
 .sweep::after{content:"";position:absolute;left:0;right:0;top:-1px;height:1px;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent,var(--lamp-glow) 30%,var(--lamp-glow) 70%,transparent) no-repeat;background-size:30% 100%;background-position:-43% 0}
@@ -403,7 +408,8 @@ html.viewer-open{overflow:hidden}
   /* phones: the paragraph takes the full width; a row of photos one fixed gap above it and one below, sliding
      left along the top row and right along the bottom one. Photos are capped by screen height so short phones fit. */
   .story-stage{--sg:32px;--ph:min(calc(2 * var(--col) + var(--g)),11svh);padding:calc(2 * var(--sg) + 1.25 * var(--ph)) var(--gr) calc(2 * var(--sg) + 1.25 * var(--ph)) var(--gl)}
-  .story-lead{font-size:clamp(28px,7.6vw,40px);line-height:1.08;letter-spacing:-.025em;text-indent:calc(2 * (var(--col) + var(--g)));margin-left:0;max-width:none}
+  .story-lead{font-size:clamp(28px,7.6vw,40px);line-height:1.08;letter-spacing:-.025em;text-indent:calc(2 * (var(--col) + var(--g)))}
+  .story-lines{margin-left:0;max-width:none}
   .drift{width:var(--ph);--dy:0}
   .d0,.d1,.d4{top:var(--sg);--dx:-110}
   .d2,.d3{top:auto;bottom:var(--sg);--dx:110}

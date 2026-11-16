@@ -6,8 +6,9 @@ import stair from '../assets/home/stair-sm.jpg';
 import graze from '../assets/home/graze-sm.jpg';
 import beam from '../assets/home/beam-sm.jpg';
 
-// One paragraph held on screen while five photos pass it (review feedback: the earlier 333-style drift sent all
-// three paragraphs through a long scroll, so they were hard to read; the other two were then removed, owner request). The photos travel in the free space around the
+// The three paragraphs share one held spot and change in place as the reader scrolls, while five photos pass around
+// them (review feedback: the earlier 333-style drift sent all three through a long scroll, so they were hard to read;
+// owner requests: fixed gaps, then the paragraphs back, swapping in the same place). The photos travel in the free space around the
 // text, never across it: up the outer columns on desktop, sideways above and below it on phones. Their start points
 // and travel are in global.css (.d0 to .d4); the script below only reports how far through the hold the reader is.
 const drifts = [scallop, section, stair, graze, beam];
@@ -15,7 +16,11 @@ const drifts = [scallop, section, stair, graze, beam];
 <section class="story" id="content" aria-label="About the practice" data-label="The practice">
   <div class="story-pin">
     <div class="story-stage">
-      <p class="story-lead" data-reveal><b>This is Vellum.</b> An architectural lighting practice that treats light as a building material, drawn, detailed and tuned with the same care as stone, timber or glass.</p>
+      <div class="story-lines">
+        <p class="story-lead is-on"><b>This is Vellum.</b> An architectural lighting practice that treats light as a building material, drawn, detailed and tuned with the same care as stone, timber or glass.</p>
+        <p class="story-lead"><b>We work beside architects, developers and interior designers</b> from the first concept sketch to the night we focus the last fitting on site.</p>
+        <p class="story-lead"><b>Every project starts on paper.</b> We draw where the light falls before we choose what makes it.</p>
+      </div>
       <div class="drifts" aria-hidden="true">
         {drifts.map((src, i) => (
           <figure class={`drift d${i}`}>
@@ -35,14 +40,22 @@ const drifts = [scallop, section, stair, graze, beam];
     get matches() { return reduceQuery.matches && !document.documentElement.classList.contains('force-motion'); },
     addEventListener: (type: 'change', fn: () => void) => reduceQuery.addEventListener(type, fn),
   };
-  // The hold: the stage (paragraph plus fixed gaps) sticks, centred in the space under the bar, while the reader scrolls
-  // through .story-hold (one screen); --p runs from 0 to 1 across it and moves the photos (CSS: start point + travel
-  // x --p). Locked to the native scroll. With reduced motion, or without JavaScript, nothing is held and the photos
-  // rest halfway (--p: .5).
+  // The hold: the stage (the paragraphs plus fixed gaps) sticks, centred in the space under the bar, while the reader
+  // scrolls through .story-hold; --p runs from 0 to 1 across it and moves the photos (CSS: start point + travel x --p).
+  // Each third of the hold shows one paragraph (.is-on), crossfading in the same place. Locked to the native scroll.
+  // With reduced motion, or without JavaScript, nothing is held: the paragraphs stack and the photos rest (--p: .5).
   const story = document.querySelector<HTMLElement>('.story');
   const pin = story?.querySelector<HTMLElement>('.story-pin');
   const stage = story?.querySelector<HTMLElement>('.story-stage');
+  const lines = [...(story?.querySelectorAll<HTMLElement>('.story-lead') ?? [])];
+  let step = 0;
   let queued = false;
+
+  const show = (n: number) => {
+    if (n === step) return;
+    step = n;
+    lines.forEach((l, i) => l.classList.toggle('is-on', i === n));
+  };
 
   const update = () => {
     queued = false;
@@ -53,6 +66,7 @@ const drifts = [scallop, section, stair, graze, beam];
     const range = r.height - stage.offsetHeight;
     const p = range > 0 ? Math.min(1, Math.max(0, (top - r.top) / range)) : 0;
     stage.style.setProperty('--p', p.toFixed(4));
+    show(Math.min(lines.length - 1, Math.floor(p * lines.length)));
   };
 
   const queue = () => {
