@@ -357,7 +357,11 @@ html.viewer-open{overflow:hidden}
 .viewer-btn:hover{background:var(--on-dark);color:var(--ink)}
 .viewer-btn[hidden]{display:none}
 .viewer-stage{position:relative;display:grid;place-items:center;min-height:0;overflow:hidden}
-.viewer-stage img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+/* the image fits the space between the top and bottom rows whatever its shape, keeping its aspect ratio
+   (owner request: portrait images ran past the screen). The <picture> steps aside so the image is placed against
+   the stage itself, whose size is fixed; centred with auto margins, never cropped. */
+.viewer-stage picture{display:contents}
+.viewer-stage img{position:absolute;inset:0;margin:auto;max-width:100%;max-height:100%;width:auto;height:auto}
 .viewer.in .viewer-stage{animation:fade .4s var(--ease)}
 
 /* MOTION from the base sites. Each is switched on by script only when motion is allowed,
