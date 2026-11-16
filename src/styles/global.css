@@ -328,10 +328,15 @@ main{position:relative;z-index:1;background:var(--surface)}
 .entry-loc{font-size:16px;color:var(--ink-muted)}
 .entry-sum{margin-top:24px;font-size:16px;line-height:1.25;max-width:36ch}
 .j-group+.j-group{margin-top:72px}
-.j-label{display:flex;align-items:center;gap:8px;margin-bottom:18px;font:400 11px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted)}
-.j-label i{width:8px;height:8px;border:1px solid currentColor}
-/* lamp marks light: the finished installations are lit, the drawings are not yet */
-.j-installation i{background:var(--lamp-glow);border-color:var(--lamp-glow);box-shadow:0 0 10px var(--lamp-glow)}
+/* Drawn on paper, then Finished on site: How we work's stage strip on white (review feedback: the square markers were
+   decoration). Two equal steps, the current one in ink on an ink rule, the other grey and a link to its group.
+   The first strip sits on the project's own top rule, so its ink segment marks the stage along it. */
+.j-stages{display:flex;gap:var(--g);margin-bottom:24px}
+.j-group:first-child .j-stages{margin-top:-15px}
+.j-stage{flex:0 0 clamp(148px,15vw,220px);padding-top:14px;border-top:1px solid var(--rule);font-size:16px;line-height:1.1;color:var(--ink-muted)}
+.j-stage.is-on{border-top-color:var(--ink);color:var(--ink)}
+a.j-stage{transition:color .3s}
+a.j-stage:hover{color:var(--ink)}
 .plates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px var(--g);align-items:start}
 .plate.wide{grid-column:1/-1}
 .plate-open{display:block;overflow:hidden;border-radius:var(--radius-tile);background:#101010;cursor:zoom-in}
@@ -440,6 +445,7 @@ html.viewer-open{overflow:hidden}
   .j-s{display:none}
   .entry{grid-template-columns:1fr;row-gap:32px}
   .entry-head{position:static}
+  .j-group:first-child .j-stages{margin-top:0}
   .plates{grid-template-columns:1fr;gap:32px}
   .viewer-bottom{flex-direction:column;align-items:stretch;gap:12px}
   .viewer-nav .viewer-btn{flex:1}

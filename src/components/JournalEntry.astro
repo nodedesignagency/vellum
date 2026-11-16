@@ -1,6 +1,6 @@
 ---
 // One project in the journal: a heading that stays pinned while its images pass (base-site animation 5),
-// then its drawings ("Drawn on paper") and its installation photos ("Finished on site").
+// then its drawings ("Drawn on paper") and its installation photos ("Finished on site"), each under a two-step strip.
 // Each image opens in the viewer (animation 6); without JavaScript the link opens the full image.
 import { Picture, getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
@@ -63,8 +63,18 @@ const num = String(n).padStart(2, '0');
   </header>
   <div class="entry-body">
     {groups.map((g) => (
-      <div class="j-group">
-        <h3 class={`j-label j-${g.kind}`}><i aria-hidden="true"></i>{g.label}</h3>
+      <div class="j-group" id={`${p.slug}-${g.kind}`}>
+        {/* Two steps, paper then site: the current one is the heading, in ink; the other is grey and jumps to that
+            group, so the drawings and the finished room can be compared (review feedback: replaces the square markers). */}
+        <div class="j-stages">
+          {groups.map((s) =>
+            s.kind === g.kind ? (
+              <h3 class="j-stage is-on">{s.label}</h3>
+            ) : (
+              <a class="j-stage" href={`#${p.slug}-${s.kind}`}>{s.label}<span class="sr">, {p.title}</span></a>
+            ),
+          )}
+        </div>
         <div class="plates">
           {g.items.map((e) => (
             <figure class={`plate ${e.wide ? 'wide' : 'tall'}`} data-reveal>
