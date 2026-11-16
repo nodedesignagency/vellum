@@ -2,10 +2,16 @@
 import { Picture } from 'astro:assets';
 import night from '../assets/home/night.jpg';
 ---
-<section class="night" aria-label="After dark" data-label="After dark">
-  <Picture src={night} widths={[640, 1024, 1600, 2400, 3200, 3840]} sizes="(max-width:900px) 1008px, 100vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
+<!-- The text sits on the grid in a band of the photo's own night sky, and the photo starts just below it, its top
+     fading into that sky, so the copy never sits on the lit trees at any width (review feedback: the centred text
+     floating over the photo felt unplanned, and the paragraph wrapped awkwardly). Each phrase starts its own line (the
+     heading's two, the first sentence's two, then the second sentence balanced over two), so lines break between phrases. -->
+<section class="night" aria-labelledby="night-h" data-label="After dark">
   <div class="night-t" data-reveal>
-    <h2 class="h3">We are on site for the final focus</h2>
-    <p class="lede">Commissioning happens at night, when every fitting is aimed and dimmed. We do it ourselves, so the result matches the scheme you approved.</p>
+    <h2 class="h2" id="night-h"><span class="l">We are on site</span> <span class="l">for the final focus</span></h2>
+    <p><span class="l">Commissioning happens at night,</span> <span class="l">when every fitting is aimed and dimmed.</span> <span class="l">We do it ourselves, so the result matches the scheme you approved.</span></p>
+  </div>
+  <div class="night-img">
+    <Picture src={night} widths={[640, 1024, 1600, 2400, 3200, 3840]} sizes="(max-width:700px) 215vw, 100vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
   </div>
 </section>

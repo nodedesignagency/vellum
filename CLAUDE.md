@@ -29,7 +29,7 @@ Sections in order, as in `prototype/index.html`:
 5. **How we work**: one dark band with four tabs (Concept, Detail, Specification, Commissioning) switching a large panel below: two drawings, a luminaire schedule table, a photo.
 6. **Studio principle**: photo on the left, quote on the right.
 7. **Selected work**: grey band, sector filter on the left, project cards on the right, link to the Project page.
-8. **Night band**: full-bleed image (a courtyard at night) with its heading and line set in the sky above the trees.
+8. **Night band**: a full-bleed photo (a courtyard at night) under a band of its own night sky, which carries the heading on the left and a short paragraph on the right, on the grid; stacked on tablets and phones.
 9. **Sectors and services**: two lists, one rule above each.
 10. **Contact footer**: black footer revealed underneath the page as you scroll to the end (the page lifts off it), enquiry form, contact details, large logo.
 
