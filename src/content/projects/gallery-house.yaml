@@ -4,9 +4,9 @@ order: 2
 sector: Residential
 location: Private residence
 year: "2024"
-summary: One light idea per room. In the reading room a single 24° downlight
-  pools beside the chair. On the stair a linear step light sits under every
-  tread at 2700K.
+summary: Each room has one main light. In the reading room a single 24°
+  downlight sits beside the chair. On the stair a 2700K linear step light runs
+  under every tread.
 cover: ../../assets/projects/gallery-house/cover.jpg
 coverAlt: Floating stone stairs with a line of warm light under each tread
 entries:

@@ -19,7 +19,8 @@ const pad = (n: number) => String(n).padStart(2, '0');
     <Bar page="project" />
 
     <section class="j-intro" id="content" aria-labelledby="j-title">
-      <h1 class="j-title" id="j-title"><b>Project journal.</b> Each project in order, from the first drawing to the finished room after dark.</h1>
+      <h1 class="j-title" id="j-title"><b>Project journal</b></h1>
+      <p class="j-title j-title-rest">The drawings for each project first, then photographs of the finished lighting.</p>
     </section>
 
     <nav class="j-index" aria-labelledby="j-index-h">
@@ -45,7 +46,10 @@ const pad = (n: number) => String(n).padStart(2, '0');
     </div>
 
     <section class="j-close" aria-labelledby="j-close-h">
-      <h2 class="h2" id="j-close-h" data-reveal><b>Every project starts on paper.</b> We draw where the light falls before we choose what makes it.</h2>
+      <div class="h2-pair" data-reveal>
+        <h2 class="h2" id="j-close-h"><b>Talk to us at concept stage</b></h2>
+        <p class="h2">That is when lighting is easiest to build in, before ceilings and joinery are fixed.</p>
+      </div>
       <a class="btn btn-dark" href="#contact" data-reveal>Enquire <svg viewBox="0 0 9 9" aria-hidden="true"><path d="M1 8 8 1M2 1h6v6" fill="none" stroke="currentColor" stroke-width="1.2"></path></svg></a>
     </section>
   </main>

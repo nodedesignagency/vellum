@@ -60,7 +60,7 @@ Add `?motion=on` to any URL to see animations on a machine set to reduce motion 
 | `src/assets/home/` | Home page images (not CMS) |
 | `src/assets/projects/`, `src/assets/collaborators/` | CMS images, in Keystatic's own file layout (section 6) |
 | `keystatic.config.ts` | Editor fields, labels and help text; exports `SECTORS` |
-| `public/fonts/` | Self-hosted Geist 400/500 and Geist Mono 400 (all the site uses) |
+| `public/fonts/` | Self-hosted Geist 400/500 and Geist Mono 400 (Mono now only for the logo's line in the Home hero; only Home preloads it) |
 | `scripts/build-tokens.mjs`, `scripts/build-offline.mjs`, `scripts/serve.mjs` | Token generator, offline packager, local server |
 | `design-system/` | Brand book (`BRAND.md`), `tokens.json`, fonts, logos, icons, boards |
 | `prototype/index.html` | Approved Home design reference (has no doctype, see section 10) |
@@ -92,7 +92,7 @@ Add `?motion=on` to any URL to see animations on a machine set to reduce motion 
 3. Grey index band: ruled rows (number, title, sector, year) linking to `#<slug>`.
 4. One `JournalEntry.astro` per visible project, separated by a hairline rule:
    - left column: number, title, sector and year, location, summary; `position: sticky` so it stays pinned while the images scroll (static on phones);
-   - right column: images grouped as **Drawn on paper** then **Finished on site**, each under a plain heading (owner decision 13), grouped by `kind` whatever order the CMS holds them in; landscape images (ratio 1.2 or wider) full width, upright ones half width; mono label captions. A project with no journal images shows its cover.
+   - right column: images grouped as **Drawings** then **Finished lighting**, each under a plain heading (owner decisions 13 and 16), grouped by `kind` whatever order the CMS holds them in; landscape images (ratio 1.2 or wider) full width, upright ones half width; mono label captions. A project with no journal images shows its cover.
    - each image is a link to its full-size WebP (works without JavaScript) that the viewer intercepts.
 5. The page's one dark band: "Every project starts on paper. We draw where the light falls before we choose what makes it." (reused from the Home statement) and an Enquire button.
 6. `Viewer.astro`: full-screen `<dialog>` stepping through that project's images (section 7).
@@ -143,10 +143,10 @@ Details that matter:
 - Tokens: `design-system/tokens.json` becomes `src/styles/tokens.css` (Day theme on `:root`, Night under `[data-theme="night"]`). Use token variables, not raw values.
 - Layout variables in `global.css`: `--g` gutter (24px, 18px on phones), `--gl/--gr` with safe areas, `--bar` (56px, 52px on phones), `--col` (one of 7 columns), `--ease` `cubic-bezier(.19,1,.22,1)`.
 - Breakpoint: phones are `max-width: 700px`. The fixed footer applies at `min-width: 901px and min-height: 720px`.
-- Type: Geist 400 for everything, Geist Mono 400 uppercase with letter spacing for labels and captions. Emphasis is tone (ink vs ink-muted), never weight.
+- Type: Geist 400 for everything, including labels and captions: `--label` (13px, `ink-muted` or `on-dark-muted`, sentence case, normal spacing; tabular figures for numbers). Geist Mono uppercase with wide tracking is kept for the logo's line only (owner decision 16, departing from `BRAND.md`). Emphasis is tone (ink vs ink-muted), never weight.
 - Colour: one dark band per page; `lamp`/`lamp-glow` marks light (active line, moon, the bar caption's lamp, the chosen dropdown option), never text on white. The prototype's `#e8c391` (`--lamp-glow`) is used wherever the prototype used gold.
 - `picture{display:contents}` lets the `<img>` lay out as the prototype's bare `<img>` did, and **`picture>source{display:none}` is required**: without it the `<source>` elements become grid items and push content around.
-- Brand rules: `design-system/BRAND.md`. Captions follow the label style: fitting reference, colour temperature, dim level.
+- Brand rules: `design-system/BRAND.md` (except where owner decision 16 departs from it). Caption content stays data: fitting reference, colour temperature, dim level. Headings carry no punctuation.
 
 ## 9. Decisions (owner's, in order) and open defaults
 
@@ -166,12 +166,13 @@ Owner decided:
 13. Journal group headings: **a plain heading over each group, nothing else** (review feedback, then owner request). "Drawn on paper" over the drawings and "Finished on site" over the finished photos, as `h3.j-label` (16px, ink). The square markers, the stage strips with rules, and the pinned stage list with a side line that were tried in between are all gone.
 14. Image viewer: **every image fits the screen** (owner request: portrait images opened full width and ran past the bottom). The image is placed against `.viewer-stage` itself (`picture` is `display: contents`; the `img` is absolutely positioned with auto margins and `max-width`/`max-height: 100%`), so it is as large as the space between the top and bottom rows allows, keeps its aspect ratio and is never cropped. Checked portrait and landscape at 375x812, 812x375, 1280x720, 1440x900 and 2560x1300.
 15. Statement: **three paragraphs in one held spot, changing in place, with fixed spacing** (review feedback, then owner requests). The 333-style drift sent three large paragraphs and the photos through a long scroll, so reading meant scrolling back and forth. Then: one paragraph held while the photos pass around it, never across it; spacing a fixed gap, not shared-out space; the other two paragraphs briefly removed, then brought back to show one at a time in the same place. Now "This is Vellum…", "We work beside architects…" and "Every project starts on paper…" crossfade in turn as the reader scrolls through the hold. Type is up to 66px (was 88px). Reduced motion or no JavaScript: nothing is held, the three paragraphs stack and the photos rest around them.
+16. Copy, headings and labels: **a plain copy pass, no punctuation in headings, no mono labels** (review feedback). Formulaic and tagline-like lines were rewritten as plain, specific sentences: hero "We design how buildings and interiors look after dark"; Statement leads "Vellum is an architectural lighting studio", "We work with architects, developers and interior designers", "Every project starts with drawings"; How we work "One team through all four stages" (was "From first sketch to final focus."); principle "We plan what stays dark as carefully as what gets lit"; night band "We are on site for the final focus"; scope "Sectors and services"; footer "Tell us about your project"; journal groups "Drawings" and "Finished lighting" (were "Drawn on paper" and "Finished on site"); journal close "Talk to us at concept stage"; two project summaries ("One light idea per room", "A dark room with one beam in it") rewritten. Headings carry no punctuation; where a two-tone heading had a second sentence, that sentence is now its own grey paragraph (`.h2-pair` in How we work and the journal close, `.j-title-rest` in the journal intro). Labels and captions (hero note, bar caption, card and entry meta, numbers, journal index, image captions, How we work stage numbers, panel captions and schedule, footer legal line, viewer) moved from Geist Mono uppercase with wide tracking to `--label`; the gold squares beside the bar and menu captions are gone, and the dropdown marks the chosen option with a check. Mono stays only in the logo's line. Checked: no heading with punctuation, no em dashes, no other mono or uppercase text on either page; axe 0 violations at 1440 and 375.
 
 Defaults chosen by the assistant, not yet confirmed by the owner (change freely if asked):
 - Prototype greys below WCAG AA replaced by the `ink-muted` token (#6f6f6f); footer legal text #808080; filter buttons at least 24px tall on desktop; ticker button changes its label instead of also toggling `aria-pressed`.
 - Studio principle photo kept 900px tall above 700px, as the prototype rendered it (its `height` attribute overrode `aspect-ratio: 4/5`). Delete one marked line in `global.css` for 4:5 there too.
 - Gold for lit details stays `#e8c391` (`lamp-glow`); the tokens' `lamp` `#d9ad82` is unused.
-- Journal intro line is new copy; the closing band reuses the statement's last line ("Every project starts on paper.").
+- All copy was rewritten in a plain pass (owner decision 16); the journal's closing band and the Home statement no longer share a line.
 - Bar labels "Collaborators" and "Sectors and services" are new words ("The practice", "How we work", "Studio principle", "Selected work", "After dark" come from the prototype).
 - Enquiry success message when email is connected: "Thanks, {first}. Your enquiry has been sent to the studio." (new copy).
 
