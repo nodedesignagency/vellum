@@ -75,7 +75,7 @@ Add `?motion=on` to any URL to see animations on a machine set to reduce motion 
 | --- | --- | --- | --- |
 | 1 | Hero | `Hero.astro` | Full-bleed facade, cream logo, white H1 then a Contact us button (`.hero-copy`), `settle`/`lift` load animation |
 | 2 | Docking bar | `Bar.astro` | Sticky under the hero; Menu, current-section label, logo, caption, Enquire |
-| 3 | Statement | `Statement.astro` | Indented two-tone paragraphs; five photos fly up through the text (section 7) |
+| 3 | Statement | `Statement.astro` | Key paragraph held on screen while five photos pass around it; two more paragraphs fade up below (section 7) |
 | 4 | Collaborators ticker | `Collaborators.astro` | From CMS; drawn twice for a seamless loop; pause/play button |
 | 5 | How we work | `Method.astro` | The page's one dark band; four tabs (WAI-ARIA tabs); timed rotation with filling gold line; stacked on phones |
 | 6 | Studio principle | `Principle.astro` | Photo 900px tall as the prototype rendered it |
@@ -119,7 +119,7 @@ All motion respects `prefers-reduced-motion`. For reviewing, `?motion=on` sets `
 | Effect | Code | Taken from | With reduced motion |
 | --- | --- | --- | --- |
 | Hero settle and headline lift | `global.css` `.hero img`, `.hero-copy` keyframes | prototype | off |
-| Statement photos fly up through the text | `Statement.astro`; start points `.story.is-moving .d0..d4` in `global.css` | 333 South Wabash, second section (`reference/333southwabash-com/source/js/site.js:9`, `css/site.css` story rules) | photos rest at the prototype's positions |
+| Statement: key paragraph held, photos pass around it | `Statement.astro` sets `--p` (0 to 1) on `.story-stage`; start points and travel `.d0..d4` in `global.css` | review feedback, replacing 333 South Wabash's second-section drift | nothing held; photos rest halfway |
 | Fade up on scroll | `motion.ts`, `[data-reveal]` gets `.rv`, then `.is-in` | 333 `.reveal` (`js/site.js:6-8`) | nothing hidden |
 | Smooth in-page links, focus follows, fixed footer reached by scrolling to the end | `motion.ts` click handler; offset from `scroll-padding-top` | Airloom (`js/site.js:8-53`) | jumps |
 | Current section or project name in the bar | `motion.ts`, `[data-label]`; shown only once the bar is docked; hidden on phones | Airloom header label (`js/site.js:54-82`) | text swaps without sliding |
@@ -133,7 +133,7 @@ All motion respects `prefers-reduced-motion`. For reviewing, `?motion=on` sets `
 | Image viewer | `Viewer.astro` | 333 gallery (`js/site.js:31`) and Airloom dialog (`js/site.js:231`) | no fades |
 
 Details that matter:
-- **Statement photos**: `translateY(-(p x speed x k)%)` of the photo's own height, `p` = scroll distance since the section's top reached the bottom of the screen, speeds `2.2 / 4 / 2 / 3.5 / 1.8` (333's), `k = 0.13` (0.16 on phones). On screen they move at 1.52 to 2.16 times scroll speed (333: 1.55 to 2.23). They are **locked to the native scroll every frame**; an earlier version smoothed them separately and read as floaty against the text. Start points are 333's, measured against the text block (48% to 163% of its height), so most begin below the text.
+- **Statement hold**: `.story-pin` is one screen plus one more (`200svh - bar`); `.story-stage` (one screen, `container-type: size`) sticks under the bar across it, and the script sets `--p` from 0 to 1 over the held screen. Each photo sits at a start point (`left`/`top`) and moves by `--dx`/`--dy` x `--p`, in `cqw`/`cqh` (percent of the stage). Desktop: the paragraph spans columns 2 to 6, photos rise up column 1 (`--dy: -150`, three photos) and column 7 (`--dy: -200`, two photos, faster). Phones: the paragraph is full width, photos slide left through the space above it (`--dx: -110`) and right through the space below (`--dx: 110`), at most 13cqh wide so they clear the text on short phones. Checked at nine sizes from 320x568 to 2560x1300: no photo touches the text at any point of the hold. The held paragraph fades in without rising (`.story-lead.rv`), so it never shifts into a photo's path. Photos outside the stage are clipped, so lazy loading would wait until they slide in; the script switches them to eager loading once the section is within a screen.
 - **How we work**: clicking a stage (or arrow keys) jumps there and restarts its line from empty; the rotation carries on. Only the pause button stops it. It holds while **keyboard** focus (`:focus-visible`) is in the band, while the band is less than 30% visible, and while the tab is hidden. It does not hold on hover (the owner found that read as static).
 - **Viewer**: opens from any journal image; Previous/Next buttons, Left/Right keys, swipe (40px); Escape closes; focus returns to the image; the page behind is locked (`html.viewer-open`); it clones the page's `<picture>` with `sizes="100vw"` so the largest file loads; new images are announced in a live region.
 - **Not brought across, deliberately**: 333's scroll-jacking smooth scroll (breaks find-in-page and assistive tech), its WebGL type intro with scroll lock, loaders, scroll-scrubbed video. A light page-load fade (Airloom) was offered and not chosen.
@@ -153,7 +153,7 @@ Details that matter:
 Owner decided:
 1. Stack: Astro + Keystatic. Host: **Vercel**.
 2. Base websites: **333 South Wabash** ("the red website") and **Airloom**. Bring across the six recommended effects (fade up, smooth links, section name in the bar, lamp sweep, pinned heading, image viewer).
-3. Statement: use **333's second-section animation**; then, from a screen recording of 333, keep the photos locked to the text.
+3. Statement: use **333's second-section animation**; then, from a screen recording of 333, keep the photos locked to the text. **Superseded by 15.**
 4. How we work: **stack the four stages on phones**; make them **advance on a timer with the gold line filling**; **clicking a stage restarts its timer** rather than stopping.
 5. Project page: **one continuous journal page** (not a page per project), **white throughout with one closing dark band** (not installations on dark).
 6. Hero headline: **raise its contrast** (review feedback: the grey "Drawn on paper, finished on site." was hard to read where it crosses the uplit base of the facade, 1.75:1 at 1440px wide). Done with a soft shade behind the headline only (now `.hero-copy::before` in `global.css`, 50% black, sized in em so it follows the type), leaving the text colours and the rest of the photo as they were. The grey line itself was later replaced (8).
@@ -165,6 +165,7 @@ Owner decided:
 12. Contact footer: **more room around the edges** and **custom dropdowns** (review feedback). The footer has its own side margin, `--fx` = clamp(24px, 3.4vw, 56px), and a top margin of clamp(48px, 8svh, 88px); phones keep the page gutter with 64px top. On the fixed desktop footer the big logo takes the height left over (at most 36svh), so the legal line never leaves the screen (checked 901x720 to 2560x1300). Contact details go to one column under 420px. Project type and Stage are select-only comboboxes (WAI-ARIA APG pattern) built by the script in `ContactFooter.astro` over the native selects, which stay in the form hidden (`.dd-native`) so the values post unchanged and show as normal selects without JavaScript. Keys: arrows, Home/End, PageUp/PageDown, Enter/Space, Escape, Tab (chooses), Alt+Up, and typing letters (the same letter cycles). The chosen option carries the gold lamp marker; the list opens upwards when there is no room below and lines up with the field's right edge when it would run past the form.
 13. Journal group headings: **a plain heading over each group, nothing else** (review feedback, then owner request). "Drawn on paper" over the drawings and "Finished on site" over the finished photos, as `h3.j-label` (16px, ink). The square markers, the stage strips with rules, and the pinned stage list with a side line that were tried in between are all gone.
 14. Image viewer: **every image fits the screen** (owner request: portrait images opened full width and ran past the bottom). The image is placed against `.viewer-stage` itself (`picture` is `display: contents`; the `img` is absolutely positioned with auto margins and `max-width`/`max-height: 100%`), so it is as large as the space between the top and bottom rows allows, keeps its aspect ratio and is never cropped. Checked portrait and landscape at 375x812, 812x375, 1280x720, 1440x900 and 2560x1300.
+15. Statement: **hold one paragraph, plain text for the rest** (review feedback: the 333-style drift sent all three large paragraphs and the photos through a long scroll, so reading meant scrolling back and forth). "This is Vellum…" is held in the middle of the screen for one screen of scrolling while the five photos pass around it, never across it; the other two paragraphs follow in the same measure and fade up. Type is now up to 66px (was 88px) so the held paragraph fits a screen. Reduced motion or no JavaScript: nothing is held, the photos rest around the paragraph.
 
 Defaults chosen by the assistant, not yet confirmed by the owner (change freely if asked):
 - Prototype greys below WCAG AA replaced by the `ink-muted` token (#6f6f6f); footer legal text #808080; filter buttons at least 24px tall on desktop; ticker button changes its label instead of also toggling `aria-pressed`.
@@ -215,7 +216,7 @@ Keep all prototype copy unless the owner changes it. **No em dashes anywhere in 
 | Projects, journal images, logos | `/keystatic` (or the YAML in `src/content/`) |
 | Colours, spacing, sizes | `design-system/tokens.json`, then `npm run tokens` |
 | How long each How we work stage shows | `STAGE_MS` in `src/components/Method.astro` |
-| Statement photo speeds or start points | `drifts` speeds in `Statement.astro`; `.story.is-moving .dN` in `global.css` |
+| Statement photos' start points or travel, or how long the paragraph is held | `.d0` to `.d4` (`left`/`top`, `--dx`/`--dy`) in `global.css`, desktop and phone blocks; `.story.is-moving .story-pin` height |
 | Fade-up distance or timing | `.rv` in `global.css` |
 | Sweep length or timing | `.sweep::after` and `@keyframes sweep` in `global.css` |
 | Bar label words | `data-label` on each section component |

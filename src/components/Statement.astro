@@ -6,28 +6,28 @@ import stair from '../assets/home/stair-sm.jpg';
 import graze from '../assets/home/graze-sm.jpg';
 import beam from '../assets/home/beam-sm.jpg';
 
-// Five images flying up through the statement, each at its own speed: the second section of
-// 333 South Wabash (reference/333southwabash-com/source/js/site.js:9). The speed factors are theirs.
-const drifts = [
-  { src: scallop, speed: 2.2 },
-  { src: section, speed: 4 },
-  { src: stair, speed: 2 },
-  { src: graze, speed: 3.5 },
-  { src: beam, speed: 1.8 },
-];
+// One key paragraph held on screen while five photos pass it (review feedback: the earlier 333-style drift sent all
+// three paragraphs through a long scroll, so they were hard to read). The photos travel in the free space around the
+// text, never across it: up the outer columns on desktop, sideways above and below it on phones. Their start points
+// and travel are in global.css (.d0 to .d4); the script below only reports how far through the hold the reader is.
+const drifts = [scallop, section, stair, graze, beam];
 ---
 <section class="story" id="content" aria-label="About the practice" data-label="The practice">
-  <div class="story-copy">
-    <p data-reveal><b>This is Vellum.</b> An architectural lighting practice that treats light as a building material, drawn, detailed and tuned with the same care as stone, timber or glass.</p>
-    <p data-reveal><b>We work beside architects, developers and interior designers</b> from the first concept sketch to the night we focus the last fitting on site.</p>
-    <p data-reveal><b>Every project starts on paper.</b> We draw where the light falls before we choose what makes it.</p>
+  <div class="story-pin">
+    <div class="story-stage">
+      <p class="story-lead" data-reveal><b>This is Vellum.</b> An architectural lighting practice that treats light as a building material, drawn, detailed and tuned with the same care as stone, timber or glass.</p>
+      <div class="drifts" aria-hidden="true">
+        {drifts.map((src, i) => (
+          <figure class={`drift d${i}`}>
+            <Picture src={src} widths={[160, 320, 480, 645]} sizes="(max-width:700px) 23vw, 13vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
+          </figure>
+        ))}
+      </div>
+    </div>
   </div>
-  <div class="drifts" aria-hidden="true">
-    {drifts.map((d, i) => (
-      <figure class={`drift d${i}`} data-speed={d.speed}>
-        <Picture src={d.src} widths={[160, 320, 480, 645]} sizes="(max-width:700px) 28vw, 14vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
-      </figure>
-    ))}
+  <div class="story-copy">
+    <p data-reveal><b>We work beside architects, developers and interior designers</b> from the first concept sketch to the night we focus the last fitting on site.</p>
+    <p data-reveal style="--d:1"><b>Every project starts on paper.</b> We draw where the light falls before we choose what makes it.</p>
   </div>
 </section>
 
@@ -38,28 +38,23 @@ const drifts = [
     get matches() { return reduceQuery.matches && !document.documentElement.classList.contains('force-motion'); },
     addEventListener: (type: 'change', fn: () => void) => reduceQuery.addEventListener(type, fn),
   };
-  // How 333 South Wabash moves its story photos (reference/333southwabash-com/source/js/site.js:9):
-  //  - each photo moves up by (scroll x its speed x 0.13)% of its own height (0.16 on phones),
-  //    so on screen it travels at about 1.5 to 2.2 times the scroll speed and crosses the text;
-  //  - text and photos follow the same scroll value, so the photos stay locked to the words they pass.
-  //    The page's own scrolling (trackpad momentum, smooth wheel) provides the glide.
-  // With reduced motion, or without JavaScript, the photos stay still at the prototype's resting positions.
-  const phone = matchMedia('(max-width:700px)');
+  // The hold: the stage sticks under the bar while the reader scrolls one screen; --p runs from 0 to 1 across it and
+  // moves the photos (CSS: start point + travel x --p, in units of the stage's size). Locked to the native scroll.
+  // With reduced motion, or without JavaScript, nothing is held and the photos rest halfway (--p: .5).
   const story = document.querySelector<HTMLElement>('.story');
-  const drifts = [...document.querySelectorAll<HTMLElement>('.drift')];
-  const speeds = drifts.map((d) => parseFloat(d.dataset.speed || '0'));
+  const pin = story?.querySelector<HTMLElement>('.story-pin');
+  const stage = story?.querySelector<HTMLElement>('.story-stage');
   let queued = false;
 
   const update = () => {
     queued = false;
-    if (!story || reduce.matches) return;
-    // scroll distance since the statement's top reached the bottom of the screen (333 counts from the page top,
-    // where its story starts at the bottom of the first screen, as ours does)
-    const p = Math.max(0, innerHeight - story.getBoundingClientRect().top);
-    const k = phone.matches ? 0.16 : 0.13;
-    drifts.forEach((d, i) => {
-      d.style.transform = `translate3d(0,${(-p * speeds[i] * k).toFixed(2)}%,0)`;
-    });
+    if (!story || !pin || !stage || reduce.matches) return;
+    const r = pin.getBoundingClientRect();
+    if (r.bottom < 0 || r.top > innerHeight) return;
+    const top = parseFloat(getComputedStyle(stage).top) || 0;
+    const range = r.height - stage.offsetHeight;
+    const p = range > 0 ? Math.min(1, Math.max(0, (top - r.top) / range)) : 0;
+    stage.style.setProperty('--p', p.toFixed(4));
   };
 
   const queue = () => {
@@ -70,15 +65,26 @@ const drifts = [
   };
 
   const setMode = () => {
-    if (!story) return;
+    if (!story || !stage) return;
     if (reduce.matches) {
       story.classList.remove('is-moving');
-      drifts.forEach((d) => (d.style.transform = ''));
+      stage.style.removeProperty('--p');
       return;
     }
     story.classList.add('is-moving');
     update();
   };
+
+  // photos waiting outside the stage are clipped, so lazy loading would only fetch them as they slide in:
+  // fetch them as the section comes within a screen of view instead
+  if (story && 'IntersectionObserver' in window) {
+    const near = new IntersectionObserver((entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      story.querySelectorAll<HTMLImageElement>('.drift img').forEach((img) => (img.loading = 'eager'));
+      near.disconnect();
+    }, { rootMargin: '100% 0px' });
+    near.observe(story);
+  }
 
   addEventListener('scroll', queue, { passive: true });
   addEventListener('resize', queue);
