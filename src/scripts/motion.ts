@@ -3,6 +3,7 @@
 //   2. Smooth in-page links    a[href^="#"]    (Airloom menu and contact links)
 //   3. Section name in the bar [data-label]    (Airloom header label)
 //   4. Lamp line sweep         [data-sweep]    (Airloom feature rule sweep)
+//   Also: the bar's logo on Home appears once the bar docks   .bar[data-dock]
 // With prefers-reduced-motion, 1 and 4 never hide or move anything, 2 jumps, and 3 swaps text without sliding.
 // (?motion=on in the address overrides that for reviewing, see Base.astro.)
 
@@ -133,3 +134,11 @@ if (bar && label && sections.length) {
   addEventListener('resize', update);
   update();
 }
+
+/* The bar's logo on Home: hidden while the hero and its own logo are on screen, shown once the bar docks.
+   The bar sits right under the hero, so it docks exactly when the hero has scrolled out of view. */
+const dock = document.querySelector<HTMLElement>('.bar[data-dock]');
+const heroEl = document.querySelector('.hero');
+if (dock && heroEl && io) {
+  new IntersectionObserver(([e]) => { dock.dataset.dock = e.isIntersecting ? 'hero' : 'docked'; }).observe(heroEl);
+} else if (dock) dock.dataset.dock = 'docked';

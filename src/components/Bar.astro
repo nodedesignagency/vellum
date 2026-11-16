@@ -1,13 +1,14 @@
 ---
 // The 56px bar: sits under the hero and docks to the top on scroll.
 // The grey label beside Menu names the section in view (from each section's data-label).
+// On Home the centre logo waits until the bar docks (data-dock, see motion.ts), so it never repeats the hero logo on screen.
 interface Props {
   page: 'home' | 'project';
 }
 const { page } = Astro.props;
 const top = page === 'home' ? '#top' : '/';
 ---
-<div class="bar">
+<div class="bar" data-dock={page === 'home' ? 'hero' : undefined}>
   <div class="bar-left">
     <button class="menu-btn" type="button" aria-haspopup="dialog" aria-controls="menu" aria-expanded="false">
       <svg viewBox="0 0 6 8" aria-hidden="true"><path d="M0 0l6 4-6 4z" fill="currentColor"></path></svg>Menu

@@ -123,6 +123,7 @@ All motion respects `prefers-reduced-motion`. For reviewing, `?motion=on` sets `
 | Fade up on scroll | `motion.ts`, `[data-reveal]` gets `.rv`, then `.is-in` | 333 `.reveal` (`js/site.js:6-8`) | nothing hidden |
 | Smooth in-page links, focus follows, fixed footer reached by scrolling to the end | `motion.ts` click handler; offset from `scroll-padding-top` | Airloom (`js/site.js:8-53`) | jumps |
 | Current section or project name in the bar | `motion.ts`, `[data-label]`; shown only once the bar is docked; hidden on phones | Airloom header label (`js/site.js:54-82`) | text swaps without sliding |
+| Bar logo appears as the bar docks (Home only) | `motion.ts` watches `.hero` and sets `.bar[data-dock]` to `hero` or `docked`; `global.css` hides `.bar-mark` under `html.js` (set inline in `Base.astro`), so without JavaScript it always shows | review feedback | appears without fading |
 | Lamp line sweeping along hairline rules | `motion.ts`, `[data-sweep]` gets `.sweep`, then `.is-swept` | Airloom feature rule (`js/site.js:110`, `css/site.css:82-84`) | off |
 | Logo ticker | CSS `marq` 40s; pause button | prototype / Airloom | starts paused |
 | How we work timed stages | `Method.astro`: `STAGE_MS = 7000`, active line fills via `--p`, loops | Airloom feature tabs (`js/site.js:168-229`) | starts stopped; Play runs it |
@@ -159,6 +160,8 @@ Owner decided:
 7. Hero on phones: **drop the top-right caption** ("Facade uplight study, 2700K · 15° · 40% dim"; review feedback: its lines did not line up with the logo and it competed with it) and **tidy the margins**: the logo now sits 18px from the top, the same as the side margin, so logo, strapline and headline share one left edge inside one margin. Above 700px the caption stays at the bottom right as in the prototype.
 8. Hero headline: **remove "Drawn on paper, finished on site." and put a Contact us button in its place** (owner request). The headline is now one white sentence; the button is the site's outlined dark button (`.btn btn-dark`, as on the journal's closing band) with the arrow, linking to `#contact` like Enquire. Headline and button sit together in `.hero-copy`, which carries the position, the `lift` animation and the shade.
 9. Studio principle photo on phones: **shorter** (review feedback: too tall, a long scroll). Phones use the photo's own 4:5 (339x424 at 375px wide instead of 339x900), which shows the whole staircase and makes the section about 480px shorter.
+10. Menu: **labels only** (review feedback: the small descriptions under each item, such as "Four stages", were not needed).
+11. Bar logo on Home: **hidden until the bar docks** (review feedback: it repeated the hero logo). It fades up as the hero scrolls out and the bar sticks to the top, and hides again on the way back up. While hidden it is out of the tab order (the hero logo links to the same place). The Project page has no hero, so its bar logo always shows.
 
 Defaults chosen by the assistant, not yet confirmed by the owner (change freely if asked):
 - Prototype greys below WCAG AA replaced by the `ink-muted` token (#6f6f6f); footer legal text #808080; filter buttons at least 24px tall on desktop; ticker button changes its label instead of also toggling `aria-pressed`.

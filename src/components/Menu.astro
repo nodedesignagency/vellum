@@ -5,12 +5,13 @@ interface Props {
 }
 const { page } = Astro.props;
 const home = page === 'home';
+// labels only: the small descriptions under each were removed (review feedback: the labels already say where they go)
 const links = [
-  { href: home ? '#top' : '/', label: 'Home', small: 'The practice', current: home },
-  { href: '/project/', label: 'Project journal', small: 'Drawings to installations', current: page === 'project' },
-  { href: home ? '#practice' : '/#practice', label: 'How we work', small: 'Four stages', current: false },
-  { href: home ? '#work' : '/#work', label: 'Selected work', small: 'By sector', current: false },
-  { href: '#contact', label: 'Contact', small: 'New enquiries', current: false },
+  { href: home ? '#top' : '/', label: 'Home', current: home },
+  { href: '/project/', label: 'Project journal', current: page === 'project' },
+  { href: home ? '#practice' : '/#practice', label: 'How we work', current: false },
+  { href: home ? '#work' : '/#work', label: 'Selected work', current: false },
+  { href: '#contact', label: 'Contact', current: false },
 ];
 ---
 <dialog class="menu" id="menu" aria-label="Site menu">
@@ -20,7 +21,7 @@ const links = [
   </div>
   <nav aria-label="Main">
     {links.map((l) => (
-      <a href={l.href} aria-current={l.current ? 'page' : undefined}>{l.label}<small>{l.small}</small></a>
+      <a href={l.href} aria-current={l.current ? 'page' : undefined}>{l.label}</a>
     ))}
   </nav>
   <div class="menu-foot">
