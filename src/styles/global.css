@@ -194,6 +194,10 @@ main{position:relative;z-index:1;background:var(--surface)}
 .principle{padding:clamp(72px,9vw,120px) var(--gr) clamp(96px,11vw,160px) var(--gl);display:grid;grid-template-columns:clamp(300px,34vw,560px) minmax(0,600px);column-gap:clamp(40px,6vw,120px);justify-content:start;align-items:center}
 .principle-fig{width:100%}
 .principle-fig img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:var(--radius-tile);background:#101010}
+/* the chip over the quote is the section's heading (owner request), in the brand's tag style: label type, rule outline,
+   radius-tag (BRAND.md: tags are the one small shape with rounded corners besides tiles and buttons) */
+.principle-t{display:flex;flex-direction:column;align-items:flex-start;gap:clamp(16px,1.6vw,24px)}
+.chip{display:inline-flex;align-items:center;min-height:28px;padding:3px 10px;border:1px solid var(--rule);border-radius:var(--radius-tag);font:var(--label);color:var(--ink-muted)}
 .principle blockquote{margin:0;font-size:clamp(26px,2.6vw,40px);line-height:1.06;letter-spacing:-.015em}
 .principle blockquote .l{display:block;text-wrap:balance}
 
