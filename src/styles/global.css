@@ -136,7 +136,9 @@ main{position:relative;z-index:1;background:var(--surface)}
 }
 
 /* 2b. COLLABORATORS ticker (Airloom logo marquee) */
-.clients{position:relative;padding:24px 0 clamp(40px,5vw,56px);overflow:hidden}
+/* the prototype's boxed ticker, restored (owner request, decision 23): a rule above the section (the lamp sweep runs
+   along it), square cells divided by thin vertical rules, each logo at the bottom left of its box */
+.clients{position:relative;padding:24px 0 24px;border-top:1px solid var(--rule);overflow:hidden}
 .clients-top{display:flex;justify-content:space-between;align-items:flex-start;gap:var(--g);padding-inline:var(--gl) var(--gr)}
 .clients-top p{max-width:448px}
 .tick-btn{flex:none;width:40px;height:40px;display:grid;place-items:center;background:var(--surface-wash);border-radius:var(--radius-button);transition:background-color .3s}
@@ -148,8 +150,8 @@ main{position:relative;z-index:1;background:var(--surface)}
 .track{display:flex;width:max-content;margin:0;padding:0;list-style:none;animation:marq 40s linear infinite}
 .clients.paused .track,.ticker:hover .track,.ticker:focus-within .track{animation-play-state:paused}
 @keyframes marq{to{transform:translateX(-50%)}}
-.cell{flex:0 0 177px;height:64px;padding:0 16px;display:flex;align-items:center}
-.cell img{width:120px;height:50px;max-width:100%;object-fit:contain;object-position:left center;filter:grayscale(1)}
+.cell{flex:0 0 177px;height:177px;border-left:1px solid var(--rule);padding:0 16px;display:flex;align-items:flex-end}
+.cell img{width:120px;height:50px;max-width:100%;object-fit:contain;object-position:left bottom;filter:grayscale(1)}
 .cell .nm{font-size:18px;line-height:1.05;letter-spacing:-.01em}
 
 /* 3. METHOD: dark band (Airloom .dark) */
@@ -435,7 +437,7 @@ html.viewer-open{overflow:hidden}
   .d2{left:-30%}
   .d3{left:30%}
   .ticker{margin-top:48px}
-  .cell{flex-basis:140px;padding:0 12px}
+  .cell{flex-basis:140px;height:140px;padding:0 12px}
   /* phones: the four stages stack in one column (the prototype had two by two) */
   .steps{grid-template-columns:1fr;row-gap:20px;margin-top:40px}
   .step{border-top-color:transparent}
