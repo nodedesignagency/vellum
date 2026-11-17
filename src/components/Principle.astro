@@ -2,8 +2,8 @@
 import { Picture } from 'astro:assets';
 import pillar from '../assets/home/principle.jpg';
 ---
-<!-- Photo at its own 4:5 and the quote beside it after one fixed gap, centred on the photo's height, each sentence on
-     its own lines (owner request: the 900px-tall photo made the section too tall and the words read as apart from it).
+<!-- Photo at its own 4:5 and the quote beside it after one fixed gap, centred on the photo's height, its lines
+     balanced to even lengths (owner request: the 900px-tall photo made the section too tall and the words read as apart from it).
      Over the quote, "Vellum principle" is the section's heading in the same plain 18px style as the Collaborators line
      (.lede; owner requests: first a chip, then "make that chip like" the Collaborators heading). -->
 <section class="principle" aria-labelledby="principle-h" data-label="Vellum principle">
@@ -12,6 +12,6 @@ import pillar from '../assets/home/principle.jpg';
   </figure>
   <div class="principle-t" data-reveal style="--d:1">
     <h2 class="lede" id="principle-h">Vellum principle</h2>
-    <blockquote><span class="l">We plan what stays dark as carefully as what gets lit.</span> <span class="l">Without contrast, a&nbsp;room at night looks flat.</span></blockquote>
+    <blockquote>We plan what stays dark as carefully as what gets lit. Without&nbsp;contrast, a&nbsp;room at night looks flat.</blockquote>
   </div>
 </section>

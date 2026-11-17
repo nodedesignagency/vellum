@@ -197,8 +197,9 @@ main{position:relative;z-index:1;background:var(--surface)}
 /* "Vellum principle" over the quote is the section's heading, plain .lede like the Collaborators line (owner request) */
 .principle-t{display:flex;flex-direction:column;align-items:flex-start;gap:clamp(16px,1.6vw,24px)}
 /* the quote at the site's large heading size, as How we work's heading (.h2; owner request), up to 1150px wide */
-.principle blockquote{max-width:1150px;margin:0;font-size:clamp(26px,3.9vw,56px);line-height:1;letter-spacing:-.03em}
-.principle blockquote .l{display:block;text-wrap:balance}
+.principle blockquote{max-width:1150px;margin:0;font-size:clamp(26px,3.9vw,56px);line-height:1;letter-spacing:-.03em;text-wrap:balance}
+/* the whole quote is balanced, so its lines come out about the same length (owner: balancing each sentence on its
+   own left two short lines over one long one on wide screens) */
 
 /* 5. WORK (Airloom news grid) */
 .work{background:var(--surface-wash);padding:64px var(--gr) 96px var(--gl)}
