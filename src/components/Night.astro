@@ -2,18 +2,18 @@
 import { Picture } from 'astro:assets';
 import night from '../assets/home/night.jpg';
 ---
-<!-- The courtyard photo is the background and the words sit on top of it, in a band of its own night sky that its top
-     edge fades into, so the copy never crosses the lit trees (owner request: the photo behind the words, after a framed
-     photo beside the text was not liked). Top left, on one edge: the heading large in white, the paragraph small in
-     grey under it (owner: a heading and paragraph at one size, with an indented first line, did not fit together).
-     Heading and paragraph break between phrases (span.l), the heading over two lines, so the two blocks come out
-     about the same width (owner: a one-line heading over a narrow paragraph looked odd). -->
+<!-- The photo fills the section and the words sit on its open night sky at the top left, the lit olive tree at the
+     bottom right (owner request, after a slide on Superside's site: a small line, then a large heading with an italic
+     serif phrase). The photo was rendered for this layout (Magnific, Nano Banana 2.1 at 4k, the old courtyard as the
+     style reference, then the site's curve grade), so the upper left half is empty sky. Phones stack: the words on a
+     band of the photo's own sky, the photo below fading into it, cropped to the tree. -->
 <section class="night" aria-labelledby="night-h" data-label="After dark">
-  <div class="night-t" data-reveal>
-    <h2 id="night-h"><span class="l">We are on site</span> <span class="l">for the final focus</span></h2>
-    <p><span class="l">Commissioning happens at night,</span> <span class="l">when every fitting is aimed and dimmed.</span> <span class="l">We do it ourselves, so the result</span> <span class="l">matches the scheme you approved.</span></p>
-  </div>
   <div class="night-img">
-    <Picture src={night} widths={[640, 1024, 1600, 2400, 3200, 3840]} sizes="(max-width:700px) 215vw, 100vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
+    <Picture src={night} widths={[640, 1024, 1600, 2400, 3200, 3840]} sizes="(max-width:700px) 180vw, 100vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
+  </div>
+  <div class="night-t" data-reveal>
+    <p class="night-k">After dark</p>
+    <h2 id="night-h"><span class="l">We are on site</span> <span class="l">for the <em>final focus</em></span></h2>
+    <p class="night-p"><span class="l">Commissioning happens at night,</span> <span class="l">when every fitting is aimed and dimmed.</span> <span class="l">We do it ourselves, so the result</span> <span class="l">matches the scheme you approved.</span></p>
   </div>
 </section>

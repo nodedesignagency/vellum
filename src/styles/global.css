@@ -9,6 +9,8 @@
 @font-face{font-family:"Geist";src:url("/fonts/Geist-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:"Geist";src:url("/fonts/Geist-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
 @font-face{font-family:"Geist Mono";src:url("/fonts/GeistMono-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+/* Cormorant Garamond italic: only the italic phrase in the after dark heading (owner request), so not preloaded */
+@font-face{font-family:"Cormorant Garamond";src:url("/fonts/CormorantGaramond-400-Italic.woff2") format("woff2");font-weight:400;font-style:italic;font-display:swap}
 
 :root{
   --g:var(--gutter);
@@ -221,31 +223,30 @@ main{position:relative;z-index:1;background:var(--surface)}
 .work-foot{margin-top:72px;display:flex;justify-content:flex-end}
 .empty{grid-column:1/-1;color:var(--ink-muted);font-size:18px}
 
-/* 6. AFTER DARK (Airloom .wyo) */
-/* The photo is the background and the words sit on top, in a band of the photo's own sky (#0e1421, sampled from its
-   top edge); the photo starts just below, tucked up under the text by its empty sky (the tree tops begin 19% down the
-   photo, about 10% of its width) and its top edge fading into the band, so the copy never sits on the trees.
-   Top left, on one edge: the heading large in white over two lines, the paragraph small in grey under it, each phrase
-   on its own line (owner request: a heading and paragraph at one size with an indented first line did not fit together). */
-.night{--sky:#0e1421;position:relative;background:var(--sky);color:var(--on-dark);overflow:hidden}
-.night-t{position:relative;z-index:2;padding:clamp(64px,8vw,128px) var(--gr) 0 var(--gl)}
-/* the heading sits over two lines and its size stays about 2.6 times the paragraph's, so its wider line ("for the
-   final focus") is within about 10% of the paragraph's widest ("when every fitting is aimed and dimmed.") at every
-   width (owner: a one-line heading over a narrow paragraph looked odd) */
-.night-t h2{font-size:clamp(40px,3.7vw,57px);line-height:1.02;letter-spacing:-.03em}
-.night-t p{margin-top:clamp(18px,1.7vw,28px);font-size:clamp(17px,1.42vw,22px);line-height:1.35;color:#cfcfcf}
+/* 6. AFTER DARK */
+/* The photo fills the section at its own shape (16:9, at most a screen tall) and the words sit on its open sky at the
+   top left, the lit tree at the bottom right (owner request, after a Superside slide): a small line, a large heading
+   with an italic serif phrase (Cormorant Garamond, the brand's display face), the paragraph under it. The photo was
+   rendered so its upper left half is empty sky (#09111f at the top edge); cropping keeps the bottom right. */
+.night{--sky:#09111f;position:relative;background:var(--sky);color:var(--on-dark);overflow:hidden;height:min(55.81vw,calc(100svh - var(--bar)));min-height:420px}
+.night-img{position:absolute;inset:0}
+.night-img img{width:100%;height:100%;object-fit:cover;object-position:80% 100%}
+.night-t{position:relative;z-index:1;padding:clamp(48px,5vw,104px) var(--gr) 0 var(--gl)}
+.night-k{font-size:18px;line-height:1.12}
+.night-t h2{margin-top:clamp(14px,1.4vw,24px);font-size:clamp(40px,5.2vw,108px);line-height:1;letter-spacing:-.035em}
+.night-t h2 em{font-family:var(--font-display);font-style:italic;font-weight:400;font-size:1.14em;line-height:0;letter-spacing:-.01em}
+.night-p{margin-top:clamp(18px,1.8vw,32px);font-size:clamp(17px,1.3vw,22px);line-height:1.35;color:#cfcfcf}
 .night-t .l{display:block;text-wrap:balance}
-/* the left tree's top is 18.7% down the photo, 10.4% of its width: the text keeps 56 to 80px clear of it */
-.night-img{position:relative;margin-top:calc(clamp(56px,4.2vw,80px) - 10.4%)}
-.night-img::before{content:"";position:absolute;z-index:1;inset:0 0 auto;height:16%;background:linear-gradient(var(--sky),rgba(14,20,33,0));pointer-events:none}
-.night img{display:block;width:100%;height:auto}
 @media (max-width:700px){
+  /* phones: the words on a band of the photo's sky, the photo below (cropped to the tree), its top fading into the band */
+  .night{height:auto;min-height:0;display:flex;flex-direction:column-reverse}
   .night-t{padding-top:56px}
-  .night-t h2{font-size:clamp(32px,9.4vw,40px)}
-  .night-t p{margin-top:14px;font-size:16px}
-  /* a tall crop of the middle of the courtyard, fitted to its height, so the tree tops are 18.7% of that height down */
-  .night-img{margin-top:calc(48px - .187 * min(118vw,520px))}
-  .night img{height:min(118vw,520px);object-fit:cover;object-position:50% 0}
+  .night-k{font-size:16px}
+  .night-t h2{font-size:clamp(36px,10.4vw,46px)}
+  .night-p{font-size:16px}
+  .night-img{position:relative;inset:auto;height:100vw;margin-top:-8vw}
+  .night-img::before{content:"";position:absolute;z-index:1;inset:0 0 auto;height:30%;background:linear-gradient(var(--sky),rgba(9,17,32,0))}
+  .night-img img{object-position:100% 100%}
 }
 
 /* 7. SCOPE lists (Airloom team rows) */

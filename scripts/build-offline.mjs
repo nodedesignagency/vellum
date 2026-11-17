@@ -17,7 +17,7 @@ const pages = [
 ];
 const assets = new Set();
 const fonts = Object.fromEntries(
-  ['Geist-400', 'Geist-500', 'GeistMono-400'].map((f) => [f, readFileSync(join(root, 'public/fonts', `${f}.woff2`)).toString('base64')]),
+  ['Geist-400', 'Geist-500', 'GeistMono-400', 'CormorantGaramond-400-Italic'].map((f) => [f, readFileSync(join(root, 'public/fonts', `${f}.woff2`)).toString('base64')]),
 );
 
 for (const { file, up } of pages) {
