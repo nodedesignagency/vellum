@@ -3,7 +3,7 @@ import { Picture } from 'astro:assets';
 import night from '../assets/home/night.jpg';
 ---
 <!-- The photo fills the section and the words sit on its open night sky at the top left, the lit olive tree at the
-     bottom right (owner request, after a slide on Superside's site: a small line, then a large heading). The photo was
+     bottom right (owner request, after a slide on Superside's site: a large heading; its small line above was removed, owner request). The photo was
      rendered for this layout (Magnific, Nano Banana 2.1 at 4k, the old courtyard as the style reference, then the
      site's curve grade), so the upper left half is empty sky. The paragraph runs as wide as the heading (owner: a
      narrow paragraph under the wide heading looked odd); one font throughout (owner: no serif). Phones stack: the
@@ -13,7 +13,6 @@ import night from '../assets/home/night.jpg';
     <Picture src={night} widths={[640, 1024, 1600, 2400, 3200, 3840]} sizes="(max-width:700px) 180vw, 100vw" formats={['avif', 'webp']} fallbackFormat="jpg" alt="" loading="lazy" decoding="async" />
   </div>
   <div class="night-t" data-reveal>
-    <p class="night-k">After dark</p>
     <h2 id="night-h"><span class="l">We are on site</span> <span class="l">for the final focus</span></h2>
     <p class="night-p">Commissioning happens at night, when every fitting is aimed and dimmed. We do it ourselves, so the result matches the scheme you approved.</p>
   </div>
