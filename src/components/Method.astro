@@ -5,6 +5,16 @@ import detail from '../assets/home/method-detail.jpg';
 import commissioning from '../assets/home/method-commissioning.jpg';
 // on phones the panel is 300px tall, so a wide image is cropped from about 540px across
 const wide = { widths: [640, 1024, 1600, 2048, 2752], sizes: '(max-width:700px) 540px, calc(100vw - 48px)' };
+// the Specification panel: the lobby's luminaire schedule, one entry per fitting type
+const fittings = [
+  { ref: 'G01', type: 'Linear wall grazer, recessed', cct: '2700K', cri: '95', beam: '10×60°', ugr: '<16', control: 'DALI-2', circuit: 'C1' },
+  { ref: 'P02', type: 'Pendant, opal glass', cct: '2200K', cri: '90', beam: 'Diffuse', ugr: 'n/a', control: 'Phase', circuit: 'C2' },
+  { ref: 'D03', type: 'Downlight, deep regressed', cct: '3000K', cri: '95', beam: '24°', ugr: '<13', control: 'DALI-2', circuit: 'C3' },
+  { ref: 'D04', type: 'Downlight, adjustable', cct: '3000K', cri: '95', beam: '15°', ugr: '<13', control: 'DALI-2', circuit: 'C3' },
+  { ref: 'S05', type: 'Step light, linear', cct: '2700K', cri: '90', beam: 'Asymmetric', ugr: 'n/a', control: 'DALI-2', circuit: 'C4' },
+  { ref: 'E06', type: 'In-ground uplight, facade', cct: '2700K', cri: '90', beam: '8°', ugr: 'n/a', control: 'DMX', circuit: 'External' },
+];
+const specs = [['cct', 'CCT'], ['cri', 'CRI'], ['beam', 'Beam'], ['ugr', 'UGR'], ['control', 'Control'], ['circuit', 'Circuit']] as const;
 ---
 <section class="method" id="practice" aria-labelledby="method-h" data-label="How we work">
   <div class="method-top">
@@ -32,19 +42,34 @@ const wide = { widths: [640, 1024, 1600, 2048, 2752], sizes: '(max-width:700px) 
       <Picture src={detail} {...wide} formats={['avif', 'webp']} fallbackFormat="jpg" loading="lazy" decoding="async" alt="Cutaway drawing of a recessed ceiling slot, with gold arrows showing light spilling down the wall and its cut-off angle" />
     </div>
     <div class="panel" role="tabpanel" id="p2" aria-labelledby="t2" tabindex="0" hidden>
-      <div class="sched-wrap">
-        <table class="sched">
-          <caption class="sr">Luminaire schedule for the lobby, revision C</caption>
-          <thead><tr><th scope="col">Ref</th><th scope="col">Type</th><th scope="col">CCT</th><th scope="col">CRI</th><th scope="col">Beam</th><th scope="col">UGR</th><th scope="col">Control</th><th scope="col">Circuit</th></tr></thead>
-          <tbody>
-            <tr><td>G01</td><td>Linear wall grazer, recessed</td><td>2700K</td><td>95</td><td>10×60°</td><td>&lt;16</td><td>DALI-2</td><td>C1</td></tr>
-            <tr><td>P02</td><td>Pendant, opal glass</td><td>2200K</td><td>90</td><td>Diffuse</td><td>n/a</td><td>Phase</td><td>C2</td></tr>
-            <tr><td>D03</td><td>Downlight, deep regressed</td><td>3000K</td><td>95</td><td>24°</td><td>&lt;13</td><td>DALI-2</td><td>C3</td></tr>
-            <tr><td>D04</td><td>Downlight, adjustable</td><td>3000K</td><td>95</td><td>15°</td><td>&lt;13</td><td>DALI-2</td><td>C3</td></tr>
-            <tr><td>S05</td><td>Step light, linear</td><td>2700K</td><td>90</td><td>Asymmetric</td><td>n/a</td><td>DALI-2</td><td>C4</td></tr>
-            <tr><td>E06</td><td>In-ground uplight, facade</td><td>2700K</td><td>90</td><td>8°</td><td>n/a</td><td>DMX</td><td>External</td></tr>
-          </tbody>
-        </table>
+      <!-- owner request: the plain table filled a third of the panel with one level of type. Now a composed schedule:
+           title, project and three key figures on the left; the six fittings as a grid filling the height on the right,
+           each with its reference, type and six labelled values. Tablets and phones: the fittings scroll sideways. -->
+      <div class="spec">
+        <div class="spec-head">
+          <div>
+            <h3 class="spec-t">Luminaire schedule</h3>
+            <p class="spec-m">Hotel lobby, revision C, six fittings</p>
+          </div>
+          <dl class="spec-sum">
+            <div><dt>Colour temperature</dt><dd>2200 to 3000K</dd></div>
+            <div><dt>Colour rendering</dt><dd>CRI 90 to 95</dd></div>
+            <div><dt>Glare, where rated</dt><dd>UGR below 16</dd></div>
+          </dl>
+        </div>
+        <ul class="spec-list" role="list" aria-label="Fittings" tabindex="0">
+          {fittings.map((f) => (
+            <li class="fit">
+              <div>
+                <p class="fit-ref">{f.ref}</p>
+                <h4 class="fit-t">{f.type}</h4>
+              </div>
+              <dl class="fit-d">
+                {specs.map(([k, label]) => <div><dt>{label}</dt><dd>{f[k]}</dd></div>)}
+              </dl>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
     <div class="panel" role="tabpanel" id="p3" aria-labelledby="t3" tabindex="0" hidden>
