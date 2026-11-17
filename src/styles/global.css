@@ -187,13 +187,15 @@ main{position:relative;z-index:1;background:var(--surface)}
 .sched td:first-child{color:var(--lamp-glow)}
 
 /* 4. PRINCIPLE (Airloom .quote) */
-.principle{padding:clamp(72px,9vw,120px) var(--gr) clamp(96px,11vw,160px) var(--gl);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--g)}
-.principle-fig{grid-column:1;grid-row:1/span 2;align-self:start;width:min(100%,448px)}
-.principle-fig img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:var(--radius-tile);background:#101010}
-/* The approved prototype shows this photo 900px tall: its height="900" attribute overrode the 4:5 ratio above.
-   Kept as approved above 700px (phones use 4:5, see PHONE). Delete this line for the 4:5 crop the CSS intended. */
-.principle-fig img{height:900px}
-.principle blockquote{grid-column:2;grid-row:1;align-self:start;margin:0;font-size:clamp(24px,2.3vw,32px);line-height:1.05;letter-spacing:-.015em;max-width:640px}
+/* owner request: the prototype's 900px-tall photo (448px wide) made the section too tall, and the quote, alone at the
+   top of the far half, read as apart from it. The photo now shows at its own 4:5, 34vw wide (300 to 560px, so at most
+   700px tall); the quote follows after one fixed gap, centred on the photo's height, larger, each sentence on its own
+   balanced lines, so photo and words read as one composition. */
+.principle{padding:clamp(72px,9vw,120px) var(--gr) clamp(96px,11vw,160px) var(--gl);display:grid;grid-template-columns:clamp(300px,34vw,560px) minmax(0,600px);column-gap:clamp(40px,6vw,120px);justify-content:start;align-items:center}
+.principle-fig{width:100%}
+.principle-fig img{width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:var(--radius-tile);background:#101010}
+.principle blockquote{margin:0;font-size:clamp(26px,2.6vw,40px);line-height:1.06;letter-spacing:-.015em}
+.principle blockquote .l{display:block;text-wrap:balance}
 
 /* 5. WORK (Airloom news grid) */
 .work{background:var(--surface-wash);padding:64px var(--gr) 96px var(--gl)}
@@ -437,12 +439,8 @@ html.viewer-open{overflow:hidden}
   .step{border-top-color:transparent}
   .step-t,.step-d{font-size:16px}
   .stage{margin-top:40px;height:auto;aspect-ratio:4/3;max-width:100%}
-  .principle{grid-template-columns:1fr}
-  .principle{row-gap:40px}
-  .principle-fig,.principle blockquote{grid-column:1;grid-row:auto}
-  /* review feedback: 900px tall in a phone column (339x900 at 375px) was taller than the screen and cropped away
-     half the stairs; the photo's own 4:5 shows the whole flight and saves about 480px of scroll */
-  .principle-fig img{height:auto}
+  /* phones: photo full width at 4:5, the quote 28px under it */
+  .principle{grid-template-columns:1fr;row-gap:28px}
   .work-grid{grid-template-columns:1fr;margin-top:48px}
   .filter{position:static;display:flex;flex-wrap:wrap;gap:8px 18px;border-top:0;padding-top:0;font-size:16px}
   .filter-l{display:none}
